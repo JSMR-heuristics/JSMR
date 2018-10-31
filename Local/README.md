@@ -1,3 +1,0 @@
-# JSMR
-Heuristics Case
-ding
