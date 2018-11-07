@@ -46,23 +46,20 @@ class Smartgrid(object):
             y.append(house.y)
 
         # hier gaat het fout bij mij, de asses veranderen naar de input
-        plt.ylim(0,52)
-        plt.xlim(0,52)
-        plt.scatter(x , y, marker = ".")
-
+        ax = plt.gca()
+        ax.axis([-2, 52, -2 , 52])
+        ax.scatter(x , y, marker = ".")
+        ax.set_xticks(np.arange(0, 52, 1), minor = True)
+        ax.set_yticks(np.arange(0, 52, 1), minor = True)
+        ax.grid(b = True, which="major", linewidth=1)
+        ax.grid(b = True, which="minor", linewidth=.2)
 
         plt.show()
 
 
-################ alles wat ik eerder geprobeert heb, dit mag je nergeren
-        # fig = plt.figure()
-        # ax = plt.gca()
-        # ax.set_xticks(np.arange(0, 52, 1), minor = True)
-        # ax.set_yticks(np.arange(0, 52, 1), minor = True)
-        # ax.grid(b = True, which="major", linewidth=1)
-        # ax.grid(b = True, which="minor", linewidth=.2)
-        # create grid or let matplot do it
-        # possibly convert coordinates to usable data
+    # Nu kijken of we batterijen ook kunnen toevoegen,
+    # wanneer deze ingeladen zijn
+
 
     # def load_batteries(self, input):
     #     # TODO
