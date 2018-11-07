@@ -35,6 +35,7 @@ elif x_batt > x_hous:
 
 else:
     x_diff = 0
+# dus x_diff = abs(x_batt - x_house) Dat is wat korter
 
 # calculate difference in y-coordinate
 
