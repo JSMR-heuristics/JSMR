@@ -1,7 +1,6 @@
 class Battery(object):
 
-    def __init__(self, id, capacity, x, y):
-        self.id = id
+    def __init__(self, capacity, x, y):
         self.capacity = capacity
         self.x = int(x)
         self.y = int(y)
