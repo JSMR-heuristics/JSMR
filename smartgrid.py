@@ -65,11 +65,16 @@ class Smartgrid(object):
 
     def load_batteries(self):
         with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
+
+            # read text file per line
             data_batteries = batteries_text.readlines()
+
+            # delete headers
             data_batteries.pop(0)
 
             batteries = {}
 
+            # for every batterie isolate coordinates and capacity
             for id, battery in enumerate(data_batteries):
                 coordinates = battery.split("\t", 1)[0]
                 cap = battery.split("\t", 1)[1]
@@ -80,6 +85,7 @@ class Smartgrid(object):
                 y = re.sub("\D", "", y)
                 batteries[id] = Battery(cap, x, y)
 
+        # return dict to INIT
         return batteries
 
 
