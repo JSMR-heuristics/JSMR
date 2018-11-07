@@ -23,9 +23,10 @@ class Smartgrid(object):
             # for every house, save coordinates and output in dictionary
             # name for instance in dict is Xcoord-Ycoord
             for row in data_houses:
-                id = f"{row[0]}-{row[1]}"
                 x = row[0]
                 y = row[1]
+                id = f"{x}-{y}"
+
                 output = row[2]
                 houses[id] = House(x, y, output)
         # returns dict, goes to init (self.houses)
