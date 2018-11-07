@@ -1,7 +1,7 @@
 class House(object):
     def __init__(self, x, y, output):
-        self.x = x
-        self.y = y
+        self.x = int(x)
+        self.y = int(y)
         self.output = output
         self.houses = {}
 
