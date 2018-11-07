@@ -1,6 +1,9 @@
 from house import House
 from battery import Battery
 import csv
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.ticker as ticker
 
 INPUT_HOUSES = "wijk1_huizen.csv"
 
@@ -22,9 +25,22 @@ class Smartgrid(object):
         return houses
 
     def plot_houses(self, houses):
-        size = Smartgrid.size
-        # create grid or let matplot do it
-        # possibly convert coordinates to usable data
+
+        x = []
+        y = []
+
+        houses_list = list(houses.values())
+        for house in houses_list:
+            x.append(house.x)
+            y.append(house.y)
+
+        plt.axis([0, 52, 0 , 52])
+        plt.scatter(x , y, marker = ".")
+
+
+        plt.show()
+
+
 
     # def load_batteries(self, input):
     #     # TODO
@@ -43,3 +59,4 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
+    smart.plot_houses(smart.houses)
