@@ -12,12 +12,14 @@ class Smartgrid(object):
         with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
             data_houses = csv.reader(houses_csv, delimiter=",")
             next(data_houses, None)
+            houses = {}
             for row in data_houses:
                 id = f"{row[0]}-{row[1]}"
                 x = row[0]
                 y = row[1]
                 output = row[2]
-                House.houses[id] = House(x, y, output)
+                houses[id] = House(x, y, output)
+        return houses
 
     def plot_houses(self, houses):
         size = Smartgrid.size
