@@ -46,7 +46,8 @@ class Smartgrid(object):
             y.append(house.y)
 
         # hier gaat het fout bij mij, de asses veranderen naar de input
-        plt.axis([0, 52, 0 , 52])
+        plt.ylim(0,52)
+        plt.xlim(0,52)
         plt.scatter(x , y, marker = ".")
 
 
