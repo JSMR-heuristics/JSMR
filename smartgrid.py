@@ -60,10 +60,10 @@ class Smartgrid(object):
     # Nu kijken of we batterijen ook kunnen toevoegen,
     # wanneer deze ingeladen zijn
 
-
-    # def load_batteries(self, input):
-    #     # TODO
-    #
+    def load_batteries(self, input):
+        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}", newline="") as batteries_text:
+            data_batteries =
+            
     # def place_batteries(self, batteries):
     #     # TODO
     #
