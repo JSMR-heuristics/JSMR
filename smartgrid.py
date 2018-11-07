@@ -45,14 +45,19 @@ class Smartgrid(object):
             x.append(house.x)
             y.append(house.y)
 
-        # hier gaat het fout bij mij, de asses veranderen naar de input
+
+        # make plot
         ax = plt.gca()
         ax.axis([-2, 52, -2 , 52])
         ax.scatter(x , y, marker = ".")
+        ax.scatter(x_batt, y_batt, marker = "+")
         ax.set_xticks(np.arange(0, 52, 1), minor = True)
         ax.set_yticks(np.arange(0, 52, 1), minor = True)
         ax.grid(b = True, which="major", linewidth=1)
         ax.grid(b = True, which="minor", linewidth=.2)
+
+
+
 
         plt.show()
 
