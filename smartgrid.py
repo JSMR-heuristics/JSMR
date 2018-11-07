@@ -4,12 +4,15 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.ticker as ticker
+import re
 
 INPUT_HOUSES = "wijk1_huizen.csv"
+INPUT_BATTERIES = "wijk1_batterijen.txt"
 
 class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
+        self.batteries = self.load_batteries()
 
     def load_houses(self):
         # open file
@@ -60,10 +63,27 @@ class Smartgrid(object):
     # Nu kijken of we batterijen ook kunnen toevoegen,
     # wanneer deze ingeladen zijn
 
-    def load_batteries(self, input):
-        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}", newline="") as batteries_text:
-            data_batteries =
-            
+    def load_batteries(self):
+        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
+            data_batteries = batteries_text.readlines()
+            data_batteries.pop(0)
+
+            batteries = {}
+
+            for id, battery in enumerate(data_batteries):
+                coordinates = battery.split("\t", 1)[0]
+                cap = battery.split("\t", 1)[1]
+                cap = cap.strip()
+                x = coordinates.split(",", 1)[0]
+                y = coordinates.split(",", 1)[1]
+                x = re.sub("\D", "", x)
+                y = re.sub("\D", "", y)
+                batteries[id] = Battery(cap, x, y)
+
+        print(batteries)
+        print(batteries[1].capacity)
+
+
     # def place_batteries(self, batteries):
     #     # TODO
     #
@@ -78,4 +98,4 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
-    smart.plot_houses(smart.houses)
+    #smart.plot_houses(smart.houses)
