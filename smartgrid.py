@@ -35,23 +35,34 @@ class Smartgrid(object):
         # returns dict, goes to init (self.houses)
         return houses
 
-    def plot_houses(self, houses):
+    def plot_houses(self, houses, batteries):
 
-        x = []
-        y = []
+        x_houses = []
+        y_houses = []
+
+        x_batteries = []
+        y_batteries = []
 
         # turn dict to list so we can iterate through
         houses_list = list(houses.values())
+        batteries_list = list(batteries.values())
 
         # for every house save coordinates to lists
         for house in houses_list:
-            x.append(house.x)
-            y.append(house.y)
+            x_houses.append(house.x)
+            y_houses.append(house.y)
+
+        # for every battery save coordinates to lists
+        for battery in batteries_list:
+            x_batteries.append(battery.x)
+            y_batteries.append(battery.y)
+
 
         # hier gaat het fout bij mij, de asses veranderen naar de input
         ax = plt.gca()
         ax.axis([-2, 52, -2 , 52])
-        ax.scatter(x , y, marker = ".")
+        ax.scatter(x_houses , y_houses, marker = ".")
+        ax.scatter(x_batteries, y_batteries, marker = "o", c = "r")
         ax.set_xticks(np.arange(0, 52, 1), minor = True)
         ax.set_yticks(np.arange(0, 52, 1), minor = True)
         ax.grid(b = True, which="major", linewidth=1)
@@ -103,4 +114,4 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
-    #smart.plot_houses(smart.houses)
+    #smart.plot_houses(smart.houses, smart.batteries)
