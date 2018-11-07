@@ -80,8 +80,7 @@ class Smartgrid(object):
                 y = re.sub("\D", "", y)
                 batteries[id] = Battery(cap, x, y)
 
-        print(batteries)
-        print(batteries[1].capacity)
+        return batteries
 
 
     # def place_batteries(self, batteries):
