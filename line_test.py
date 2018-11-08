@@ -27,15 +27,28 @@ ax.grid(b = True, which="major", linewidth=1)
 ax.grid(b = True, which="minor", linewidth=.2)
 
 # calclate difference in x-coordinate
+x_diff = abs(x_batt - x_house)
 if x_batt < x_house:
-    x_diff = x_house - x_batt
+    batt_loc = "Left"
 
-elif x_batt > x_hous:
-    x_diff = x_batt - x_house
+elif x_batt > x_house:
+    batt_loc = "Right"
 
 else:
-    x_diff = 0
+    batt_loc = "Same"
+
+y_diff = abs(y_batt - y_house)
+if y_batt < y_house:
+    batt_loc = "Lower"
+
+elif y_batt > y_house:
+    batt_loc = "Higher"
+
+else:
+    batt_loc = "Same"
 # dus x_diff = abs(x_batt - x_house) Dat is wat korter
+# J: klopt, maar ik zit zelf nog ff te kijken naar een manier waarop het programma
+# weet waar de lijn geplaatst moet worden
 
 # calculate difference in y-coordinate
 
