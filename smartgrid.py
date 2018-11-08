@@ -9,12 +9,12 @@ import operator
 # Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk1_huizen.csv"
 INPUT_BATTERIES = "wijk1_batterijen.txt"
+COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
-        self.colour_list = [m, k, g, c, y, r, b, grey, maroon, yellow, orange, fuchsia, lime, peru]
 
     def load_houses(self):
         # open file
@@ -99,8 +99,7 @@ class Smartgrid(object):
                 x = re.sub("\D", "", x)
                 y = re.sub("\D", "", y)
                 # colour = smart.colour_list[id]
-                colour = self.colour_list
-                colour = colour[id]
+                colour = COLOUR_LIST[id]
                 batteries[id] = Battery(cap, x, y, colour)
 
         # return dict to INIT
