@@ -3,7 +3,6 @@ class House(object):
         self.x = int(x)
         self.y = int(y)
         self.output = output
-        self.houses = {}
         self.dist = []
         self.link = []
         self.ord_dist = {}
