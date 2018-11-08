@@ -12,12 +12,12 @@ INPUT_BATTERIES = "wijk1_batterijen.txt"
 
 class Smartgrid(object):
     def __init__(self):
-        self.houses = self.load_houses(INPUT_HOUSES)
-        self.batteries = self.load_batteries(INPUT_BATTERIES)
+        self.houses = self.load_houses()
+        self.batteries = self.load_batteries()
 
-    def load_houses(self, map):
+    def load_houses(self):
         # open file
-        with open(f"Huizen&Batterijen/{map}", newline="") as houses_csv:
+        with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
             # skip headers
@@ -55,6 +55,9 @@ class Smartgrid(object):
             x_house = house.x
             y_house = house.y
 
+            id_batt = house.link[0]
+            x_batt, y_batt = smart.batteries[id_batt].x, smart.batteries[id_batt].y
+
             # calculate the new coordinate for the vertical line
             x_diff = x_batt - x_house
             new_x = x_house + x_diff
@@ -74,8 +77,8 @@ class Smartgrid(object):
 
         plt.show()
 
-    def load_batteries(self, map):
-        with open(f"Huizen&Batterijen/{map}") as batteries_text:
+    def load_batteries(self):
+        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
@@ -166,6 +169,7 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
-    #smart.plot_houses(smart.houses, smart.batteries)
     smart.calculate_cable()
+
     smart.link_houses()
+    smart.plot_houses()
