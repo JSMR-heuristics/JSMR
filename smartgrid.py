@@ -51,6 +51,26 @@ class Smartgrid(object):
         ax.grid(b = True, which="minor", linewidth=.2)
 
 
+        for house in list(smart.houses.values()):
+            x_house = house.x
+            y_house = house.y
+
+            # calculate the new coordinate for the vertical line
+            x_diff = x_batt - x_house
+            new_x = x_house + x_diff
+
+            # place horizontal line
+            ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
+            # plac evertical line
+            ax.plot([new_x, new_x], [y_house, y_batt], color='b',linestyle='-', linewidth=2)
+
+            # calcualte line cost
+            x_diff = abs(x_batt - x_house)
+            y_diff = abs(y_batt - y_house)
+            tot_cost = (x_diff + y_diff) * 9
+            print(tot_cost)
+
+
 
         plt.show()
 
