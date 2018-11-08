@@ -12,12 +12,13 @@ INPUT_BATTERIES = "wijk1_batterijen.txt"
 
 class Smartgrid(object):
     def __init__(self):
-        self.houses = self.load_houses(INPUT_HOUSES)
-        self.batteries = self.load_batteries(INPUT_BATTERIES)
+        self.houses = self.load_houses()
+        self.batteries = self.load_batteries()
+        self.colour_list = [m, k, g, c, y, r, b, grey, maroon, yellow, orange, fuchsia, lime, peru]
 
-    def load_houses(self, map):
+    def load_houses(self):
         # open file
-        with open(f"Huizen&Batterijen/{map}", newline="") as houses_csv:
+        with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
             # skip headers
@@ -51,11 +52,34 @@ class Smartgrid(object):
         ax.grid(b = True, which="minor", linewidth=.2)
 
 
+        for house in list(smart.houses.values()):
+            x_house = house.x
+            y_house = house.y
+
+            id_batt = house.link[0]
+            x_batt, y_batt = smart.batteries[id_batt].x, smart.batteries[id_batt].y
+
+            # calculate the new coordinate for the vertical line
+            x_diff = x_batt - x_house
+            new_x = x_house + x_diff
+
+            # place horizontal line
+            ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
+            # plac evertical line
+            ax.plot([new_x, new_x], [y_house, y_batt], color='b',linestyle='-', linewidth=2)
+
+            # calcualte line cost
+            x_diff = abs(x_batt - x_house)
+            y_diff = abs(y_batt - y_house)
+            tot_cost = (x_diff + y_diff) * 9
+            print(tot_cost)
+
+
 
         plt.show()
 
-    def load_batteries(self, map):
-        with open(f"Huizen&Batterijen/{map}") as batteries_text:
+    def load_batteries(self):
+        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
@@ -74,7 +98,8 @@ class Smartgrid(object):
                 y = coordinates.split(",", 1)[1]
                 x = re.sub("\D", "", x)
                 y = re.sub("\D", "", y)
-                batteries[id] = Battery(cap, x, y)
+                colour = self.colour_list[id]
+                batteries[id] = Battery(cap, x, y, colour)
 
         # return dict to INIT
         return batteries
@@ -146,6 +171,7 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
-    #smart.plot_houses(smart.houses, smart.batteries)
     smart.calculate_cable()
+
     smart.link_houses()
+    smart.plot_houses()
