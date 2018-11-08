@@ -46,6 +46,23 @@ elif y_batt > y_house:
 
 else:
     batt_loc = "Same"
+
+if batt_loc == "Left":
+    # make line to the left of the house with length x_diff
+    pass
+elif batt_loc == "Right":
+    # make line to the right  of the house with length x_diff
+    pass
+
+if batt_loc == "Lower":
+    # make line upwards on the endpoint of the previously made line
+    # with length y_diff
+elif batt_loc == "Higher":
+    # make line downwards on the endpoint of the previously made linewidth
+    # with length y_diff
+
+
+
 # dus x_diff = abs(x_batt - x_house) Dat is wat korter
 # J: klopt, maar ik zit zelf nog ff te kijken naar een manier waarop het programma
 # weet waar de lijn geplaatst moet worden

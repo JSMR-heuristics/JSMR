@@ -105,7 +105,6 @@ class Smartgrid(object):
         #################################################################
         # DUIDELIJK AANGEVEN DAT DIT ALLEEN VOOR PYTHON 3.6+ WERKT
         #################################################################3
-        return
 
     def get_coordinates(self):
         x_houses = []
