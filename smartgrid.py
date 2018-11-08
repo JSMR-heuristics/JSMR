@@ -87,7 +87,7 @@ class Smartgrid(object):
 
         all_diff = []
         for x_house, y_house in list(zip(x_houses, y_houses)):
-            house_diff = []
+            house_diff = {}
             for x, y in list(zip(x_batt, y_batt)):
                 x_diff = abs(x - x_house)
                 y_diff = abs(y - y_house)
