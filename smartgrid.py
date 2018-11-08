@@ -1,4 +1,3 @@
-<<<<<<< current
 from house import House
 from battery import Battery
 import csv
@@ -329,4 +328,3 @@ if __name__ == "__main__":
     #smart.plot_houses(smart.houses, smart.batteries)
     smart.calculate_cable()
     smart.link_houses()
->>>>>>> before discard
