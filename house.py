@@ -4,7 +4,10 @@ class House(object):
         self.y = int(y)
         self.output = output
         self.houses = {}
+        self.dist = []
 
+    def add_distance(self, dist_list):
+        self.dist = dist_list
     # def add_house(self, ""):
     #     Smartgrid.houses["id"] = .....
     #

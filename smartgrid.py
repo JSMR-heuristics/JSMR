@@ -35,29 +35,9 @@ class Smartgrid(object):
         # returns dict, goes to init (self.houses)
         return houses
 
-    def plot_houses(self, houses, batteries):
+    def plot_houses(self):
 
-        x_houses = []
-        y_houses = []
-
-        x_batt = []
-        y_batt = []
-
-        # turn dict to list so we can iterate through
-        houses_list = list(houses.values())
-        batteries_list = list(batteries.values())
-
-        # for every house save coordinates to lists
-        for house in houses_list:
-            x_houses.append(house.x)
-            y_houses.append(house.y)
-
-        # for every battery save coordinates to lists
-        for battery in batteries_list:
-            x_batt.append(battery.x)
-            y_batt.append(battery.y)
-
-
+        x_houses, y_houses, x_batt, y_batt  = smart.get_coordinates()
 
         # make plot
         ax = plt.gca()
@@ -72,11 +52,6 @@ class Smartgrid(object):
 
 
         plt.show()
-
-
-    # Nu kijken of we batterijen ook kunnen toevoegen,
-    # wanneer deze ingeladen zijn
-
 
     def load_batteries(self):
         with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
@@ -103,13 +78,56 @@ class Smartgrid(object):
         # return dict to INIT
         return batteries
 
+    def link_houses(self):
+        return
 
-    # def place_batteries(self, batteries):
-    #     # TODO
-    #
-    # def calculate_cable():
-    #     # TODO
-    #
+    def calculate_cable(self):
+        # get coordinates
+        x_houses, y_houses, x_batt, y_batt  = smart.get_coordinates()
+
+        all_diff = []
+        for x_house, y_house in list(zip(x_houses, y_houses)):
+            house_diff = []
+            for x, y in list(zip(x_batt, y_batt)):
+                x_diff = abs(x - x_house)
+                y_diff = abs(y - y_house)
+                house_diff.append((x_diff + y_diff))
+            all_diff.append(house_diff)
+
+        # set as attributes
+        keys_list = list(smart.houses.keys())
+        for i, key in enumerate(keys_list):
+                smart.houses[key].add_distance(all_diff[i])
+
+        print(smart.houses["10-27"].dist)
+        #################################################################
+        # DUIDELIJK AANGEVEN DAT DIT ALLEEN VOOR PYTHON 3.6+ WERKT
+        #################################################################3
+        return
+
+    def get_coordinates(self):
+        x_houses = []
+        y_houses = []
+
+        x_batt = []
+        y_batt = []
+
+        # turn dict to list so we can iterate through
+        houses_list = list(smart.houses.values())
+        batteries_list = list(smart.batteries.values())
+
+        # for every house save coordinates to lists
+        for house in houses_list:
+            x_houses.append(house.x)
+            y_houses.append(house.y)
+
+        # for every battery save coordinates to lists
+        for battery in batteries_list:
+            x_batt.append(battery.x)
+            y_batt.append(battery.y)
+
+        return x_houses, y_houses, x_batt, y_batt
+
     # def calculate_battery_input():
     #     # TODO
     #
@@ -118,4 +136,5 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
-    smart.plot_houses(smart.houses, smart.batteries)
+    #smart.plot_houses(smart.houses, smart.batteries)
+    smart.calculate_cable()
