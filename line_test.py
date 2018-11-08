@@ -13,57 +13,73 @@ import matplotlib.ticker as ticker
 x_house = 10
 y_house = 10
 
-x_batt = 20
-y_batt = 20
+x_batt = 33
+y_batt = 33
 
 # make plot
 ax = plt.gca()
 ax.axis([-2, 52, -2 , 52])
-ax.scatter(x , y, marker = ".")
+ax.scatter(x_house , y_house, marker = ".")
 ax.scatter(x_batt, y_batt, marker = "+")
 ax.set_xticks(np.arange(0, 52, 1), minor = True)
 ax.set_yticks(np.arange(0, 52, 1), minor = True)
 ax.grid(b = True, which="major", linewidth=1)
 ax.grid(b = True, which="minor", linewidth=.2)
 
-# calclate difference in x-coordinate
+# # calclate difference in x-coordinate
+# x_diff = x_batt - x_house
+# # if x_batt < x_house:
+#     batt_loc_x = "Left"
+#
+# elif x_batt > x_house:
+#     batt_loc_x = "Right"
+#
+# # else:
+# #     batt_loc_x = "Same"
+#
+# y_diff = abs(y_batt - y_house)
+# if y_batt < y_house:
+#     batt_loc_y = "Lower"
+#
+# elif y_batt > y_house:
+#     batt_loc_y = "Higher"
+#
+# # else:
+# #     batt_loc_y = "Same"
+
+# if batt_loc_x == "Left":
+#     # make line to the left of the house with length x_diff
+#     ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
+#     pass
+#
+# elif batt_loc_x == "Right":
+#     # make line to the right  of the house with length x_diff
+#     ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
+#     pass
+#
+# new_x = x_house + x_diff
+# if batt_loc_y == "Lower":
+#     # make line upwards on the endpoint of the previously made line
+#     # with length y_diff
+#     ax.plot([new_x, new_x], [y_house, y_batt], color='b',linestyle='-', linewidth=2)
+#     pass
+#
+# elif batt_loc_y == "Higher":
+#     # make line downwards on the endpoint of the previously made linewidth
+#     # with length y_diff
+#     ax.plot([new_x, new_x], [y_house, y_batt], color='b',linestyle='-', linewidth=2)
+#     pass
+
+x_diff = x_batt - x_house
+# calculate the new coordinate for the vertical line
+new_x = x_house + x_diff
+ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
+ax.plot([new_x, new_x], [y_house, y_batt], color='b',linestyle='-', linewidth=2)
+
 x_diff = abs(x_batt - x_house)
-if x_batt < x_house:
-    batt_loc_x = "Left"
-
-elif x_batt > x_house:
-    batt_loc_x = "Right"
-
-# else:
-#     batt_loc_x = "Same"
-
 y_diff = abs(y_batt - y_house)
-if y_batt < y_house:
-    batt_loc_y = "Lower"
-
-elif y_batt > y_house:
-    batt_loc_y = "Higher"
-
-# else:
-#     batt_loc_y = "Same"
-
-if batt_loc_x == "Left":
-    # make line to the left of the house with length x_diff
-    pass
-elif batt_loc_x == "Right":
-    # make line to the right  of the house with length x_diff
-    pass
-
-if batt_loc_y == "Lower":
-    # make line upwards on the endpoint of the previously made line
-    # with length y_diff
-    pass
-
-elif batt_loc_y == "Higher":
-    # make line downwards on the endpoint of the previously made linewidth
-    # with length y_diff
-    pass
-
+tot_cost = (x_diff + y_diff) * 9
+print(tot_cost)
 
 
 # dus x_diff = abs(x_batt - x_house) Dat is wat korter
