@@ -29,37 +29,40 @@ ax.grid(b = True, which="minor", linewidth=.2)
 # calclate difference in x-coordinate
 x_diff = abs(x_batt - x_house)
 if x_batt < x_house:
-    batt_loc = "Left"
+    batt_loc_x = "Left"
 
 elif x_batt > x_house:
-    batt_loc = "Right"
+    batt_loc_x = "Right"
 
-else:
-    batt_loc = "Same"
+# else:
+#     batt_loc_x = "Same"
 
 y_diff = abs(y_batt - y_house)
 if y_batt < y_house:
-    batt_loc = "Lower"
+    batt_loc_y = "Lower"
 
 elif y_batt > y_house:
-    batt_loc = "Higher"
+    batt_loc_y = "Higher"
 
-else:
-    batt_loc = "Same"
+# else:
+#     batt_loc_y = "Same"
 
-if batt_loc == "Left":
+if batt_loc_x == "Left":
     # make line to the left of the house with length x_diff
     pass
-elif batt_loc == "Right":
+elif batt_loc_x == "Right":
     # make line to the right  of the house with length x_diff
     pass
 
-if batt_loc == "Lower":
+if batt_loc_y == "Lower":
     # make line upwards on the endpoint of the previously made line
     # with length y_diff
-elif batt_loc == "Higher":
+    pass
+
+elif batt_loc_y == "Higher":
     # make line downwards on the endpoint of the previously made linewidth
     # with length y_diff
+    pass
 
 
 
