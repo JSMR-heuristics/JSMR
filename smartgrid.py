@@ -9,12 +9,12 @@ import operator
 # Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk1_huizen.csv"
 INPUT_BATTERIES = "wijk1_batterijen.txt"
+COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
-        self.colour_list = [m, k, g, c, y, r, b, grey, maroon, yellow, orange, fuchsia, lime, peru]
 
     def load_houses(self):
         # open file
@@ -63,10 +63,11 @@ class Smartgrid(object):
             x_diff = x_batt - x_house
             new_x = x_house + x_diff
 
+            line_colour = smart.batteries[id_batt].colour
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
+            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}',linestyle='-', linewidth=2)
             # plac evertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], color='b',linestyle='-', linewidth=2)
+            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}',linestyle='-', linewidth=2)
 
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
@@ -98,8 +99,8 @@ class Smartgrid(object):
                 y = coordinates.split(",", 1)[1]
                 x = re.sub("\D", "", x)
                 y = re.sub("\D", "", y)
-                colour = self.colour_list
-                colour = colour[id]
+                # colour = smart.colour_list[id]
+                colour = COLOUR_LIST[id]
                 batteries[id] = Battery(cap, x, y, colour)
 
         # return dict to INIT
