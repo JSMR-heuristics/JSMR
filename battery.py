@@ -1,13 +1,11 @@
 class Battery(object):
 
-    def __init__(self, capacity, x, y):
+    def __init__(self, capacity, x, y, colour):
         self.capacity = capacity
+        self.full = False
         self.x = int(x)
         self.y = int(y)
-        self.full = False
-
-        # dict met de huizen die verbonden zijn
-        self.linked_houses = []
+        self.colour = colour
         # latere opdrachten de prijs
 
 
