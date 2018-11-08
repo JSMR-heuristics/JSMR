@@ -40,8 +40,8 @@ class Smartgrid(object):
         x_houses = []
         y_houses = []
 
-        x_batteries = []
-        y_batteries = []
+        x_batt = []
+        y_batt = []
 
         # turn dict to list so we can iterate through
         houses_list = list(houses.values())
@@ -54,21 +54,20 @@ class Smartgrid(object):
 
         # for every battery save coordinates to lists
         for battery in batteries_list:
-            x_batteries.append(battery.x)
-            y_batteries.append(battery.y)
+            x_batt.append(battery.x)
+            y_batt.append(battery.y)
 
 
 
         # make plot
         ax = plt.gca()
         ax.axis([-2, 52, -2 , 52])
-        ax.scatter(x , y, marker = ".")
-        ax.scatter(x_batt, y_batt, marker = "+")
+        ax.scatter(x_houses , y_houses, marker = ".")
+        ax.scatter(x_batt, y_batt, marker = "o")
         ax.set_xticks(np.arange(0, 52, 1), minor = True)
         ax.set_yticks(np.arange(0, 52, 1), minor = True)
         ax.grid(b = True, which="major", linewidth=1)
         ax.grid(b = True, which="minor", linewidth=.2)
-
 
 
 
@@ -77,6 +76,7 @@ class Smartgrid(object):
 
     # Nu kijken of we batterijen ook kunnen toevoegen,
     # wanneer deze ingeladen zijn
+
 
     def load_batteries(self):
         with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
@@ -118,4 +118,4 @@ class Smartgrid(object):
     #     dict = {}
 if __name__ == "__main__":
     smart = Smartgrid()
-    #smart.plot_houses(smart.houses, smart.batteries)
+    smart.plot_houses(smart.houses, smart.batteries)
