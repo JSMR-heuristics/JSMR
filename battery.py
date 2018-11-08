@@ -4,6 +4,10 @@ class Battery(object):
         self.capacity = capacity
         self.x = int(x)
         self.y = int(y)
+        self.full = False
+
+        # dict met de huizen die verbonden zijn
+        self.linked_houses = []
         # latere opdrachten de prijs
 
 
