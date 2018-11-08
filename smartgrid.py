@@ -98,7 +98,8 @@ class Smartgrid(object):
                 y = coordinates.split(",", 1)[1]
                 x = re.sub("\D", "", x)
                 y = re.sub("\D", "", y)
-                colour = self.colour_list[id]
+                colour = self.colour_list
+                colour = colour[id]
                 batteries[id] = Battery(cap, x, y, colour)
 
         # return dict to INIT
