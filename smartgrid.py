@@ -5,18 +5,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.ticker as ticker
 import re
-
+# Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk1_huizen.csv"
 INPUT_BATTERIES = "wijk1_batterijen.txt"
 
 class Smartgrid(object):
     def __init__(self):
-        self.houses = self.load_houses()
-        self.batteries = self.load_batteries()
+        self.houses = self.load_houses(INPUT_HOUSES)
+        self.batteries = self.load_batteries(INPUT_BATTERIES)
 
-    def load_houses(self):
+    def load_houses(self, map):
         # open file
-        with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
+        with open(f"Huizen&Batterijen/{map}", newline="") as houses_csv:
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
             # skip headers
@@ -53,8 +53,8 @@ class Smartgrid(object):
 
         plt.show()
 
-    def load_batteries(self):
-        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
+    def load_batteries(self, map):
+        with open(f"Huizen&Batterijen/{map}") as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
