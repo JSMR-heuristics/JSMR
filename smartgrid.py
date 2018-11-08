@@ -99,7 +99,7 @@ class Smartgrid(object):
         # set as attributes
         keys_list = list(smart.houses.keys())
         for i, key in enumerate(keys_list):
-                smart.houses[key].add_distance(all_diff[i])
+                smart.houses[key].dist = all_diff[i]
 
         print(smart.houses["10-27"].dist)
         #################################################################

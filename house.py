@@ -6,8 +6,8 @@ class House(object):
         self.houses = {}
         self.dist = []
 
-    def add_distance(self, dist_list):
-        self.dist = dist_list
+    # def add_distance(self, dist_list):
+    #     self.dist = dist_list
     # def add_house(self, ""):
     #     Smartgrid.houses["id"] = .....
     #
