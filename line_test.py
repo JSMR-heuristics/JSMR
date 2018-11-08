@@ -55,6 +55,7 @@ for house in meh:
     x_house = house.x
     y_house = house.y
     x_diff = x_batt - x_house
+
     # calculate the new coordinate for the vertical line
     new_x = x_house + x_diff
     ax.plot([x_house, x_batt], [y_house, y_house], color='b',linestyle='-', linewidth=2)
@@ -65,6 +66,8 @@ for house in meh:
     y_diff = abs(y_batt - y_house)
     tot_cost = (x_diff + y_diff) * 9
     print(tot_cost)
+
+
 
 # # calclate difference in x-coordinate
 # x_diff = x_batt - x_house

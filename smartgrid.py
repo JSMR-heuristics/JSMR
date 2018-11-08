@@ -14,6 +14,7 @@ class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
+        self.colour_list = [m, k, g, c, y, r, b, grey, maroon, yellow, orange, fuchsia, lime, peru]
 
     def load_houses(self):
         # open file
@@ -97,7 +98,8 @@ class Smartgrid(object):
                 y = coordinates.split(",", 1)[1]
                 x = re.sub("\D", "", x)
                 y = re.sub("\D", "", y)
-                batteries[id] = Battery(cap, x, y)
+                colour = self.colour_list[id]
+                batteries[id] = Battery(cap, x, y, colour)
 
         # return dict to INIT
         return batteries
