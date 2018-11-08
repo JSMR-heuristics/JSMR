@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.ticker as ticker
 import re
+import operator
 # Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk1_huizen.csv"
 INPUT_BATTERIES = "wijk1_batterijen.txt"
@@ -79,7 +80,16 @@ class Smartgrid(object):
         return batteries
 
     def link_houses(self):
-        return
+        # order the batteries for each house
+        for house in list(smart.houses.values()):
+            dist = house.dist
+            ord_dist = sorted(dist.items(), key=operator.itemgetter(1))
+
+            # for right now, the link is the shortest
+            # regardless of battery capacity
+            house.link = ord_dist[0]
+            house.ord_dist = list(ord_dist)
+
 
     def calculate_cable(self):
         # get coordinates
@@ -101,7 +111,6 @@ class Smartgrid(object):
         for i, key in enumerate(keys_list):
                 smart.houses[key].dist = all_diff[i]
 
-        print(smart.houses["10-27"].dist)
         #################################################################
         # DUIDELIJK AANGEVEN DAT DIT ALLEEN VOOR PYTHON 3.6+ WERKT
         #################################################################3
@@ -139,3 +148,4 @@ if __name__ == "__main__":
     smart = Smartgrid()
     #smart.plot_houses(smart.houses, smart.batteries)
     smart.calculate_cable()
+    smart.link_houses()

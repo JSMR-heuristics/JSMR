@@ -5,6 +5,8 @@ class House(object):
         self.output = output
         self.houses = {}
         self.dist = []
+        self.link = []
+        self.ord_dist = []
 
     # def add_distance(self, dist_list):
     #     self.dist = dist_list
