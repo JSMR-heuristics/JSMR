@@ -7,6 +7,7 @@ class House(object):
         self.dist = []
         self.link = []
         self.ord_dist = []
+        self.diffs = {}
 
     # def add_distance(self, dist_list):
     #     self.dist = dist_list
