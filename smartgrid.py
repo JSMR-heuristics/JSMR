@@ -73,7 +73,7 @@ class Smartgrid(object):
             x_diff = abs(x_batt - x_house)
             y_diff = abs(y_batt - y_house)
             tot_cost = (x_diff + y_diff) * 9
-            print(tot_cost)
+            # print(tot_cost)
 
 
 
@@ -115,8 +115,15 @@ class Smartgrid(object):
             # for right now, the link is the shortest
             # regardless of battery capacity
             house.link = ord_dist[0]
-            house.ord_dist = list(ord_dist)
-
+            diff = ord_dist[0][1]
+            ord_dist_diff = ord_dist
+            del ord_dist_diff[0]
+            diffs = {}
+            for index in range(len(ord_dist_diff)):
+                diffs[ord_dist_diff[index][0]] = int(ord_dist_diff[index][1]) - diff
+            house.diffs = diffs
+            house.ord_dist = dict(ord_dist)
+        print(smart.houses["10-27"].diffs)
 
     def calculate_cable(self):
         # get coordinates
