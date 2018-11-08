@@ -12,12 +12,12 @@ go = 9999
 for battery in self.batteries:
     while battery.full == True:
         for house in battery.linked_houses:
-            for link in house.ord_dist:
-                if self.batteries["link:key"].full == False && link < switch:
-                    switch = link
-                    switch_batt = "link:key"
+            for link in house.diffs.items():
+                if self.batteries[link[0]].full == False && link[1] < switch:
+                    switch = link[1]
+                    switch_batt = link[0]
             if switch < go:
                 go = switch
-                go_batt = "go:key"
+                go_batt = switch_batt
                 changer = house
-        changer.link = go
+        changer.link = go_batt
