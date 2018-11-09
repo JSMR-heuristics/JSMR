@@ -7,15 +7,9 @@ import matplotlib.ticker as ticker
 import re
 import operator
 # Dit moet later worden gesoftcodedet
-<<<<<<< HEAD
-INPUT_HOUSES = "wijk1_huizen.csv"
-INPUT_BATTERIES = "wijk1_batterijen.txt"
-COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
-=======
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
-COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
->>>>>>> ec70de3bdc81fac393571d21fa891c785499cf89
+COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
