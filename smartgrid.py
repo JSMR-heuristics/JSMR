@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.ticker as ticker
 import re
 import operator
-# Dit moet later worden gesoftcodedet
+
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
 
@@ -212,6 +212,7 @@ class Smartgrid(object):
                         switch = 9999
                 # Change the connection for the best house
                 changer.link = go_batt
+                go = 9999
 
 if __name__ == "__main__":
     smart = Smartgrid()
