@@ -193,12 +193,13 @@ class Smartgrid(object):
                     # Check every possible connection the house has
                     for link in house.diffs.items():
                         # If the connection switch is possible, save it
-                        if (battery.capacity - sum(battery.linked_houses.output)) >
+                        if (battery.capacity -
+                        sum(battery.linked_houses.output)) >
                         house.output && link[1] < switch:
                             switch = link[1]
                             switch_batt = link[0]
-                    # Check the house's best switch option against the best overal
-                    # option for the battery
+                    # Check the house's best switch option against the best
+                    # overal option for the battery
                     if switch < go:
                         go = switch
                         go_batt = switch_batt
