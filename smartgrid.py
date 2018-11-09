@@ -9,7 +9,8 @@ import operator
 # Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
-COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
+COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow",
+              "orange", "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
@@ -65,9 +66,11 @@ class Smartgrid(object):
 
             line_colour = smart.batteries[id_batt].colour
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}',linestyle='-', linewidth=1)
+            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}
+            ',linestyle='-', linewidth=1)
             # plac evertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}',linestyle='-', linewidth=1)
+            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}
+            ',linestyle='-', linewidth=1)
 
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
@@ -115,6 +118,7 @@ class Smartgrid(object):
             # for right now, the link is the shortest
             # regardless of battery capacity
             house.link = ord_dist[0]
+            self.batteries[ord_dist[0]].linked_houses.append(house)
             diff = ord_dist[0][1]
             ord_dist_diff = ord_dist
             del ord_dist_diff[0]
