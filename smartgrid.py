@@ -7,8 +7,8 @@ import matplotlib.ticker as ticker
 import re
 import operator
 
-INPUT_HOUSES = "wijk3_huizen.csv"
-INPUT_BATTERIES = "wijk3_batterijen.txt"
+INPUT_HOUSES = "wijk1_huizen.csv"
+INPUT_BATTERIES = "wijk1_batterijen.txt"
 
 COLOUR_LIST = ["m", "k", "g", "c", "y", "b",
                "grey", "maroon", "yellow", "orange",
@@ -71,11 +71,11 @@ class Smartgrid(object):
 
             line_colour = smart.batteries[id_batt].colour
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}
-            ',linestyle='-', linewidth=1)
+            ax.plot([x_house, x_batt], [y_house, y_house], color=f'\
+            {line_colour}',linestyle='-', linewidth=1)
             # plac evertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}
-            ',linestyle='-', linewidth=1)
+            ax.plot([new_x, new_x], [y_house, y_batt], color=f'\
+            {line_colour}',linestyle='-', linewidth=1)
 
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
@@ -122,7 +122,7 @@ class Smartgrid(object):
             # for right now, the link is the shortest
             # regardless of battery capacity
             house.link = ord_dist[0]
-            self.batteries[ord_dist[0]].linked_houses.append(house)
+            self.batteries[ord_dist[0][0]].linked_houses.append(house)
             diff = ord_dist[0][1]
             ord_dist_diff = ord_dist
             del ord_dist_diff[0]
@@ -178,10 +178,10 @@ class Smartgrid(object):
         return x_houses, y_houses, x_batt, y_batt
 
     def optimize(self):
-        # Check every battery's capacity
-        for battery in self.batteries:
-            if battery.capacity <= sum(battery.linked_houses.output):
-                battery.full = True
+        for i in self.batteries:
+            print(self.batteries[i].full())
+        for i in self.batteries:
+            print(self.batteries[i].filled())
 
         # Initialize variables
         switch = 9999
@@ -189,34 +189,77 @@ class Smartgrid(object):
         go = 9999
         go_batt = 0
         changer = 0
+        changes = 0
+        a = 0
+        b = 0
+        c = 0
 
         # Iterate every battery
-        for battery in self.batteries:
-            while battery.full == True:
-                # Iterate every house linked to the battery
-                for house in battery.linked_houses:
-                    # Check every possible connection the house has
-                    for link in house.diffs.items():
-                        # If the connection switch is possible, save it
-                        if (battery.capacity -
-                        sum(battery.linked_houses.output)) >
-                        house.output && link[1] < switch:
-                            switch = link[1]
-                            switch_batt = link[0]
-                    # Check the house's best switch option against the best
-                    # overal option for the battery
-                    if switch < go:
-                        go = switch
-                        go_batt = switch_batt
-                        changer = house
-                        switch = 9999
-                # Change the connection for the best house
-                changer.link = go_batt
-                go = 9999
+        while self.batteries[0].full() or self.batteries[1].full() or self.batteries[2].full() or self.batteries[3].full() or self.batteries[4].full():
+            for i in self.batteries:
+                print(f"i = {i}")
+                if self.batteries[i].full():
+                    # print(f"full = {self.batteries[i].full()}")
+                    # Iterate every house linked to the battery
+                    for house in self.batteries[i].linked_houses:
+                        # print(f"house = {house}")
+                        # Check every possible connection the house has
+                        for link in house.diffs.items():
+                            # print(f"link = {link}")
+                            # print(f"switch = {switch}")
+                            # print(f"output =  {float(house.output)}")
+                            # print(f"filled = {self.batteries[i].filled()}")
+                            # print(f"capacity = {float(self.batteries[i].capacity)}")
+                            # print(f"link0 = {link[0]}")
+                            # print(f"link1 = {link[1]}")
+                            # If the connection switch is possible, save it
+                            a = self.batteries[link[0]].capacity
+                            b = self.batteries[link[0]].filled()
+                            c = house.output
+                            if link[1] < switch:
+                                 # (a - b) > c and
+                                 # and ((a - (b + c)) > 24) or ((a - (b + c)) < 6)
+                                # print(f"switch2 = {switch}")
+                                # print(f"output2 =  {float(house.output)}")
+                                # print(f"filled2 = {self.batteries[i].filled()}")
+                                # print(f"capacity2 = {float(self.batteries[i].capacity)}")
+                                # print(f"link02 = {link[0]}")
+                                # print(f"link12 = {link[1]}")
+                                switch = link[1]
+                                switch_batt = link[0]
+                        # Check the house's best switch option against the best
+                        # overal option for the battery
+                        if switch < go:
+                            go = switch
+                            go_batt = switch_batt
+                            changer = house
+                            switch = 9999
+                            # print(go)
+                            # print(changer)
+                            # print(go_batt)
+                    # Change the connection for the best house
+                    # print(f"go = {go}")
+                    # print(f"changer = {changer}")
+                    # print(f"go_batt = {go_batt}")
+                    changer.link = self.batteries[go_batt]
+                    self.batteries[go_batt].linked_houses.append(changer)
+                    self.batteries[i].linked_houses.remove(changer)
+                    go = 9999
+                    changes += 1
+                    print(f"house capacity = {changer.output}")
+                    print(f"Added to battery{go_batt}")
+                    print(f"capacity = {self.batteries[i].filled()}")
+                    print(f"Current changes = {changes}")
+            for i in self.batteries:
+                print(self.batteries[i].full())
+            for i in self.batteries:
+                print(self.batteries[i].filled())
+
 
 if __name__ == "__main__":
     smart = Smartgrid()
     smart.calculate_cable()
 
     smart.link_houses()
-    smart.plot_houses()
+    # smart.plot_houses()
+    smart.optimize()
