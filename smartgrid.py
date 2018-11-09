@@ -9,7 +9,9 @@ import operator
 # Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
-COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
+COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b",
+               "grey", "maroon", "yellow", "orange",
+               "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
@@ -75,8 +77,6 @@ class Smartgrid(object):
             tot_cost = (x_diff + y_diff) * 9
             # print(tot_cost)
 
-
-
         plt.show()
 
     def load_batteries(self):
@@ -123,7 +123,6 @@ class Smartgrid(object):
                 diffs[ord_dist_diff[index][0]] = int(ord_dist_diff[index][1]) - diff
             house.diffs = diffs
             house.ord_dist = dict(ord_dist)
-        print(smart.houses["10-27"].diffs)
 
     def calculate_cable(self):
         # get coordinates
@@ -144,7 +143,6 @@ class Smartgrid(object):
         keys_list = list(smart.houses.keys())
         for i, key in enumerate(keys_list):
                 smart.houses[key].dist = all_diff[i]
-
 
 
     def get_coordinates(self):
@@ -170,12 +168,7 @@ class Smartgrid(object):
 
         return x_houses, y_houses, x_batt, y_batt
 
-    # def calculate_battery_input():
-    #     # TODO
-    #
-    # def calculate_battery_output():
-    #     # TODO
-    #     dict = {}
+
 if __name__ == "__main__":
     smart = Smartgrid()
     smart.calculate_cable()

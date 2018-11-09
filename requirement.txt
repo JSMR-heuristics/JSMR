@@ -1,2 +1,11 @@
 calculate cable function
 - DUIDELIJK AANGEVEN DAT DIT ALLEEN VOOR PYTHON 3.6+ WERKT
+
+from house import House
+from battery import Battery
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.ticker as ticker
+import re
+import operator
