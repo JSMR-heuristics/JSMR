@@ -10,12 +10,9 @@ import operator
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
 <<<<<<< HEAD
-COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b",
+COLOUR_LIST = ["m", "k", "g", "c", "y", "b",
                "grey", "maroon", "yellow", "orange",
                "fuchsia", "lime", "peru"]
-=======
-COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
->>>>>>> b19afce72aad8292c7346ecb104933550d0abdff
 
 class Smartgrid(object):
     def __init__(self):
@@ -23,8 +20,10 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
 
     def load_houses(self):
+
         # open file
         with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
+
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
             # skip headers
@@ -59,6 +58,7 @@ class Smartgrid(object):
 
 
         for house in list(smart.houses.values()):
+
             x_house = house.x
             y_house = house.y
 
@@ -111,6 +111,7 @@ class Smartgrid(object):
         return batteries
 
     def link_houses(self):
+
         # order the batteries for each house
         for house in list(smart.houses.values()):
             dist = house.dist
@@ -129,6 +130,7 @@ class Smartgrid(object):
             house.ord_dist = dict(ord_dist)
 
     def calculate_cable(self):
+
         # get coordinates
         x_houses, y_houses, x_batt, y_batt  = smart.get_coordinates()
 
