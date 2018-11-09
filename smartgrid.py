@@ -7,8 +7,8 @@ import matplotlib.ticker as ticker
 import re
 import operator
 # Dit moet later worden gesoftcodedet
-INPUT_HOUSES = "wijk1_huizen.csv"
-INPUT_BATTERIES = "wijk1_batterijen.txt"
+INPUT_HOUSES = "wijk3_huizen.csv"
+INPUT_BATTERIES = "wijk3_batterijen.txt"
 COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
@@ -145,9 +145,7 @@ class Smartgrid(object):
         for i, key in enumerate(keys_list):
                 smart.houses[key].dist = all_diff[i]
 
-        #################################################################
-        # DUIDELIJK AANGEVEN DAT DIT ALLEEN VOOR PYTHON 3.6+ WERKT
-        #################################################################3
+
 
     def get_coordinates(self):
         x_houses = []
