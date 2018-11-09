@@ -10,12 +10,21 @@ import operator
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
 <<<<<<< HEAD
+<<<<<<< HEAD
 COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow",
               "orange", "fuchsia", "lime", "peru"]
 =======
 <<<<<<< HEAD
 COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b",
                "grey", "maroon", "yellow", "orange",
+>>>>>>> b19afce72aad8292c7346ecb104933550d0abdff
+>>>>>>> 1d4bfbc50315cffa8c8a605e304f0f3662fde518
+=======
+COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b",
+               "grey", "maroon", "yellow", "orange",
+               "fuchsia", "lime", "peru"]
+=======
+COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
 >>>>>>> b19afce72aad8292c7346ecb104933550d0abdff
 >>>>>>> 1d4bfbc50315cffa8c8a605e304f0f3662fde518
 
