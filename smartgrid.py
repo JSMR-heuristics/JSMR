@@ -9,7 +9,7 @@ import operator
 # Dit moet later worden gesoftcodedet
 INPUT_HOUSES = "wijk1_huizen.csv"
 INPUT_BATTERIES = "wijk1_batterijen.txt"
-COLOUR_LIST = ["m", "k", "g", "c", "y", "r", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
+COLOUR_LIST = ["m", "k", "g", "c", "y", "b", "grey", "maroon", "yellow", "orange", "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
@@ -45,7 +45,7 @@ class Smartgrid(object):
         ax = plt.gca()
         ax.axis([-2, 52, -2 , 52])
         ax.scatter(x_houses , y_houses, marker = ".")
-        ax.scatter(x_batt, y_batt, marker = "o")
+        ax.scatter(x_batt, y_batt, marker = "o", s = 40, c = "r" )
         ax.set_xticks(np.arange(0, 52, 1), minor = True)
         ax.set_yticks(np.arange(0, 52, 1), minor = True)
         ax.grid(b = True, which="major", linewidth=1)
@@ -65,9 +65,9 @@ class Smartgrid(object):
 
             line_colour = smart.batteries[id_batt].colour
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}',linestyle='-', linewidth=2)
+            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}',linestyle='-', linewidth=1)
             # plac evertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}',linestyle='-', linewidth=2)
+            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}',linestyle='-', linewidth=1)
 
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
