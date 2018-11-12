@@ -71,11 +71,9 @@ class Smartgrid(object):
 
             line_colour = smart.batteries[id_batt].colour
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}
-            ',linestyle='-', linewidth=1)
+            ax.plot([x_house, x_batt], [y_house, y_house], color=f'{line_colour}',linestyle='-', linewidth=1)
             # plac evertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}
-            ',linestyle='-', linewidth=1)
+            ax.plot([new_x, new_x], [y_house, y_batt], color=f'{line_colour}',linestyle='-', linewidth=1)
 
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
@@ -199,8 +197,7 @@ class Smartgrid(object):
                     for link in house.diffs.items():
                         # If the connection switch is possible, save it
                         if (battery.capacity -
-                        sum(battery.linked_houses.output)) >
-                        house.output && link[1] < switch:
+                        sum(battery.linked_houses.output)) >house.output && link[1] < switch:
                             switch = link[1]
                             switch_batt = link[0]
                     # Check the house's best switch option against the best
