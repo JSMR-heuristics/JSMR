@@ -11,8 +11,8 @@ class Battery(object):
 
     def full(self):
         sum = 0.00
-        for j in self.linked_houses:
-            sum += j.output
+        for i in self.linked_houses:
+            sum += i.output
         if self.capacity < sum:
             return True
         else:
