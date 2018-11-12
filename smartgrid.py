@@ -31,6 +31,7 @@ class Smartgrid(object):
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
+
             # skip headers
             next(data_houses, None)
             houses = {}
@@ -44,8 +45,36 @@ class Smartgrid(object):
 
                 output = row[2]
                 houses[id] = House(x, y, output)
+
         # returns dict, goes to init (self.houses)
         return houses
+
+    def load_batteries(self):
+        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
+
+            # read text file per line
+            data_batteries = batteries_text.readlines()
+
+            # delete headers
+            data_batteries.pop(0)
+
+            batteries = {}
+
+            # for every batterie isolate coordinates and capacity
+            for id, battery in enumerate(data_batteries):
+                coordinates = battery.split("\t", 1)[0]
+                cap = battery.split("\t", 1)[1]
+                cap = cap.strip()
+                x = coordinates.split(",", 1)[0]
+                y = coordinates.split(",", 1)[1]
+                x = re.sub("\D", "", x)
+                y = re.sub("\D", "", y)
+                # colour = self.colour_list[id]
+                colour = COLOUR_LIST[id]
+                batteries[id] = Battery(cap, x, y, colour)
+
+        # return dict to INIT
+        return batteries
 
     def plot_houses(self):
 
@@ -75,9 +104,11 @@ class Smartgrid(object):
             new_x = x_house + x_diff
 
             line_colour = self.batteries[id_batt].colour
+
             # place horizontal line
             ax.plot([x_house, x_batt], [y_house, y_house], color=f'\
             {line_colour}',linestyle='-', linewidth=1)
+
             # place vertical line
             ax.plot([new_x, new_x], [y_house, y_batt], color=f'\
             {line_colour}',linestyle='-', linewidth=1)
@@ -90,32 +121,7 @@ class Smartgrid(object):
 
         plt.show()
 
-    def load_batteries(self):
-        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
 
-            # read text file per line
-            data_batteries = batteries_text.readlines()
-
-            # delete headers
-            data_batteries.pop(0)
-
-            batteries = {}
-
-            # for every batterie isolate coordinates and capacity
-            for id, battery in enumerate(data_batteries):
-                coordinates = battery.split("\t", 1)[0]
-                cap = battery.split("\t", 1)[1]
-                cap = cap.strip()
-                x = coordinates.split(",", 1)[0]
-                y = coordinates.split(",", 1)[1]
-                x = re.sub("\D", "", x)
-                y = re.sub("\D", "", y)
-                # colour = self.colour_list[id]
-                colour = COLOUR_LIST[id]
-                batteries[id] = Battery(cap, x, y, colour)
-
-        # return dict to INIT
-        return batteries
 
     def link_houses(self):
 
@@ -183,6 +189,7 @@ class Smartgrid(object):
         return x_houses, y_houses, x_batt, y_batt
 
     def optimize(self):
+
         # Check initial status
         for i in self.batteries:
             print(self.batteries[i].full())
@@ -192,34 +199,8 @@ class Smartgrid(object):
         # Initialize variables
         switch = 9999
         go = 9999
-<<<<<<< HEAD
-        go_batt = 0
-        changer = 0
-
-        # Iterate every battery
-        for battery in self.batteries:
-            while battery.full == True:
-                # Iterate every house linked to the battery
-                for house in battery.linked_houses:
-                    # Check every possible connection the house has
-                    for link in house.diffs.items():
-                        # If the connection switch is possible, save it
-                        if (battery.capacity -
-                        sum(battery.linked_houses.output)) >house.output && link[1] < switch:
-                            switch = link[1]
-                            switch_batt = link[0]
-                    # Check the house's best switch option against the best
-                    # overal option for the battery
-                    if switch < go:
-                        go = switch
-                        go_batt = switch_batt
-                        changer = house
-                        switch = 9999
-                # Change the connection for the best house
-                changer.link = go_batt
-                go = 9999
-=======
         changes = 0
+
         # Between nope and yep is the range where it'll be hard to find a
         # decent house to add to a battery
         nope = 36
@@ -279,7 +260,6 @@ class Smartgrid(object):
                 print(self.batteries[i].full())
             for i in self.batteries:
                 print(self.batteries[i].filled())
->>>>>>> 48fbe51ab7363d06f1a6bb18fc6966e0383cc629
 
 
 if __name__ == "__main__":
