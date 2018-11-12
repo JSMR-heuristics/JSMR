@@ -5,7 +5,7 @@ class House(object):
         self.y = int(y)
 
         # output of the house instance
-        self.output = output
+        self.output = float(output)
         self.dist = []
         self.link = []
         self.ord_dist = {}
