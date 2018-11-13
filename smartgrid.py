@@ -253,7 +253,6 @@ class Smartgrid(object):
                   changes += 1
                   print(f"Current changes = {changes}")
                   go = 9999
-
           # Check results
           for i in self.batteries:
               print(self.batteries[i].full())
@@ -267,7 +266,6 @@ class Smartgrid(object):
           print(f"house at x{house.x}/y{house.y} changed from battery at x{current_batt.x}/y{current_batt.y} to battery at x{next_batt.x}/y{next_batt.y}")
           print(f"house capacity = {house.output}")
           print(f"capacity = {current_batt.filled()}")
-
 
 
 if __name__ == "__main__":
