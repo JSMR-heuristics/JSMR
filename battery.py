@@ -8,7 +8,7 @@ class Battery(object):
         self.linked_houses = []
         # latere opdrachten de prijs
 
-
+    # returns a boolean corresponding to whether max capacity is reached or not
     def full(self):
         sum = 0.00
         for i in self.linked_houses:
@@ -18,7 +18,7 @@ class Battery(object):
         else:
             return False
 
-
+    # current house input
     def filled(self):
         sum = 0.00
         for j in self.linked_houses:

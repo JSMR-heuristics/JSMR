@@ -6,9 +6,18 @@ class House(object):
 
         # output of the house instance
         self.output = float(output)
+
+        # the list of the distances to all the other batteries
         self.dist = []
+
+        # to which battery is the house currently connected
         self.link = []
+
+        # the ordered dict of distances between batteries
         self.ord_dist = {}
+
+        # the differences in distance between the closest Battery
+        # and the other batteries
         self.diffs = {}
 
     # def add_distance(self, dist_list):
