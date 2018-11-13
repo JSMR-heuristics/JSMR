@@ -10,7 +10,7 @@ import operator
 INPUT_HOUSES = "wijk1_huizen.csv"
 INPUT_BATTERIES = "wijk1_batterijen.txt"
 
-COLOUR_LIST = ["m", "k", "g", "c", "y", "b",
+COLOUR_LIST = ["m", "g", "c", "y", "b",
                "grey", "maroon", "yellow", "orange",
                "fuchsia", "lime", "peru"]
 
@@ -90,7 +90,7 @@ class Smartgrid(object):
         ax.grid(b = True, which="major", linewidth=1)
         ax.grid(b = True, which="minor", linewidth=.2)
 
-
+        total = 0
         for house in list(self.houses.values()):
 
             x_house = house.x
@@ -113,13 +113,23 @@ class Smartgrid(object):
             ax.plot([new_x, new_x], [y_house, y_batt], \
             color=f'{line_colour}',linestyle='-', linewidth=1)
 
-            # calcualte line cost
+            # calculate line cost
             x_diff = abs(x_batt - x_house)
             y_diff = abs(y_batt - y_house)
             tot_cost = (x_diff + y_diff) * 9
-            # print(tot_cost)
+            total += tot_cost
+        print(f"Total cost of cable: {total}")
 
-        plt.show()
+        ## adds the id to the batteries on the plot
+        ## alter in the sub3,4 to type of battery
+        # count = 0
+        # for battery in list(self.batteries.values()):
+        #     x = battery.x
+        #     y = battery.y
+        #     plt.text(x, y, f"{count}")
+        #     count += 1
+        # plt.show()
+        plt.savefig('plot.png')
 
 
 
@@ -221,11 +231,11 @@ class Smartgrid(object):
                   for house in self.batteries[i].linked_houses:
                       # Check every possible connection the house has
                       for link in house.diffs.items():
-                          a = self.batteries[link[0]].capacity
-                          b = self.batteries[link[0]].filled()
-                          c = house.output
+                          max_cap = self.batteries[link[0]].capacity
+                          cur_cap = self.batteries[link[0]].filled()
+                          cur_input = house.output
                           # d = leftover capacity minus the house that will be added
-                          d = (a - b) - c
+                          rest_cap = (max_cap - cur_cap) - cur_input
                           # If the switch is smaller than the other links
                           # of the house, consider it for switching
                           if link[1] < switch and not (f"{house}, {link}" in nope_list):
@@ -234,7 +244,8 @@ class Smartgrid(object):
                               # that should be ignored. If adding the houses
                               # puts the battery in an impractical range of
                               # capacity, also ignore the switch
-                              if a < b + c or ((d < nope) and (d > yep)):
+                              if (max_cap < cur_cap + cur_input
+                                 or ((rest_cap < nope) and (rest_cap > yep))):
                                   nope_list.append(f"{house}, {link}")
                               else:
                                   switch = link[1]
