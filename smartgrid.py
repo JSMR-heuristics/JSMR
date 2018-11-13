@@ -21,7 +21,7 @@ class Smartgrid(object):
         self.calculate_cable()
         self.link_houses()
         self.optimize()
-        # self.plot_houses()
+        self.plot_houses()
 
 
     def load_houses(self):
@@ -96,23 +96,24 @@ class Smartgrid(object):
             x_house = house.x
             y_house = house.y
 
-            id_batt = house.link[0]
-            x_batt, y_batt = self.batteries[id_batt].x, self.batteries[id_batt].y
+            batt = house.link
+            x_batt, y_batt = batt.x, batt.y
 
             # calculate the new coordinate for the vertical line
             x_diff = x_batt - x_house
             new_x = x_house + x_diff
 
-            line_colour = self.batteries[id_batt].colour
+            line_colour = batt.colour
 
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], color=f'\
-            {line_colour}',linestyle='-', linewidth=1)
+            ax.plot([x_house, x_batt], [y_house, y_house], \
+            color=f'{line_colour}',linestyle='-', linewidth=1)
 
             # place vertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], color=f'\
-            {line_colour}',linestyle='-', linewidth=1)
+            ax.plot([new_x, new_x], [y_house, y_batt], \
+            color=f'{line_colour}',linestyle='-', linewidth=1)
 
+            print("hooi")
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
             y_diff = abs(y_batt - y_house)
@@ -132,7 +133,7 @@ class Smartgrid(object):
 
             # for right now, the link is the shortest
             # regardless of battery capacity
-            house.link = ord_dist[0]
+            house.link = self.batteries[ord_dist[0][0]]
             self.batteries[ord_dist[0][0]].linked_houses.append(house)
             diff = ord_dist[0][1]
             ord_dist_diff = ord_dist
