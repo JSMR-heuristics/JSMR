@@ -205,7 +205,7 @@ class Smartgrid(object):
         # decent house to add to a battery
         nope = 36
         yep = 8
-        nope_list = []
+        # nope_list = []
 
         # Keep looping until all batteries are below max capacity
         while self.batteries[0].full() or self.batteries[1].full() or self.batteries[2].full() or self.batteries[3].full() or self.batteries[4].full():
@@ -215,6 +215,7 @@ class Smartgrid(object):
                 # Keep moving houses until the battery is no longer full
                 while self.batteries[i].full():
                     # Iterate every house linked to the battery
+                    nope_list = []
                     for house in self.batteries[i].linked_houses:
                         # Check every possible connection the house has
                         for link in house.diffs.items():
@@ -250,7 +251,7 @@ class Smartgrid(object):
                     self.batteries[i].linked_houses.remove(changer)
                     go = 9999
                     changes += 1
-                    nope_list = []
+                    # nope_list = []
                     print(f"house{changer} changed from battery{i} to battery{go_batt}")
                     print(f"house capacity = {changer.output}")
                     print(f"capacity = {self.batteries[i].filled()}")
