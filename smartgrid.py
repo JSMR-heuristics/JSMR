@@ -127,7 +127,8 @@ class Smartgrid(object):
         #     y = battery.y
         #     plt.text(x, y, f"{count}")
         #     count += 1
-        plt.show()
+        # plt.show()
+        plt.savefig('plot.png')
 
 
 
