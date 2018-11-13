@@ -258,13 +258,13 @@ class Smartgrid(object):
               print(self.batteries[i].filled())
 
     def swap_houses(self, house, current_batt, next_batt, changes):
-              house.link =  next_batt
-              next_batt.linked_houses.append(house)
-              current_batt.linked_houses.remove(house)
-              print(f"house{house} changed from battery{current_batt} to battery{next_batt}")
-              print(f"house capacity = {house.output}")
-              print(f"capacity = {current_batt.filled()}")
-              print(f"Current changes = {changes}")
+          house.link =  next_batt
+          next_batt.linked_houses.append(house)
+          current_batt.linked_houses.remove(house)
+          print(f"house{house} changed from battery{current_batt} to battery{next_batt}")
+          print(f"house capacity = {house.output}")
+          print(f"capacity = {current_batt.filled()}")
+          print(f"Current changes = {changes}")
 
 
 if __name__ == "__main__":
