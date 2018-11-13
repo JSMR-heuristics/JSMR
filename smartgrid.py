@@ -213,6 +213,9 @@ class Smartgrid(object):
       nope = 36
       yep = 8
 
+# conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
+# conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
+
       # Keep looping until all batteries are below max capacity
       while self.batteries[0].full() or self.batteries[1].full() or self.batteries[2].full() or self.batteries[3].full() or self.batteries[4].full():
           # Iterate over every battery
@@ -252,11 +255,11 @@ class Smartgrid(object):
                           switch = 9999
                   # The loop has checked every house now, so it changes the
                   # connection for the best house option
-                  go = 9999
-                  changes += 1
-
                   self.swap_houses(changer, self.batteries[i],
                                    self.batteries[go_batt], changes)
+                  changes += 1
+                  print(f"Current changes = {changes}")
+                  go = 9999
 
           # Check results
           for i in self.batteries:
@@ -265,13 +268,13 @@ class Smartgrid(object):
               print(self.batteries[i].filled())
 
     def swap_houses(self, house, current_batt, next_batt, changes):
-              house.link =  next_batt
-              next_batt.linked_houses.append(house)
-              current_batt.linked_houses.remove(house)
-              print(f"house{house} changed from battery{current_batt} to battery{next_batt}")
-              print(f"house capacity = {house.output}")
-              print(f"capacity = {current_batt.filled()}")
-              print(f"Current changes = {changes}")
+          house.link = next_batt
+          next_batt.linked_houses.append(house)
+          current_batt.linked_houses.remove(house)
+          print(f"house at x{house.x}/y{house.y} changed from battery at x{current_batt.x}/y{current_batt.y} to battery at x{next_batt.x}/y{next_batt.y}")
+          print(f"house capacity = {house.output}")
+          print(f"capacity = {current_batt.filled()}")
+
 
 
 if __name__ == "__main__":
