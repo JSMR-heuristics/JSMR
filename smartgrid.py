@@ -113,7 +113,6 @@ class Smartgrid(object):
             ax.plot([new_x, new_x], [y_house, y_batt], \
             color=f'{line_colour}',linestyle='-', linewidth=1)
 
-            print("hooi")
             # calcualte line cost
             x_diff = abs(x_batt - x_house)
             y_diff = abs(y_batt - y_house)
