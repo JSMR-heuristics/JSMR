@@ -90,7 +90,7 @@ class Smartgrid(object):
         ax.grid(b = True, which="major", linewidth=1)
         ax.grid(b = True, which="minor", linewidth=.2)
 
-
+        total = 0
         for house in list(self.houses.values()):
 
             x_house = house.x
@@ -117,7 +117,8 @@ class Smartgrid(object):
             x_diff = abs(x_batt - x_house)
             y_diff = abs(y_batt - y_house)
             tot_cost = (x_diff + y_diff) * 9
-            # print(tot_cost)
+            total += tot_cost
+        print(f"Total cost of cable: {total}")
 
         ## adds the id to the batteries on the plot
         ## alter in the sub3,4 to type of battery
