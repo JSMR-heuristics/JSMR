@@ -235,19 +235,10 @@ class Smartgrid(object):
             # to disconnect a battery from
             for i in high_low:
                 battery = i[1]
-                distance_list = []
 
                 # Sort houses linked to this battery by distance
                 # to other battery from low to high
-                for house in battery.linked_houses:
-                    element = []
-                    batts = list(house.diffs.keys())
-                    distance = list(house.diffs.values())
-                    houses = [house] * len(distance)
-                    outputs = [house.output] * len(distance)
-                    element = list(map(list, zip(batts, distance, houses, outputs)))
-                    distance_list += element
-                distance_list = sorted(distance_list, key=operator.itemgetter(1))
+                distance_list = self.sort_linked_houses(battery)
 
                 # Determine the cheapest option first, if any
                 # else transfer option with lowest output
@@ -260,6 +251,21 @@ class Smartgrid(object):
                 curr_batt = house.link
                 changes += 1
                 self.swap_houses(house, curr_batt, to_batt, changes)
+
+    def sort_linked_houses(self, battery):
+        """
+        Sorts list of linked houses of a battery by distances
+        """
+        distance_list = []
+        for house in battery.linked_houses:
+            element = []
+            batts = list(house.diffs.keys())
+            distance = list(house.diffs.values())
+            houses = [house] * len(distance)
+            outputs = [house.output] * len(distance)
+            element = list(map(list, zip(batts, distance, houses, outputs)))
+            distance_list += element
+        return sorted(distance_list, key=operator.itemgetter(1))
 
 
     def check_full(self):
