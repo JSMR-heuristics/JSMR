@@ -106,7 +106,6 @@ class Smartgrid(object):
 
             x_house = house.x
             y_house = house.y
-
             batt = house.link
             x_batt, y_batt = batt.x, batt.y
 
@@ -141,7 +140,6 @@ class Smartgrid(object):
         #     count += 1
         # plt.show()
         plt.savefig('plot.png')
-
 
 
     def link_houses(self):
@@ -195,7 +193,6 @@ class Smartgrid(object):
     def get_coordinates(self):
         x_houses = []
         y_houses = []
-
         x_batt = []
         y_batt = []
 
@@ -274,7 +271,6 @@ class Smartgrid(object):
         for battery in self.batteries.values():
             if battery.full() is True:
                 switch = True
-
         return switch
 
     def find_best(self, list, status):
@@ -293,77 +289,6 @@ class Smartgrid(object):
                     print(option[2].link.filled() - option[2].output)
                     return option[2], self.batteries[option[0]]
 
-<<<<<<< HEAD
-      # Check initial status
-      for i in self.batteries:
-          print(self.batteries[i].full())
-      for i in self.batteries:
-          print(self.batteries[i].filled())
-
-      # Initialize variables
-      switch = 9999
-      go = 9999
-      changes = 0
-
-      # Between nope and yep is the range where it'll be hard to find a
-      # decent house to add to a battery
-      nope = 30
-      yep = 8
-
-# conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
-# conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
-
-      # Keep looping until all batteries are below max capacity
-      while self.batteries[0].full() or self.batteries[1].full() or self.batteries[2].full() or self.batteries[3].full() or self.batteries[4].full():
-          # Iterate over every battery
-          for i in self.batteries:
-              print(f"i = {i}")
-              # Keep moving houses until the battery is no longer full
-              while self.batteries[i].full():
-                  nope_list = []
-                  # Iterate every house linked to the battery
-                  for house in self.batteries[i].linked_houses:
-                      # Check every possible connection the house has
-                      for link in house.diffs.items():
-                          max_cap = self.batteries[link[0]].capacity
-                          cur_cap = self.batteries[link[0]].filled()
-                          cur_input = house.output
-                          # d = leftover capacity minus the house that will be added
-                          rest_cap = (max_cap - cur_cap) - cur_input
-                          # If the switch is smaller than the other links
-                          # of the house, consider it for switching
-                          if link[1] < switch and not (f"{house}, {link}" in nope_list):
-                              # If the connection switch is possible, save it,
-                              # otherwise add it to a list of houses-connections
-                              # that should be ignored. If adding the houses
-                              # puts the battery in an impractical range of
-                              # capacity, also ignore the switch
-                              if max_cap < cur_cap + cur_input or ((rest_cap < nope) and (rest_cap > yep)) or ((cur_cap - max_cap - cur_input) > 0 and (cur_cap - max_cap - cur_input) < nope):
-                                  nope_list.append(f"{house}, {link}")
-                              else:
-                                  switch = link[1]
-                                  switch_batt = link[0]
-                      # Check the house's best switch option against the best
-                      # overal option for the battery so far
-                      if switch < go:
-                          go = switch
-                          go_batt = switch_batt
-                          changer = house
-                          switch = 9999
-                  # The loop has checked every house now, so it changes the
-                  # connection for the best house option
-                  self.swap_houses(changer, self.batteries[i],
-                                   self.batteries[go_batt], changes)
-                  changes += 1
-                  print(f"Current changes = {changes}")
-                  go = 9999
-          # Check results
-          for i in self.batteries:
-              print(self.batteries[i].full())
-          for i in self.batteries:
-              print(self.batteries[i].filled())
-=======
->>>>>>> 9d5fe428224ff054b32d93751ad360162f173402
 
     def swap_houses(self, house, current_batt, next_batt, changes):
         """
@@ -377,7 +302,6 @@ class Smartgrid(object):
         print(f"house capacity = {house.output}")
         print(f"capacity = {current_batt.filled()}")
         print(f"changes = {changes}")
-
 
 
 if __name__ == "__main__":
