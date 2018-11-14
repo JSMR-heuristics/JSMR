@@ -25,7 +25,10 @@ class Smartgrid(object):
 
 
     def load_houses(self):
-
+        """
+        Parses through csv file and saves houses as house.House
+        objects. Returns instances in dict to __init__
+        """
         # open file
         with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
 
@@ -50,6 +53,10 @@ class Smartgrid(object):
         return houses
 
     def load_batteries(self):
+        """
+        Parses through text file and saves batteries as battery.Battery
+        objects. Returns instances in dict to __init__
+        """
         with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
 
             # read text file per line
@@ -77,6 +84,10 @@ class Smartgrid(object):
         return batteries
 
     def plot_houses(self):
+        """
+        Plots houses, batteries and cables. Also calculates the total
+        cost of the cable
+        """
 
         x_houses, y_houses, x_batt, y_batt  = self.get_coordinates()
 
@@ -134,7 +145,13 @@ class Smartgrid(object):
 
 
     def link_houses(self):
+        """
+        Links houses to batteries irregardless of capacity, choses the
+        closest option
 
+        LINK_HOUSES CALCULATE_CABLE EN GET_COORDINATES MOGEN LATER DENK
+        IK WEL IN 1 METHOD GESCHREVEN
+        """
         # order the batteries for each house
         for house in list(self.houses.values()):
             dist = house.dist
