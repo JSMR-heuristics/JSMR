@@ -219,7 +219,9 @@ class Smartgrid(object):
 # conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
 
       # Keep looping until all batteries are below max capacity
-      while self.batteries[0].full() or self.batteries[1].full() or self.batteries[2].full() or self.batteries[3].full() or self.batteries[4].full():
+      while (self.batteries[0].full() or self.batteries[1].full() or
+             self.batteries[2].full() or self.batteries[3].full() or
+             self.batteries[4].full()):
           # Iterate over every battery
           for i in self.batteries:
               print(f"i = {i}")
@@ -229,17 +231,21 @@ class Smartgrid(object):
                   # Iterate every house linked to the battery
                   for house in self.batteries[i].linked_houses:
                       # Check every possible connection the house has
+                      # for alternative linking
                       for link in house.diffs.items():
                           max_cap = self.batteries[link[0]].capacity
                           cur_cap = self.batteries[link[0]].filled()
                           cur_input = house.output
-                          # d = leftover capacity minus the house that will be added
+
+                          # calculate leftover capacity and
+                          # subtract the house that will be added
                           rest_cap = (max_cap - cur_cap) - cur_input
+
                           # If the switch is smaller than the other links
                           # of the house, consider it for switching
                           if link[1] < switch and not (f"{house}, {link}" in nope_list):
                               # If the connection switch is possible, save it,
-                              # otherwise add it to a list of houses-connections
+                              # Else add it to a list of houses-connections
                               # that should be ignored. If adding the houses
                               # puts the battery in an impractical range of
                               # capacity, also ignore the switch
