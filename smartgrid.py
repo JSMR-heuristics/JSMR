@@ -213,7 +213,7 @@ class Smartgrid(object):
 
       # Between nope and yep is the range where it'll be hard to find a
       # decent house to add to a battery
-      nope = 36
+      nope = 30
       yep = 8
 
 # conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
@@ -244,8 +244,7 @@ class Smartgrid(object):
                               # that should be ignored. If adding the houses
                               # puts the battery in an impractical range of
                               # capacity, also ignore the switch
-                              if (max_cap < cur_cap + cur_input
-                                 or ((rest_cap < nope) and (rest_cap > yep))):
+                              if max_cap < cur_cap + cur_input or ((rest_cap < nope) and (rest_cap > yep)) or ((cur_cap - max_cap - cur_input) > 0 and (cur_cap - max_cap - cur_input) < nope):
                                   nope_list.append(f"{house}, {link}")
                               else:
                                   switch = link[1]
