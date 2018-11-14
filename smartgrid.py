@@ -25,7 +25,10 @@ class Smartgrid(object):
 
 
     def load_houses(self):
-
+        """
+        Parses through csv file and saves houses as house.House
+        objects. Returns instances in dict to __init__
+        """
         # open file
         with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
 
@@ -50,6 +53,10 @@ class Smartgrid(object):
         return houses
 
     def load_batteries(self):
+        """
+        Parses through text file and saves batteries as battery.Battery
+        objects. Returns instances in dict to __init__
+        """
         with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
 
             # read text file per line
@@ -77,6 +84,10 @@ class Smartgrid(object):
         return batteries
 
     def plot_houses(self):
+        """
+        Plots houses, batteries and cables. Also calculates the total
+        cost of the cable
+        """
 
         x_houses, y_houses, x_batt, y_batt  = self.get_coordinates()
 
@@ -134,7 +145,13 @@ class Smartgrid(object):
 
 
     def link_houses(self):
+        """
+        Links houses to batteries irregardless of capacity, choses the
+        closest option
 
+        LINK_HOUSES CALCULATE_CABLE EN GET_COORDINATES MOGEN LATER DENK
+        IK WEL IN 1 METHOD GESCHREVEN
+        """
         # order the batteries for each house
         for house in list(self.houses.values()):
             dist = house.dist
@@ -199,7 +216,84 @@ class Smartgrid(object):
         return x_houses, y_houses, x_batt, y_batt
 
     def optimize(self):
+        """
+        This function changes links between houses and batteries
+        so no battery is over it's capacity, this will be done
+        with lowest cost possible for this algorithm
+        """
+        # Initialize changes counter, this gives insight to
+        # the speed of this algorithm
+        changes = 0
 
+        # While one or more batteries are over their capacity
+        while self.check_full():
+
+            # Sorts batteries based off total inputs from high to low
+            total_inputs = []
+            for battery in self.batteries.values():
+                total_inputs.append([battery.filled(), battery])
+            high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
+
+            # Prioritize battery with highest inputs
+            # to disconnect a battery from
+            for i in high_low:
+                battery = i[1]
+                distance_list = []
+
+                # Sort houses linked to this battery by distance
+                # to other battery from low to high
+                for house in battery.linked_houses:
+                    element = []
+                    batts = list(house.diffs.keys())
+                    distance = list(house.diffs.values())
+                    houses = [house] * len(distance)
+                    outputs = [house.output] * len(distance)
+                    element = list(map(list, zip(batts, distance, houses, outputs)))
+                    distance_list += element
+                distance_list = sorted(distance_list, key=operator.itemgetter(1))
+
+                # Determine the cheapest option first, if any
+                # else transfer option with lowest output
+                try:
+                    house, to_batt = self.find_best(distance_list, "strict")
+                except TypeError:
+                    house, to_batt = self.find_best(distance_list, "not-strict")
+
+                # Switch the house from battery
+                curr_batt = house.link
+                changes += 1
+                self.swap_houses(house, curr_batt, to_batt, changes)
+
+
+    def check_full(self):
+        """
+        Returns True if one or more of the batteries is over it's
+        capacity, False if not.
+        """
+        switch = False
+        for battery in self.batteries.values():
+            if battery.full() is True:
+                switch = True
+
+        return switch
+
+    def find_best(self, list, status):
+        """
+        Tries to find either the cheapest house to possibly switch from battery
+        or the one with the lowest possible output
+        """
+        if status is "strict":
+            for option in list:
+                if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity:
+                    return option[2], self.batteries[option[0]]
+        else:
+            list = sorted(list, key=operator.itemgetter(3))
+            for option in list:
+                if (option[2].link.filled() - option[2].output) < option[2].link.capacity:
+                    print(option[2].link.filled() - option[2].output)
+                    return option[2], self.batteries[option[0]]
+
+<<<<<<< HEAD
       # Check initial status
       for i in self.batteries:
           print(self.batteries[i].full())
@@ -268,14 +362,22 @@ class Smartgrid(object):
               print(self.batteries[i].full())
           for i in self.batteries:
               print(self.batteries[i].filled())
+=======
+>>>>>>> 9d5fe428224ff054b32d93751ad360162f173402
 
     def swap_houses(self, house, current_batt, next_batt, changes):
-          house.link = next_batt
-          next_batt.linked_houses.append(house)
-          current_batt.linked_houses.remove(house)
-          print(f"house at x{house.x}/y{house.y} changed from battery at x{current_batt.x}/y{current_batt.y} to battery at x{next_batt.x}/y{next_batt.y}")
-          print(f"house capacity = {house.output}")
-          print(f"capacity = {current_batt.filled()}")
+        """
+        Switches house from battery it's currently linked to, to the next
+        one
+        """
+        house.link = next_batt
+        next_batt.linked_houses.append(house)
+        current_batt.linked_houses.remove(house)
+        print(f"house at x{house.x}/y{house.y} changed from battery at x{current_batt.x}/y{current_batt.y} to battery at x{next_batt.x}/y{next_batt.y}")
+        print(f"house capacity = {house.output}")
+        print(f"capacity = {current_batt.filled()}")
+        print(f"changes = {changes}")
+
 
 
 if __name__ == "__main__":
