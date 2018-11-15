@@ -7,12 +7,9 @@ import matplotlib.ticker as ticker
 import re
 import operator
 
-INPUT_HOUSES = "wijk1_huizen.csv"
-INPUT_BATTERIES = "wijk1_batterijen.txt"
+# Moet worden vervangen door user input
+INPUT = 1
 
-COLOUR_LIST = ["m", "g", "c", "y", "b",
-               "grey", "maroon", "yellow", "orange",
-               "fuchsia", "lime", "peru"]
 
 class Smartgrid(object):
     def __init__(self):
@@ -30,7 +27,7 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # open file
-        with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
+        with open(f"Huizen&Batterijen/wijk{INPUT}_huizen.csv", newline="") as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -57,7 +54,7 @@ class Smartgrid(object):
         Parses through text file and saves batteries as battery.Battery
         objects. Returns instances in dict to __init__
         """
-        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
+        with open(f"Huizen&Batterijen/wijk{INPUT}_batterijen.txt") as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
@@ -66,6 +63,10 @@ class Smartgrid(object):
             data_batteries.pop(0)
 
             batteries = {}
+
+            COLOUR_LIST = ["m", "g", "c", "y", "b",
+                           "grey", "maroon", "yellow", "orange",
+                           "fuchsia", "lime", "peru"]
 
             # for every batterie isolate coordinates and capacity
             for id, battery in enumerate(data_batteries):
@@ -295,85 +296,8 @@ class Smartgrid(object):
                     print(option[2].link.filled() - option[2].output)
                     return option[2], self.batteries[option[0]]
 
-<<<<<<< HEAD
-      # Check initial status
-      for i in self.batteries:
-          print(self.batteries[i].full())
-      for i in self.batteries:
-          print(self.batteries[i].filled())
-
-      # Initialize variables
-      switch = 9999
-      go = 9999
-      changes = 0
-
-      # Between nope and yep is the range where it'll be hard to find a
-      # decent house to add to a battery
-      nope = 36
-      yep = 8
-
 # conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
 # conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
-
-      # Keep looping until all batteries are below max capacity
-      while (self.batteries[0].full() or self.batteries[1].full() or
-             self.batteries[2].full() or self.batteries[3].full() or
-             self.batteries[4].full()):
-          # Iterate over every battery
-          for i in self.batteries:
-              print(f"i = {i}")
-              # Keep moving houses until the battery is no longer full
-              while self.batteries[i].full():
-                  nope_list = []
-                  # Iterate every house linked to the battery
-                  for house in self.batteries[i].linked_houses:
-                      # Check every possible connection the house has
-                      # for alternative linking
-                      for link in house.diffs.items():
-                          max_cap = self.batteries[link[0]].capacity
-                          cur_cap = self.batteries[link[0]].filled()
-                          cur_input = house.output
-
-                          # calculate leftover capacity and
-                          # subtract the house that will be added
-                          rest_cap = (max_cap - cur_cap) - cur_input
-
-                          # If the switch is smaller than the other links
-                          # of the house, consider it for switching
-                          if link[1] < switch and not (f"{house}, {link}" in nope_list):
-                              # If the connection switch is possible, save it,
-                              # Else add it to a list of houses-connections
-                              # that should be ignored. If adding the houses
-                              # puts the battery in an impractical range of
-                              # capacity, also ignore the switch
-                              if (max_cap < cur_cap + cur_input
-                                 or ((rest_cap < nope) and (rest_cap > yep))):
-                                  nope_list.append(f"{house}, {link}")
-                              else:
-                                  switch = link[1]
-                                  switch_batt = link[0]
-                      # Check the house's best switch option against the best
-                      # overal option for the battery so far
-                      if switch < go:
-                          go = switch
-                          go_batt = switch_batt
-                          changer = house
-                          switch = 9999
-                  # The loop has checked every house now, so it changes the
-                  # connection for the best house option
-                  self.swap_houses(changer, self.batteries[i],
-                                   self.batteries[go_batt], changes)
-                  changes += 1
-                  print(f"Current changes = {changes}")
-                  go = 9999
-
-          # Check results
-          for i in self.batteries:
-              print(self.batteries[i].full())
-          for i in self.batteries:
-              print(self.batteries[i].filled())
-=======
->>>>>>> 1ed419705b8d89c9bcd594e3aaff78d6c072a64c
 
     def swap_houses(self, house, current_batt, next_batt, changes):
         """
