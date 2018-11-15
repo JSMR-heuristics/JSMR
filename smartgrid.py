@@ -64,6 +64,7 @@ class Smartgrid(object):
 
             batteries = {}
 
+            # Library color list toevoegen
             COLOUR_LIST = ["m", "g", "c", "y", "b",
                            "grey", "maroon", "yellow", "orange",
                            "fuchsia", "lime", "peru"]
@@ -71,13 +72,9 @@ class Smartgrid(object):
             # for every batterie isolate coordinates and capacity
             for id, battery in enumerate(data_batteries):
                 coordinates = battery.split("\t", 1)[0]
-                cap = battery.split("\t", 1)[1]
-                cap = cap.strip()
-                x = coordinates.split(",", 1)[0]
-                y = coordinates.split(",", 1)[1]
-                x = re.sub("\D", "", x)
-                y = re.sub("\D", "", y)
-                # colour = self.colour_list[id]
+                cap = battery.split("\t", 1)[1].strip()
+                x = re.sub("\D", "", coordinates.split(",", 1)[0])
+                y = re.sub("\D", "", coordinates.split(",", 1)[1])
                 colour = COLOUR_LIST[id]
                 batteries[id] = Battery(cap, x, y, colour)
 
@@ -105,16 +102,14 @@ class Smartgrid(object):
         total = 0
         for house in list(self.houses.values()):
 
-            x_house = house.x
-            y_house = house.y
-            batt = house.link
-            x_batt, y_batt = batt.x, batt.y
+            x_house, y_house = house.x, house.y
+            x_batt, y_batt = house.link.x, house.link.y
 
             # calculate the new coordinate for the vertical line
             x_diff = x_batt - x_house
             new_x = x_house + x_diff
 
-            line_colour = batt.colour
+            line_colour = house.link.colour
 
             # place horizontal line
             ax.plot([x_house, x_batt], [y_house, y_house], \
@@ -130,6 +125,7 @@ class Smartgrid(object):
             tot_cost = (x_diff + y_diff) * 9
             total += tot_cost
         print(f"Total cost of cable: {total}")
+        plt.title(f"Total cost of cable: {total}")
 
         ## adds the id to the batteries on the plot
         ## alter in the sub3,4 to type of battery
@@ -145,7 +141,7 @@ class Smartgrid(object):
 
     def link_houses(self):
         """
-        Links houses to batteries irregardless of capacity, choses the
+        Links houses to batteries regardless of capacity, choses the
         closest option
 
         LINK_HOUSES CALCULATE_CABLE EN GET_COORDINATES MOGEN LATER DENK
@@ -169,6 +165,7 @@ class Smartgrid(object):
             house.diffs = diffs
             house.ord_dist = dict(ord_dist)
 
+# kan weggewerkt worden
     def calculate_cable(self):
 
         # get coordinates
@@ -190,7 +187,7 @@ class Smartgrid(object):
         for i, key in enumerate(keys_list):
                 self.houses[key].dist = all_diff[i]
 
-
+# kan weggewerkt worden
     def get_coordinates(self):
         x_houses = []
         y_houses = []
@@ -226,6 +223,7 @@ class Smartgrid(object):
         # While one or more batteries are over their capacity
         while self.check_full():
 
+            # kan korter
             # Sorts batteries based off total inputs from high to low
             total_inputs = []
             for battery in self.batteries.values():
@@ -233,7 +231,7 @@ class Smartgrid(object):
             high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
 
             # Prioritize battery with highest inputs
-            # to disconnect a battery from
+            # to disconnect a house from
             for i in high_low:
                 battery = i[1]
 
@@ -289,6 +287,7 @@ class Smartgrid(object):
             for option in list:
                 if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity:
                     return option[2], self.batteries[option[0]]
+        # wordt vervangen door output gewicht
         else:
             list = sorted(list, key=operator.itemgetter(3))
             for option in list:
