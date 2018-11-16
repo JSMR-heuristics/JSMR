@@ -13,16 +13,27 @@ import operator
 from pathlib import Path
 
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
+# en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
-if len(sys.argv) is not 2:
-    print("Usage: python smargrid.py <wijknummer>")
-    sys.exit(2)
-elif int(sys.argv[1]) not in [1, 2, 3]:
-    print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-    sys.exit(2)
+plot = False
 
-INPUT = sys.argv[1]
-
+if len(sys.argv) not in [2, 3]:
+        print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
+        sys.exit(2)
+elif len(sys.argv) is 2:
+    if int(sys.argv[1]) not in [1, 2, 3]:
+        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+        sys.exit(2)
+    else:
+        INPUT = sys.argv[1]
+elif len(sys.argv) is 3:
+    if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
+        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+        print("If you want plots type\n python smargrid.py <wijknummer> plot")
+        sys.exit(2)
+    else:
+        INPUT = sys.argv[1]
+        plot = True
 
 class Smartgrid(object):
     def __init__(self):
@@ -30,7 +41,6 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.link_houses()
         self.optimize()
-        self.plot_houses()
 
 
     def load_houses(self):
@@ -100,7 +110,7 @@ class Smartgrid(object):
         # return dict to INIT
         return batteries
 
-    def plot_houses(self):
+    def plot_houses(self, changes):
         """
         Plots houses, batteries and cables. Also calculates the total
         cost of the cable
@@ -140,7 +150,7 @@ class Smartgrid(object):
 
             # calculate line cost
             total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
-            
+
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
 
@@ -153,7 +163,7 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        plt.savefig('plot.png')
+        plt.savefig(f'plot{changes}.png')
 
 
     def link_houses(self):
@@ -256,7 +266,10 @@ class Smartgrid(object):
                 curr_batt = house.link
                 changes += 1
                 self.swap_houses(house, curr_batt, to_batt, changes)
+                if (changes % 5) is 0 and plot:
+                    self.plot_houses(changes)
                 break
+        self.plot_houses("FINAL")
         for i in self.batteries:
             print(self.batteries[i].filled())
             print(f"{self.batteries[i].x}/{self.batteries[i].y}")
