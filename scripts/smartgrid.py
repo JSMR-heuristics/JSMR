@@ -165,7 +165,7 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        subpath = f"figures/plot{changes}_Wijk{INPUT}_{ALGORITHM}.png"
+        subpath = f"figures/Wijk_{INPUT}/plot{changes}_{ALGORITHM}.png"
         path = str(Path.cwd()).replace("scripts", subpath)
         plt.savefig(path)
 
