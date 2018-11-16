@@ -7,6 +7,8 @@ import matplotlib.ticker as ticker
 import re
 import operator
 
+from pathlib import Path
+
 # Moet worden vervangen door user input
 INPUT = 1
 
@@ -26,8 +28,11 @@ class Smartgrid(object):
         Parses through csv file and saves houses as house.House
         objects. Returns instances in dict to __init__
         """
+        # find specific directory with the data
+        subpath = f"Huizen&Batterijen\wijk{INPUT}_huizen.csv"
+        path = str(Path.cwd()).replace("scripts", subpath)
         # open file
-        with open(f"Huizen&Batterijen/wijk{INPUT}_huizen.csv", newline="") as houses_csv:
+        with open(path, newline="") as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -54,7 +59,11 @@ class Smartgrid(object):
         Parses through text file and saves batteries as battery.Battery
         objects. Returns instances in dict to __init__
         """
-        with open(f"Huizen&Batterijen/wijk{INPUT}_batterijen.txt") as batteries_text:
+        # find specific directory with the data
+        subpath = f"Huizen&Batterijen\wijk{INPUT}_batterijen.txt"
+        path = str(Path.cwd()).replace("scripts", subpath)
+
+        with open(path) as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
