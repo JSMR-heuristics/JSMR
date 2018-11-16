@@ -6,10 +6,12 @@ import numpy as np
 import matplotlib.ticker as ticker
 import re
 import operator
+import os
 
 from pathlib import Path
 
 # Moet worden vervangen door user input
+
 INPUT = 1
 
 
