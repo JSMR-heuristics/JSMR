@@ -13,11 +13,14 @@ import os
 
 from pathlib import Path
 
+<<<<<<< HEAD
 # Moet worden vervangen door user input
 
 INPUT = 3
 
 
+=======
+>>>>>>> b8944f15a8916692846b733786441d714bb4a522
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
@@ -169,9 +172,15 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
+<<<<<<< HEAD
         subpath = "figures"
         path = str(Path.cwd()).replace("scripts", subpath)
         plt.savefig(path + f'plot{changes}.png', dpi = 300)
+=======
+        subpath = f"figures/plot{changes}.png"
+        path = str(Path.cwd()).replace("scripts", subpath)
+        plt.savefig(path)
+>>>>>>> b8944f15a8916692846b733786441d714bb4a522
 
 
     def link_houses(self):
