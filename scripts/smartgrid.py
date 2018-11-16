@@ -7,6 +7,8 @@ import matplotlib.ticker as ticker
 import re
 import operator
 
+from pathlib import Path
+
 # Moet worden vervangen door user input
 INPUT = 2
 
@@ -15,7 +17,7 @@ class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
-        self.calculate_cable()
+        self.calculate_distance()
         self.link_houses()
         self.optimize()
         self.plot_houses()
@@ -26,8 +28,11 @@ class Smartgrid(object):
         Parses through csv file and saves houses as house.House
         objects. Returns instances in dict to __init__
         """
+        # find specific directory with the data
+        subpath = f"Huizen&Batterijen\wijk{INPUT}_huizen.csv"
+        path = str(Path.cwd()).replace("scripts", subpath)
         # open file
-        with open(f"Huizen&Batterijen/wijk{INPUT}_huizen.csv", newline="") as houses_csv:
+        with open(path, newline="") as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -54,7 +59,11 @@ class Smartgrid(object):
         Parses through text file and saves batteries as battery.Battery
         objects. Returns instances in dict to __init__
         """
-        with open(f"Huizen&Batterijen/wijk{INPUT}_batterijen.txt") as batteries_text:
+        # find specific directory with the data
+        subpath = f"Huizen&Batterijen\wijk{INPUT}_batterijen.txt"
+        path = str(Path.cwd()).replace("scripts", subpath)
+
+        with open(path) as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
@@ -148,51 +157,40 @@ class Smartgrid(object):
         IK WEL IN 1 METHOD GESCHREVEN
         """
         # order the batteries for each house
-        for house in list(self.houses.values()):
-            dist = house.dist
-            ord_dist = sorted(dist.items(), key=operator.itemgetter(1))
-
+        all_distances = self.calculate_distance()
+        for index, house in enumerate(list(self.houses.values())):
             # for right now, the link is the shortest
             # regardless of battery capacity
-            house.link = self.batteries[ord_dist[0][0]]
-            self.batteries[ord_dist[0][0]].linked_houses.append(house)
-            diff = ord_dist[0][1]
-            ord_dist_diff = ord_dist
-            del ord_dist_diff[0]
+            batteries = list(all_distances[index].keys())
+            distances = list(all_distances[index].values())
+
+            house.link = self.batteries[batteries[0]]
+            self.batteries[batteries[0]].linked_houses.append(house)
+            diff, distance_diffs = distances[0], distances[1:]
             diffs = {}
-            for index in range(len(ord_dist_diff)):
-                diffs[ord_dist_diff[index][0]] = int(ord_dist_diff[index][1]) - diff
+            for index in range(len(distance_diffs)):
+                diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
-            house.ord_dist = dict(ord_dist)
 
-# kan weggewerkt worden
-    def calculate_cable(self):
-
-        # get coordinates
-        x_houses, y_houses, x_batt, y_batt  = self.get_coordinates()
-
-        all_diff = []
-        for x_house, y_house in list(zip(x_houses, y_houses)):
+    def calculate_distance(self):
+        all_distances = []
+        for house in self.houses.values():
+            x_house, y_house = house.x, house.y
             house_diff = {}
             counter = 0
-            for x, y in list(zip(x_batt, y_batt)):
-                x_diff = abs(x - x_house)
-                y_diff = abs(y - y_house)
+            for battery in self.batteries.values():
+                x_batt, y_batt = battery.x, battery.y
+                x_diff = abs(x_batt - x_house)
+                y_diff = abs(y_batt - y_house)
                 house_diff[counter] = (x_diff + y_diff)
                 counter += 1
-            all_diff.append(house_diff)
-
-        # set as attributes
-        keys_list = list(self.houses.keys())
-        for i, key in enumerate(keys_list):
-                self.houses[key].dist = all_diff[i]
+            house_diff = dict(sorted(house_diff.items(), key=operator.itemgetter(1)))
+            all_distances.append(house_diff)
+        return all_distances
 
 # kan weggewerkt worden
     def get_coordinates(self):
-        x_houses = []
-        y_houses = []
-        x_batt = []
-        y_batt = []
+        x_houses, y_houses, x_batt, y_batt = [], [], [], []
 
         # turn dict to list so we can iterate through
         houses_list = list(self.houses.values())
