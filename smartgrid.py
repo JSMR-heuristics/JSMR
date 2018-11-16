@@ -8,7 +8,7 @@ import re
 import operator
 
 # Moet worden vervangen door user input
-INPUT = 1
+INPUT = 2
 
 
 class Smartgrid(object):
@@ -221,7 +221,7 @@ class Smartgrid(object):
         changes = 0
 
         # While one or more batteries are over their capacity
-        while self.check_full():
+        while self.check_full() and changes < 250:
 
             # kan korter
             # Sorts batteries based off total inputs from high to low
@@ -250,6 +250,12 @@ class Smartgrid(object):
                 curr_batt = house.link
                 changes += 1
                 self.swap_houses(house, curr_batt, to_batt, changes)
+                break
+        for i in self.batteries:
+            print(self.batteries[i].filled())
+            print(f"{self.batteries[i].x}/{self.batteries[i].y}")
+            # for house in self.batteries[i].linked_houses:
+            #     print(house.output)
 
     def sort_linked_houses(self, battery):
         """
@@ -257,11 +263,18 @@ class Smartgrid(object):
         """
         distance_list = []
         for house in battery.linked_houses:
-            element = []
             batts = list(house.diffs.keys())
-            distance = list(house.diffs.values())
+            distance = []
+            weight = 50 / house.output
+            for diff in list(house.diffs.values()):
+                weighted_diff = diff * weight
+                distance.append(weighted_diff)
+            # distance = list(house.diffs.values())
+            # print(weight)
+            # print(distance)
             houses = [house] * len(distance)
             outputs = [house.output] * len(distance)
+            element = []
             element = list(map(list, zip(batts, distance, houses, outputs)))
             distance_list += element
         return sorted(distance_list, key=operator.itemgetter(1))
@@ -285,7 +298,10 @@ class Smartgrid(object):
         """
         if status is "strict":
             for option in list:
-                if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity:
+                a = self.batteries[option[0]].filled() + option[2].output
+                b = self.batteries[option[0]].capacity
+                c = b - a
+                if a <= b and not 7 < c < 35:
                     return option[2], self.batteries[option[0]]
         # wordt vervangen door output gewicht
         else:
