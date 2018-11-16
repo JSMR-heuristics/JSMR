@@ -9,4 +9,4 @@ M. Proto Optimalize
 S. Optimalize ver. 2
 1 56401 , 6.44637
 2 46401 , 2.22222
-3
+3 45300 , 4,32969
