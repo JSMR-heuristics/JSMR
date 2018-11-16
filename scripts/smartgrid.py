@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+import sys
 from house import House
 from battery import Battery
 import csv
@@ -9,8 +12,16 @@ import operator
 
 from pathlib import Path
 
-# Moet worden vervangen door user input
-INPUT = 2
+# nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
+# Validates user input and gives instructions if it's wrong
+if len(sys.argv) is not 2:
+    print("Usage: python smargrid.py <wijknummer>")
+    sys.exit(2)
+elif int(sys.argv[1]) not in [1, 2, 3]:
+    print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+    sys.exit(2)
+
+INPUT = sys.argv[1]
 
 
 class Smartgrid(object):
