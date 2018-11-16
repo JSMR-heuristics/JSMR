@@ -139,10 +139,8 @@ class Smartgrid(object):
             color=f'{line_colour}',linestyle='-', linewidth=1)
 
             # calculate line cost
-            x_diff = abs(x_batt - x_house)
-            y_diff = abs(y_batt - y_house)
-            tot_cost = (x_diff + y_diff) * 9
-            total += tot_cost
+            total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
+            
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
 
