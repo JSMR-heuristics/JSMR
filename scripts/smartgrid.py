@@ -17,7 +17,12 @@ from pathlib import Path
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
+<<<<<<< HEAD
 plot = True
+=======
+PLOT = False
+ALGORITHM = "GREEDY"
+>>>>>>> 4c62b30518f9164dccc69eee8c4134477d296cc1
 
 if len(sys.argv) not in [2, 3]:
         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
@@ -35,7 +40,7 @@ elif len(sys.argv) is 3:
         sys.exit(2)
     else:
         INPUT = sys.argv[1]
-        plot = True
+        PLOT = True
 
 class Smartgrid(object):
     def __init__(self):
@@ -165,7 +170,7 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        subpath = f"figures/plot{changes}.png"
+        subpath = f"figures/Wijk_{INPUT}/plot{changes}_{ALGORITHM}.png"
         path = str(Path.cwd()).replace("scripts", subpath)
         plt.savefig(path)
 
@@ -270,7 +275,7 @@ class Smartgrid(object):
                 curr_batt = house.link
                 changes += 1
                 self.swap_houses(house, curr_batt, to_batt, changes)
-                if (changes % 5) is 0 and plot:
+                if (changes % 5) is 0 and PLOT:
                     self.plot_houses(changes)
                 break
         self.plot_houses("FINAL")
