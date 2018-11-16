@@ -7,10 +7,8 @@ class House(object):
         # output of the house instance
         self.output = float(output)
 
-
         # to which battery is the house currently connected
         self.link = []
-
 
         # the differences in distance between the closest Battery
         # and the other batteries
