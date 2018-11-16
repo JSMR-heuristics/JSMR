@@ -12,7 +12,7 @@ from pathlib import Path
 
 # Moet worden vervangen door user input
 
-INPUT = 1
+INPUT = 3
 
 
 class Smartgrid(object):

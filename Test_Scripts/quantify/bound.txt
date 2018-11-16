@@ -1,14 +1,14 @@
 1
 closest: 53188.0
 furthest: 103030.0
-our: 63817.0
+our: 56401
 
 2
 closest: 45268.0
 furthest: 96253.0
-our: 47041.0
+our: 46401
 
 3
 closest: 42757.0
 furthest: 101491.0
-our: 47293.0
+our: 45300.0
