@@ -13,12 +13,6 @@ import os
 
 from pathlib import Path
 
-<<<<<<< HEAD
-# Moet worden vervangen door user input
-
-INPUT = 3
-
-=======
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
@@ -41,7 +35,6 @@ elif len(sys.argv) is 3:
     else:
         INPUT = sys.argv[1]
         plot = True
->>>>>>> da9ecd367caeb6915324511c839ec12d53809eec
 
 class Smartgrid(object):
     def __init__(self):
