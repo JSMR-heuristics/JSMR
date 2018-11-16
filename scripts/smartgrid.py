@@ -163,7 +163,9 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        plt.savefig(f'plot{changes}.png')
+        subpath = f"figures/plot{changes}.png"
+        path = str(Path.cwd()).replace("scripts", subpath)
+        plt.savefig(path)
 
 
     def link_houses(self):
