@@ -11,12 +11,8 @@ import os
 from pathlib import Path
 
 # Moet worden vervangen door user input
-<<<<<<< HEAD
 
 INPUT = 1
-=======
-INPUT = 2
->>>>>>> 67f356cd1b5935c897a95d7d5951ea846707d9db
 
 
 class Smartgrid(object):
