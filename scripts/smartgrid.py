@@ -17,7 +17,6 @@ class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
-        self.calculate_distance()
         self.link_houses()
         self.optimize()
         self.plot_houses()
