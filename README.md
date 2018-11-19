@@ -18,3 +18,4 @@ according to our set of priorities.
 Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode
 
 ### This is what our neighbourhood would look like when all houses are simply linked to the nearest battery:
+![alt text](https://github.com/JSMR-heuristics/JSMR/blob/master/figures/Wijk_1/No_algorithm_SG1_lower.png)
