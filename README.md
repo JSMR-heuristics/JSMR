@@ -20,7 +20,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ![alt text](https://github.com/JSMR-heuristics/JSMR/blob/master/figures/Wijk_1/plotFINAL_GREEDY.png)
 
 ## Repository layout:
-Our datafiles are stored in the "Huizen&batterijen" folder.
-Processing takes place in the "scripts" folder.
-Output files are stored in the "figures" folder.
-Our testing area is contained in "test_scripts".
+* Our datafiles are stored in the "Huizen&batterijen" folder.
+* Processing takes place in the "scripts" folder.
+* Output files are stored in the "figures" folder.
+* Our testing area is contained in "test_scripts".
