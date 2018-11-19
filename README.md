@@ -26,6 +26,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 * Our testing area is contained in "test_scripts".
 
 ## Running the code:
+* Make sure you're using python 3.6 or higher
 * For the code to run, certain libraries need to be installed. Check these libraries in the Requirements.txt
 * To run our main code, "smartgrid.py"
   * go to the location of the JSMR/scripts folder on your PC
