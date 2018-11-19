@@ -1,9 +1,10 @@
+# SmartGrid
 
 Wat wil ik wisselen
 Hoeveel wil ik wisselen
 Het kunnen meerdere dingen verschillen
 
-Problem:
+## Problem:
 When enough houses can generate their own energy, it becomes possible that
 excess energy will be generated. It's economically beneficial to be able to
 store that excess energy into batteries for later use, however it is
@@ -12,3 +13,8 @@ as possible to minimize battery and cable costs. What exactly is the most
 economic set-up can result into an astronomically large range of battery and
 cable layouts. Thus this program is made to return the most beneficial layout
 according to our set of priorities.
+
+## Progress:
+Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode
+
+### This is what our neighbourhood would look like when all houses are simply linked to the nearest battery:
