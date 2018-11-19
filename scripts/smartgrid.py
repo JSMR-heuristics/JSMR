@@ -273,10 +273,7 @@ class Smartgrid(object):
             # for house in self.batteries[i].linked_houses:
             #     print(house.output)
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 2596bfa7027c4e2a18397952ae566251147dc6d0
     def check_full(self):
         """
         Returns True if one or more of the batteries is over it's
@@ -288,9 +285,6 @@ class Smartgrid(object):
                 switch = True
         return switch
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 2596bfa7027c4e2a18397952ae566251147dc6d0
 if __name__ == "__main__":
     Smartgrid()
