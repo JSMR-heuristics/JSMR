@@ -10,7 +10,7 @@ import operator
 from pathlib import Path
 
 # Moet worden vervangen door user input
-INPUT = 2
+INPUT = 1
 
 
 class Smartgrid(object):
@@ -217,9 +217,13 @@ class Smartgrid(object):
         # Initialize changes counter, this gives insight to
         # the speed of this algorithm
         changes = 0
+        # for num in self.batteries:
+        #     print(f"Battery{num}: {self.batteries[num].filled()}")
+        #     for ding in self.batteries[num].linked_houses:
+        #         print(f"House: {ding.output}")
 
         # While one or more batteries are over their capacity
-        while self.check_full() and changes < 250:
+        while self.check_full() and changes < 50:
 
             # kan korter
             # Sorts batteries based off total inputs from high to low
@@ -242,6 +246,12 @@ class Smartgrid(object):
                 try:
                     house, to_batt = self.find_best(distance_list, "strict")
                 except TypeError:
+                    print("-----------------------------------")
+                    # for i in self.batteries:
+                    #     print(self.batteries[i].filled())
+                    #     print(f"{self.batteries[i].x}/{self.batteries[i].y}")
+                    #     for house in self.batteries[i].linked_houses:
+                    #         print(house.output)
                     house, to_batt = self.find_best(distance_list, "not-strict")
 
                 # Switch the house from battery
@@ -262,14 +272,12 @@ class Smartgrid(object):
         distance_list = []
         for house in battery.linked_houses:
             batts = list(house.diffs.keys())
+            # distance = list(house.diffs.values())
             distance = []
             weight = 50 / house.output
             for diff in list(house.diffs.values()):
                 weighted_diff = diff * weight
                 distance.append(weighted_diff)
-            # distance = list(house.diffs.values())
-            # print(weight)
-            # print(distance)
             houses = [house] * len(distance)
             outputs = [house.output] * len(distance)
             element = []
@@ -299,7 +307,8 @@ class Smartgrid(object):
                 a = self.batteries[option[0]].filled() + option[2].output
                 b = self.batteries[option[0]].capacity
                 c = b - a
-                if a <= b and not 7 < c < 35:
+                d = option[2].link.filled() - option[2].link.capacity - option[2].output
+                if (a <= b) and not (12 < c < 40) and not (35 < d < 0):
                     return option[2], self.batteries[option[0]]
         # wordt vervangen door output gewicht
         else:
