@@ -13,9 +13,11 @@ import os
 
 from pathlib import Path
 
+
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
+
 PLOT = False
 ALGORITHM = "GREEDY"
 
