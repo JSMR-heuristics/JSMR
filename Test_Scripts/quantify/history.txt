@@ -1,0 +1,12 @@
+archief van kosten per wijk per optimalizatie versie
+
+M. Proto Optimalize
+
+1 58734(?) , 11,99
+2 47041 , 3.47749
+3 47293 , 7.72295
+
+S. Optimalize ver. 2
+1 56401 , 6.44637
+2 46401 , 2.22222
+3 45300 , 4,32969

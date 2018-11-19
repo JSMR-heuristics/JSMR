@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+import sys
 from house import House
 from battery import Battery
 import csv
@@ -6,21 +9,47 @@ import numpy as np
 import matplotlib.ticker as ticker
 import re
 import operator
+import os
 
 from pathlib import Path
 
+<<<<<<< HEAD
 # Moet worden vervangen door user input
 INPUT = 1
+=======
+>>>>>>> a840e77287441ba4eaa085d6b39c88f347f4d862
 
+# nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
+# en voor tussenplots, die maken het algorimte een stuk slomer
+# Validates user input and gives instructions if it's wrong
+
+PLOT = False
+ALGORITHM = "GREEDY"
+
+if len(sys.argv) not in [2, 3]:
+        print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
+        sys.exit(2)
+elif len(sys.argv) is 2:
+    if int(sys.argv[1]) not in [1, 2, 3]:
+        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+        sys.exit(2)
+    else:
+        INPUT = sys.argv[1]
+elif len(sys.argv) is 3:
+    if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
+        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+        print("If you want plots type\n python smargrid.py <wijknummer> plot")
+        sys.exit(2)
+    else:
+        INPUT = sys.argv[1]
+        PLOT = True
 
 class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
-        self.calculate_distance()
         self.link_houses()
         self.optimize()
-        self.plot_houses()
 
 
     def load_houses(self):
@@ -90,7 +119,7 @@ class Smartgrid(object):
         # return dict to INIT
         return batteries
 
-    def plot_houses(self):
+    def plot_houses(self, changes):
         """
         Plots houses, batteries and cables. Also calculates the total
         cost of the cable
@@ -129,10 +158,8 @@ class Smartgrid(object):
             color=f'{line_colour}',linestyle='-', linewidth=1)
 
             # calculate line cost
-            x_diff = abs(x_batt - x_house)
-            y_diff = abs(y_batt - y_house)
-            tot_cost = (x_diff + y_diff) * 9
-            total += tot_cost
+            total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
+
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
 
@@ -145,7 +172,9 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        plt.savefig('plot.png')
+        subpath = f"figures/Wijk_{INPUT}/plot{changes}_{ALGORITHM}.png"
+        path = str(Path.cwd()).replace("scripts", subpath)
+        plt.savefig(path)
 
 
     def link_houses(self):
@@ -234,6 +263,7 @@ class Smartgrid(object):
 
             # Prioritize battery with highest inputs
             # to disconnect a house from
+<<<<<<< HEAD
             for i in high_low:
                 battery = i[1]
 
@@ -259,6 +289,30 @@ class Smartgrid(object):
                 changes += 1
                 self.swap_houses(house, curr_batt, to_batt, changes)
                 break
+=======
+            # for i in high_low:
+            battery = high_low[0][1]
+
+            # Sort houses linked to this battery by distance
+            # to other battery from low to high
+            distance_list = self.sort_linked_houses(battery)
+
+            # Determine the cheapest option first, if any
+            # else transfer option with lowest output
+            try:
+                house, to_batt = self.find_best(distance_list, "strict")
+            except TypeError:
+                house, to_batt = self.find_best(distance_list, "not-strict")
+
+            # Switch the house from battery
+            curr_batt = house.link
+            changes += 1
+            self.swap_houses(house, curr_batt, to_batt, changes)
+            if (changes % 5) is 0 and PLOT:
+                self.plot_houses(changes)
+            # break
+        self.plot_houses("FINAL")
+>>>>>>> a840e77287441ba4eaa085d6b39c88f347f4d862
         for i in self.batteries:
             print(self.batteries[i].filled())
             print(f"{self.batteries[i].x}/{self.batteries[i].y}")
