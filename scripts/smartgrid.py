@@ -17,12 +17,9 @@ from pathlib import Path
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
-<<<<<<< HEAD
-plot = True
-=======
+
 PLOT = False
 ALGORITHM = "GREEDY"
->>>>>>> 4c62b30518f9164dccc69eee8c4134477d296cc1
 
 if len(sys.argv) not in [2, 3]:
         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
@@ -257,27 +254,27 @@ class Smartgrid(object):
 
             # Prioritize battery with highest inputs
             # to disconnect a house from
-            for i in high_low:
-                battery = i[1]
+            # for i in high_low:
+            battery = high_low[0][1]
 
-                # Sort houses linked to this battery by distance
-                # to other battery from low to high
-                distance_list = self.sort_linked_houses(battery)
+            # Sort houses linked to this battery by distance
+            # to other battery from low to high
+            distance_list = self.sort_linked_houses(battery)
 
-                # Determine the cheapest option first, if any
-                # else transfer option with lowest output
-                try:
-                    house, to_batt = self.find_best(distance_list, "strict")
-                except TypeError:
-                    house, to_batt = self.find_best(distance_list, "not-strict")
+            # Determine the cheapest option first, if any
+            # else transfer option with lowest output
+            try:
+                house, to_batt = self.find_best(distance_list, "strict")
+            except TypeError:
+                house, to_batt = self.find_best(distance_list, "not-strict")
 
-                # Switch the house from battery
-                curr_batt = house.link
-                changes += 1
-                self.swap_houses(house, curr_batt, to_batt, changes)
-                if (changes % 5) is 0 and PLOT:
-                    self.plot_houses(changes)
-                break
+            # Switch the house from battery
+            curr_batt = house.link
+            changes += 1
+            self.swap_houses(house, curr_batt, to_batt, changes)
+            if (changes % 5) is 0 and PLOT:
+                self.plot_houses(changes)
+            # break
         self.plot_houses("FINAL")
         for i in self.batteries:
             print(self.batteries[i].filled())
