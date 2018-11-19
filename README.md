@@ -26,6 +26,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 * Our testing area is contained in "test_scripts".
 
 ## Running the code:
+* Make sure you're using python 3.6 or higher
 * For the code to run, certain libraries need to be installed. Check these libraries in the Requirements.txt
 * To run our main code, "smartgrid.py"
   * go to the location of the JSMR/scripts folder on your PC
@@ -33,3 +34,6 @@ Currently we have implemented a greedy algorithm which runs until the constraint
   * run "python smartgrid.py 'Number' 'plot'"
   * for number use 1, 2 or 3, this indicates which neighbourhood you want to use
   * for plot either type "plot" if you want intermediate plots to be saved or leave it empty if you don't want intermediate plots.
+    * example:
+
+        python smartgrid.py 1 plot
