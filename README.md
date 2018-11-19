@@ -30,6 +30,6 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 * To run our main code, "smartgrid.py"
   * go to the location of the JSMR/scripts folder on your PC
   * open the command window here
-  * run "python smartgrid.py <Number> <plot>"
+  * run "python smartgrid.py 'Number' 'plot'"
   * for number use 1, 2 or 3, this indicates which neighbourhood you want to use
   * for plot either type "plot" if you want intermediate plots to be saved or leave it empty if you don't want intermediate plots.
