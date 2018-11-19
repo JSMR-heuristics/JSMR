@@ -13,11 +13,8 @@ import os
 
 from pathlib import Path
 
-<<<<<<< HEAD
 # Moet worden vervangen door user input
 INPUT = 1
-=======
->>>>>>> a840e77287441ba4eaa085d6b39c88f347f4d862
 
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
@@ -263,33 +260,6 @@ class Smartgrid(object):
 
             # Prioritize battery with highest inputs
             # to disconnect a house from
-<<<<<<< HEAD
-            for i in high_low:
-                battery = i[1]
-
-                # Sort houses linked to this battery by distance
-                # to other battery from low to high
-                distance_list = self.sort_linked_houses(battery)
-
-                # Determine the cheapest option first, if any
-                # else transfer option with lowest output
-                try:
-                    house, to_batt = self.find_best(distance_list, "strict")
-                except TypeError:
-                    print("-----------------------------------")
-                    # for i in self.batteries:
-                    #     print(self.batteries[i].filled())
-                    #     print(f"{self.batteries[i].x}/{self.batteries[i].y}")
-                    #     for house in self.batteries[i].linked_houses:
-                    #         print(house.output)
-                    house, to_batt = self.find_best(distance_list, "not-strict")
-
-                # Switch the house from battery
-                curr_batt = house.link
-                changes += 1
-                self.swap_houses(house, curr_batt, to_batt, changes)
-                break
-=======
             # for i in high_low:
             battery = high_low[0][1]
 
@@ -312,7 +282,6 @@ class Smartgrid(object):
                 self.plot_houses(changes)
             # break
         self.plot_houses("FINAL")
->>>>>>> a840e77287441ba4eaa085d6b39c88f347f4d862
         for i in self.batteries:
             print(self.batteries[i].filled())
             print(f"{self.batteries[i].x}/{self.batteries[i].y}")
