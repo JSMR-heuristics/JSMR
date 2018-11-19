@@ -34,6 +34,6 @@ Currently we have implemented a greedy algorithm which runs until the constraint
   * for number use 1, 2 or 3, this indicates which neighbourhood you want to use
   * for plot either type "plot" if you want intermediate plots to be saved or leave it empty if you don't want intermediate plots.
     * example:
-    """
-    python smartgrid.py 1 plot
-    """
+    *  """
+      python smartgrid.py 1 plot
+      """
