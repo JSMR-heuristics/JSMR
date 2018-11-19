@@ -228,9 +228,13 @@ class Smartgrid(object):
         # Initialize changes counter, this gives insight to
         # the speed of this algorithm
         changes = 0
+        # for num in self.batteries:
+        #     print(f"Battery{num}: {self.batteries[num].filled()}")
+        #     for ding in self.batteries[num].linked_houses:
+        #         print(f"House: {ding.output}")
 
         # While one or more batteries are over their capacity
-        while self.check_full() and changes < 250:
+        while self.check_full() and changes < 50:
 
             # kan korter
             # Sorts batteries based off total inputs from high to low
@@ -270,6 +274,29 @@ class Smartgrid(object):
             # for house in self.batteries[i].linked_houses:
             #     print(house.output)
 
+<<<<<<< HEAD
+=======
+    def sort_linked_houses(self, battery):
+        """
+        Sorts list of linked houses of a battery by distances
+        """
+        distance_list = []
+        for house in battery.linked_houses:
+            batts = list(house.diffs.keys())
+            # distance = list(house.diffs.values())
+            distance = []
+            weight = 50 / house.output
+            for diff in list(house.diffs.values()):
+                weighted_diff = diff * weight
+                distance.append(weighted_diff)
+            houses = [house] * len(distance)
+            outputs = [house.output] * len(distance)
+            element = []
+            element = list(map(list, zip(batts, distance, houses, outputs)))
+            distance_list += element
+        return sorted(distance_list, key=operator.itemgetter(1))
+
+>>>>>>> 8bd03bc56af4fea289e5fbf92472c75007525a0f
 
     def check_full(self):
         """
@@ -282,6 +309,46 @@ class Smartgrid(object):
                 switch = True
         return switch
 
+<<<<<<< HEAD
+=======
+    def find_best(self, list, status):
+        """
+        Tries to find either the cheapest house to possibly switch from battery
+        or the one with the lowest possible output
+        """
+        if status is "strict":
+            for option in list:
+                a = self.batteries[option[0]].filled() + option[2].output
+                b = self.batteries[option[0]].capacity
+                c = b - a
+                d = option[2].link.filled() - option[2].link.capacity - option[2].output
+                if (a <= b) and not (12 < c < 40) and not (35 < d < 0):
+                    return option[2], self.batteries[option[0]]
+        # wordt vervangen door output gewicht
+        else:
+            list = sorted(list, key=operator.itemgetter(3))
+            for option in list:
+                if (option[2].link.filled() - option[2].output) < option[2].link.capacity:
+                    print(option[2].link.filled() - option[2].output)
+                    return option[2], self.batteries[option[0]]
+
+# conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
+# conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
+
+    def swap_houses(self, house, current_batt, next_batt, changes):
+        """
+        Switches house from battery it's currently linked to, to the next
+        one
+        """
+        house.link = next_batt
+        next_batt.linked_houses.append(house)
+        current_batt.linked_houses.remove(house)
+        print(f"house at x{house.x}/y{house.y} changed from battery at x{current_batt.x}/y{current_batt.y} to battery at x{next_batt.x}/y{next_batt.y}")
+        print(f"house capacity = {house.output}")
+        print(f"capacity = {current_batt.filled()}")
+        print(f"changes = {changes}")
+
+>>>>>>> 8bd03bc56af4fea289e5fbf92472c75007525a0f
 
 if __name__ == "__main__":
     Smartgrid()
