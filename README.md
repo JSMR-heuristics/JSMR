@@ -1,9 +1,5 @@
 # SmartGrid
 
-Wat wil ik wisselen
-Hoeveel wil ik wisselen
-Het kunnen meerdere dingen verschillen
-
 ## Problem:
 When enough houses can generate their own energy, it becomes possible that
 excess energy will be generated. It's economically beneficial to be able to
@@ -15,10 +11,16 @@ cable layouts. Thus this program is made to return the most beneficial layout
 according to our set of priorities.
 
 ## Progress:
-Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode
+Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode!
 
 ### This is what our neighbourhood would look like when all houses are simply linked to the nearest battery:
 ![alt text](https://github.com/JSMR-heuristics/JSMR/blob/master/figures/Wijk_1/No_algorithm_SG1_lower.png)
 
 ### And this is what the neighbourhood looks like when our greedy algorithm has been implemented:
 ![alt text](https://github.com/JSMR-heuristics/JSMR/blob/master/figures/Wijk_1/plotFINAL_GREEDY.png)
+
+## Repository layout:
+Our datafiles are stored in the "Huizen&batterijen" folder.
+Processing takes place in the "scripts" folder.
+Output files are stored in the "figures" folder.
+Our testing area is contained in "test_scripts".
