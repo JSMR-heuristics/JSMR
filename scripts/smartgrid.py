@@ -17,7 +17,17 @@ from pathlib import Path
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+plot = True
+=======
+>>>>>>> bf6b264bc7f6b37e7210bc385e5db4049a10f2e2
+>>>>>>> 60005cb4a2518e853d8875ea2bb83f3f4a304d0a
 PLOT = False
 ALGORITHM = "GREEDY"
 
