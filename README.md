@@ -19,3 +19,6 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 
 ### This is what our neighbourhood would look like when all houses are simply linked to the nearest battery:
 ![alt text](https://github.com/JSMR-heuristics/JSMR/blob/master/figures/Wijk_1/No_algorithm_SG1_lower.png)
+
+### And this is what the neighbourhood looks like when our greedy algorithm has been implemented:
+![alt text](https://github.com/JSMR-heuristics/JSMR/blob/master/figures/Wijk_1/plotFINAL_GREEDY.png)
