@@ -17,9 +17,16 @@ from pathlib import Path
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+plot = True
+=======
+>>>>>>> bf6b264bc7f6b37e7210bc385e5db4049a10f2e2
 PLOT = False
 ALGORITHM = "GREEDY"
+>>>>>>> 4c62b30518f9164dccc69eee8c4134477d296cc1
 
 if len(sys.argv) not in [2, 3]:
         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
