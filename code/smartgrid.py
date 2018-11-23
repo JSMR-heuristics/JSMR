@@ -55,7 +55,7 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"Huizen&Batterijen\wijk{INPUT}_huizen.csv"
+        subpath = f"data\wijk{INPUT}_huizen.csv"
         path = str(Path.cwd()).replace("scripts", subpath)
         # open file
         with open(path, newline="") as houses_csv:
@@ -213,7 +213,7 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        subpath = f"figures/Wijk_{INPUT}/plot{changes}_{ALGORITHM}.png"
+        subpath = f"results/Wijk_{INPUT}/plot{changes}_{ALGORITHM}.png"
         path = str(Path.cwd()).replace("scripts", subpath)
         plt.savefig(path)
 
