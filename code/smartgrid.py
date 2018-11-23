@@ -86,7 +86,7 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"Huizen&Batterijen\wijk{INPUT}_batterijen.txt"
+        subpath = f"data\wijk{INPUT}_batterijen.txt"
         path = str(Path.cwd()).replace("scripts", subpath)
 
         with open(path) as batteries_text:
