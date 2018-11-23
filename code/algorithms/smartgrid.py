@@ -65,8 +65,8 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data/wijk{INPUT}_huizen.csv"
-        path_mand = str(Path.cwd()).replace("algorithms", "")
-        path = str(path_mand.replace("code", subpath))
+        path = str(Path.cwd()).replace("algorithms", "")
+        path = str(path.replace("code", subpath))
         print("meh")
         print(path)
         # open file
@@ -99,8 +99,8 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data/wijk{INPUT}_batterijen.txt"
-        path_mand = str(Path.cwd()).replace("algorithms", "")
-        path = str(path_mand.replace("code", subpath))
+        path = str(Path.cwd()).replace("algorithms", "")
+        path = str(path.replace("code", subpath))
 
         with open(path) as batteries_text:
 
