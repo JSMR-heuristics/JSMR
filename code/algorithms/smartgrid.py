@@ -23,7 +23,7 @@ from house import House
 # Validates user input and gives instructions if it's wrong
 
 PLOT = False
-ALGORITHM = "GREEDY"
+ALGORITHM = "greedy"
 
 if len(sys.argv) not in [2, 3]:
         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
@@ -220,9 +220,17 @@ class Smartgrid(object):
         #     plt.text(x, y, f"{count}")
         #     count += 1
         # plt.show()
-        subpath = f"results/Wijk_{INPUT}/plot{changes}_{ALGORITHM}.png"
-        path = str(Path.cwd()).replace("scripts", subpath)
-        plt.savefig(path)
+        # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
+        # path = str(Path.cwd()).replace("scripts", subpath)
+
+        # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
+        # path = str(Path.cwd()).replace("algorithms", "")
+        # path = str(Path.cwd()).replace("/.png", "")
+        # path = str(path.replace("code", subpath))
+        # print(path.cwd())
+        # print(path)
+        #
+        # plt.savefig(path)
 
 
     def optimize(self):
