@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
 import sys
-from house import House
-from battery import Battery
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,6 +12,11 @@ import os
 from pathlib import Path
 
 from helpers import *
+
+path = str(Path.cwd()).replace("algorithms", "classes")
+sys.path.append(path)
+from battery import Battery
+from house import House
 
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
