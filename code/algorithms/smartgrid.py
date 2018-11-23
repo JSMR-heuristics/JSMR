@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
 import sys
-from house import House
-from battery import Battery
+
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,6 +14,10 @@ from pathlib import Path
 
 from helpers import *
 
+path = str(Path.cwd()).replace("algorithms", "classes")
+sys.path.append(path)
+from battery import Battery
+from house import House
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
@@ -61,8 +64,11 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_huizen.csv"
-        path = str(Path.cwd()).replace("scripts", subpath)
+        subpath = f"data/wijk{INPUT}_huizen.csv"
+        path_mand = str(Path.cwd()).replace("algorithms", "")
+        path = str(path_mand.replace("code", subpath))
+        print("meh")
+        print(path)
         # open file
         with open(path, newline="") as houses_csv:
 
@@ -92,8 +98,9 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_batterijen.txt"
-        path = str(Path.cwd()).replace("scripts", subpath)
+        subpath = f"data/wijk{INPUT}_batterijen.txt"
+        path_mand = str(Path.cwd()).replace("algorithms", "")
+        path = str(path_mand.replace("code", subpath))
 
         with open(path) as batteries_text:
 

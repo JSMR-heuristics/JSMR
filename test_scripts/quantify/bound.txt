@@ -6,14 +6,24 @@ our: 56401
 1 greedy
 closest: 53188.0
 furthest: 103030.0
-our: 58201
+our: 58417
 
 2
 closest: 45268.0
 furthest: 96253.0
 our: 46401
 
+2 greedy
+closest: 45268.0
+furthest: 96253.0
+our: 46636
+
 3
 closest: 42757.0
 furthest: 101491.0
 our: 45300.0
+
+3 greedy
+closest: 42757.0
+furthest: 101491.0
+our: 46537
