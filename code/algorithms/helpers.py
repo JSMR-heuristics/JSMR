@@ -14,6 +14,7 @@ def calculate_distance(self):
             counter += 1
         house_diff = dict(sorted(house_diff.items(), key=operator.itemgetter(1)))
         all_distances.append(house_diff)
+        house.dists = house_diff
     return all_distances
 
 def sort_linked_houses(self, battery):

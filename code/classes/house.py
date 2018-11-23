@@ -13,3 +13,6 @@ class House(object):
         # the differences in distance between the closest Battery
         # and the other batteries
         self.diffs = {}
+
+        # {0: 51, 1: 40, etc}
+        self.dists = {}
