@@ -45,9 +45,15 @@ class Smartgrid(object):
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
-        self.link_houses()
-        self.optimize()
+        helpers.calculate_distance()
+        self.dfs()
+        # self.link_houses()
+        # self.optimize()
+        dict = {}
 
+        for house in self.houses:
+            dict[house] = house.dists
+        print(dict)
 
     def load_houses(self):
         """
