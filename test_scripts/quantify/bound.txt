@@ -12,3 +12,8 @@ our: 46401
 closest: 42757.0
 furthest: 101491.0
 our: 45300.0
+
+1 greedy randomizer
+closest: 53188.0
+furthest: 103030.0
+our: 58399
