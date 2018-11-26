@@ -22,26 +22,20 @@ from helpers import *
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
 
-PLOT = False
+ITER = 0
 ALGORITHM = "GREEDY"
 
-if len(sys.argv) not in [2, 3]:
+if len(sys.argv) not in [3]:
         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
         sys.exit(2)
-elif len(sys.argv) is 2:
-    if int(sys.argv[1]) not in [1, 2, 3]:
-        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-        sys.exit(2)
-    else:
-        INPUT = sys.argv[1]
 elif len(sys.argv) is 3:
-    if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
+    if int(sys.argv[1]) not in [1, 2, 3] or isinstance(sys.argv[2], int):
         print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
         print("If you want plots type\n python smargrid.py <wijknummer> plot")
         sys.exit(2)
     else:
         INPUT = sys.argv[1]
-        PLOT = True
+        ITER = sys.argv[2]
 
 class Smartgrid(object):
     def __init__(self):
@@ -164,8 +158,9 @@ class Smartgrid(object):
         """
         # turn houses into list
         random_houses = list(self.houses.values())
-        
-        iterations = 10
+        print(ITER)
+
+        iterations = int(ITER)
 
         prices = []
         count = 0
