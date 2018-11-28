@@ -221,7 +221,7 @@ class Smartgrid(object):
         # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         # path = str(Path.cwd()).replace("scripts", subpath)
 
-        subpath = f"results/wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
+        subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         path = str(Path.cwd()).replace("\\algorithms", "")
         path= path.replace("code", subpath)
         print(Path.cwd())
