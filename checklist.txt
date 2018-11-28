@@ -1,0 +1,25 @@
+Maak een x van de o vóór elk ding dat is gedaan.
+
+Infrastructure en Datastructure:
+  o Algemene readme afmaken en iedereen even nakijken
+      - Julian
+      - Mark
+      - Z-bass
+  o Readme's in elke map.
+  o file paths kloppend maken.
+  o Bijhouden states tijdens het runnen.
+  o Resultaten in readme zetten.
+  o Werking programma in readme zetten.
+
+Exploration:
+  o Berekenen state spaces.
+  o Berekenen upper- en lower bounds.
+  o Metingen en vergelijkingen van beste met andere algoritmes.
+  o Omschrijving van problemen van de case en welke oplossingen wij daar voor hebben bedacht.
+
+Algorithms:
+  o Bestaande algoritmes afmaken.
+  o "heatmap"-algoritme implementeren.
+  o Hill climber implementeren.
+  o DFS implementeren.
+  o Branch-and-bound implementeren.
