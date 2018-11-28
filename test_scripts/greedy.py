@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
 import sys
-from house import House
-from battery import Battery
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,8 +11,14 @@ import os
 import random
 import statistics
 import pickle
-
 from pathlib import Path
+import time
+
+
+path = str(Path.cwd()).replace("test_scripts", "code/classes")
+sys.path.append(path)
+from battery import Battery
+from house import House
 
 from helpers import *
 
@@ -83,8 +87,9 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"Huizen&Batterijen\wijk{INPUT}_batterijen.txt"
-        path = str(Path.cwd()).replace("scripts", subpath)
+        subpath = f"data\wijk{INPUT}_batterijen.txt"
+        path = str(Path.cwd()).replace("test_sripts", subpath)
+        print(path)
 
         with open(path) as batteries_text:
 
@@ -155,6 +160,9 @@ class Smartgrid(object):
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
+
+
+        SEQUENCES ONTHOUDEN VOOR EXTRA PUNTEN!!!!!!!!!! id's
         """
         # turn houses into list
         random_houses = list(self.houses.values())
@@ -261,4 +269,7 @@ class Smartgrid(object):
         return cost
 
 if __name__ == "__main__":
+    start_time = time.clock()
+    print(f"Start: {start_time}")
     Smartgrid()
+    print(time.clock() - start_time, "seconds")
