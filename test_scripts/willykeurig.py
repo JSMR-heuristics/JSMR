@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import sys
+from house import House
+from battery import Battery
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,15 +13,9 @@ import os
 import random
 import statistics
 import pickle
-from pathlib import Path
 import time
 
-
-path = str(Path.cwd()).replace("test_scripts", "code/classes")
-sys.path.append(path)
-from battery import Battery
-from house import House
-
+from pathlib import Path
 
 from helpers import *
 
@@ -88,9 +84,8 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_batterijen.txt"
-        path = str(Path.cwd()).replace("test_sripts", subpath)
-        print(path)
+        subpath = f"Huizen&Batterijen\wijk{INPUT}_batterijen.txt"
+        path = str(Path.cwd()).replace("scripts", subpath)
 
         with open(path) as batteries_text:
 
@@ -161,9 +156,6 @@ class Smartgrid(object):
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
-
-
-        SEQUENCES ONTHOUDEN VOOR EXTRA PUNTEN!!!!!!!!!! id's
         """
         # turn houses into list
         random_houses = list(self.houses.values())
@@ -174,6 +166,7 @@ class Smartgrid(object):
         prices = []
         count = 0
         misses = -iterations
+        batt_index = [0, 1, 2, 3, 4]
 
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
@@ -182,6 +175,7 @@ class Smartgrid(object):
             # house is linked to a battery
             while self.check_linked() is False or self.check_full() is True:
                 misses += 1
+                print(misses)
 
                 # shuffle order of houses
                 random.shuffle(random_houses)
@@ -192,11 +186,10 @@ class Smartgrid(object):
                 # for every house find closest battery to connect to provided
                 # that this house wont over-cap the battery
                 for house in random_houses:
-                    for i in range(5):
-                        if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
-                            house.link = self.batteries[list(house.diffs)[i]]
-                            self.batteries[list(house.diffs)[i]].linked_houses.append(house)
-                            break
+                    index = random.sample(batt_index, 1)[0]
+                    house.link = self.batteries[index]
+                    self.batteries[index].linked_houses.append(house)
+
 
             # calculate price
             price = self.calculate_cost()
@@ -205,14 +198,18 @@ class Smartgrid(object):
             # pickle cheapest configuration so far + sequence of houses
             if price is min(prices):
                 house_batt = [self.houses, self.batteries]
-                with open("random_greedy_lowest_WIJK{INPUT}.dat", "wb") as f:
+                with open(f"random_greedy_lowest_WIJK{INPUT}_{ITER}.dat", "wb") as f:
                     pickle.dump(house_batt, f)
-                with open("sequence_lowest_WIJK{INPUT}.dat", "wb") as f:
+                with open(f"sequence_lowest_WIJK{INPUT}_{ITER}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
 
 
             count += 1
             print(count)
+        with open(f"prices{INPUT}_{ITER}.dat", "wb") as f:
+            pickle.dump(prices, f)
+
+
         print(f"min: {min(prices)}")
         print(f"max: {max(prices)}")
         print(f"mean: {np.mean(prices)}")
