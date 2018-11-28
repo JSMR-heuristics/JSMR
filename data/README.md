@@ -1,6 +1,5 @@
 # Data
-De data van ieder wijk is te vinden in 2 respectieve files per wijk
-* Data van de huizen in wijk *x*, CSV formaat
-  *  wijk*x*\_huizen.csv
-* Data van de batterijen in wijk *x*, TXT formaat
-  * wijk*x*\_batterijen.txt
+The data of every district can be obtained from "wijk*x*_data", with x being the number of the district:
+* wijk*x*_batterijen contains the battery data of district *x* in .TXT format
+* wijk*x*_huizen contains the battery data of districy *x* in .CSV format
+
