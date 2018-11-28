@@ -27,3 +27,18 @@ our: 45300.0
 closest: 42757.0
 furthest: 101491.0
 our: 46537
+
+1 random_1000
+closest: 42757.0
+furthest: 101491.0
+our: 58318
+
+2 random_1000
+closest: 42757.0
+furthest: 101491.0
+our: 46519
+
+3 random_1000
+closest: 42757.0
+furthest: 101491.0
+our: 46285
