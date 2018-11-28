@@ -38,6 +38,7 @@ Which will be added up in the formula due to being independent variables
 which results in:
 total state space with 5 batteries:  
 * 2500^5 + 150^5
+
 and we predict that no more than 10 batteries will be used.  
 Thus having a state space not exceeding:
 * 2500^10 + 150^10
