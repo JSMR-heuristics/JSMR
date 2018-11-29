@@ -13,7 +13,6 @@ import statistics
 import pickle
 from pathlib import Path
 import time
-import time
 
 
 path = str(Path.cwd()).replace("test_scripts", "code/classes")

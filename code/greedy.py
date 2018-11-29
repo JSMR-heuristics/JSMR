@@ -42,6 +42,14 @@ elif len(sys.argv) is 3:
         INPUT = sys.argv[1]
         ITER = sys.argv[2]
 
+# promt user
+"""
+Willen jullie deze methode of de commandline methode?
+"""
+
+# INPUT = input("Give Neighbourhood number (1, 2 or 3): ")
+# ITER = input("Give Number of Iterations: ")
+
 class Smartgrid(object):
     def __init__(self):
         self.houses = self.load_houses()
@@ -203,11 +211,13 @@ class Smartgrid(object):
             prices.append(price)
 
             # pickle cheapest configuration so far + sequence of houses
+            # include time
+            time_var = time.strftime("%d%m%Y_%H%M")
             if price is min(prices):
                 house_batt = [self.houses, self.batteries]
-                with open("random_greedy_lowest_WIJK{INPUT}.dat", "wb") as f:
+                with open(f"greedy_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(house_batt, f)
-                with open("sequence_lowest_WIJK{INPUT}.dat", "wb") as f:
+                with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
 
 
