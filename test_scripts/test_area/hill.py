@@ -12,17 +12,15 @@ import os
 from pathlib import Path
 from helpers import *
 
-path = str(Path.cwd()).replace("algorithms", "classes")
-sys.path.append(path)
 from battery import Battery
 from house import House
 
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
-
+ITER = 0
 PLOT = False
-ALGORITHM = "optimize"
+ALGORITHM = "hill"
 
 if len(sys.argv) not in [2, 3]:
         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
@@ -48,9 +46,7 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
-        self.optimize()
-
-
+        self.hill_climber()
     def load_houses(self):
         """
         Parses through csv file and saves houses as house.House
@@ -58,8 +54,10 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data\wijk{INPUT}_huizen.csv"
-        path_mand = str(Path.cwd()).replace("algorithms", "")
-        path = str(path_mand.replace("code\\", subpath))
+        path = str(Path.cwd()).replace("test_area", "")
+        path = str(path.replace("Test_Scripts", subpath))
+        print(path)
+
         print(path)
         # open file
         with open(path, newline="") as houses_csv:
@@ -83,7 +81,6 @@ class Smartgrid(object):
 
         # returns dict, goes to init (self.houses)
         return houses
-
     def load_batteries(self):
         """
         Parses through text file and saves batteries as battery.Battery
@@ -91,8 +88,9 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data\wijk{INPUT}_batterijen.txt"
-        path_mand = str(Path.cwd()).replace("algorithms", "")
-        path = str(path_mand.replace("code\\", subpath))
+        path = str(Path.cwd()).replace("test_area", "")
+        path = str(path.replace("Test_Scripts", subpath))
+        print(path)
 
         with open(path) as batteries_text:
 
@@ -120,8 +118,6 @@ class Smartgrid(object):
 
         # return dict to INIT
         return batteries
-
-    # kan weggewerkt worden
     def get_coordinates(self):
         x_houses, y_houses, x_batt, y_batt = [], [], [], []
 
@@ -140,7 +136,6 @@ class Smartgrid(object):
             y_batt.append(battery.y)
 
         return [x_houses, y_houses, x_batt, y_batt]
-
     def link_houses(self):
         """
         Links houses to batteries regardless of capacity, choses the
@@ -164,7 +159,6 @@ class Smartgrid(object):
             for index in range(len(distance_diffs)):
                 diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
-
     def plot_houses(self, changes):
         """
         Plots houses, batteries and cables. Also calculates the total
@@ -221,71 +215,114 @@ class Smartgrid(object):
         # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         # path = str(Path.cwd()).replace("scripts", subpath)
 
-        subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
-        path = str(Path.cwd()).replace("\\algorithms", "")
-        path= path.replace("code", subpath)
-        print(Path.cwd())
+        subpath = f"/plot{changes}_{ALGORITHM}.png"
+        path = str(Path.cwd()) + "\\hill_test\\" + subpath
         print(path)
 
         plt.savefig(path)
 
 
-    def optimize(self):
+    def hill_climber(self):
         """
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        # Initialize changes counter, this gives insight to
-        # the speed of this algorithm
-        changes = 0
-        # for num in self.batteries:
-        #     print(f"Battery{num}: {self.batteries[num].filled()}")
-        #     for ding in self.batteries[num].linked_houses:
-        #         print(f"House: {ding.output}")
 
-        # While one or more batteries are over their capacity
-        while self.check_full() and changes < 50:
+        random_houses = list(self.houses.values())
+        print(ITER)
 
-            # kan korter
-            # Sorts batteries based off total inputs from high to low
-            total_inputs = []
-            for battery in self.batteries.values():
-                total_inputs.append([battery.filled(), battery])
-            high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
+        iterations = int(ITER)
 
-            # Prioritize battery with highest inputs
-            # to disconnect a house from
-            # for i in high_low:
-            battery = high_low[0][1]
+        prices = []
+        count = 0
+        misses = -iterations
+
+        # Do untill we have <iterations> succesfull configurations
+        while count < iterations:
+            self.disconnect()
+            # While one or more batteries are over their capacity or not every
+            # house is linked to a battery
+            while self.check_linked() is False or self.check_full() is True:
+                misses += 1
+
+                # shuffle order of houses
+                random.shuffle(random_houses)
+                # remove connections, if any
+                self.disconnect()
+                # for every house find closest battery to connect to provided
+                # that this house wont over-cap the battery
+                for house in random_houses:
+                    for i in range(5):
+                        if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
+                            house.link = self.batteries[list(house.diffs)[i]]
+                            self.batteries[list(house.diffs)[i]].linked_houses.append(house)
+                            break
+
+                distance_list = sort_linked_houses(self, battery)
+
+                random.shuffle(random_houses)
+                # Determine the cheapest option first, if any
+                # else transfer option with lowest output
+                try:
+                    house, to_batt = find_best(self, distance_list, "strict")
+                except TypeError:
+                    house, to_batt = find_best(self, distance_list, "not-strict")
+
+                # Switch the house from battery
+                curr_batt = house.link
+                changes += 1
+                swap_houses(self, house, curr_batt, to_batt, changes)
+
+            # calculate price
+            price = self.calculate_cost()
+            prices.append(price)
+
+            # pickle cheapest configuration so far + sequence of houses
+            if price is min(prices):
+                house_batt = [self.houses, self.batteries]
+                with open("random_greedy_lowest_WIJK{INPUT}.dat", "wb") as f:
+                    pickle.dump(house_batt, f)
+                with open("sequence_lowest_WIJK{INPUT}.dat", "wb") as f:
+                    pickle.dump(random_houses, f)
+
+
+            count += 1
+            print(count)
+
 
             # Sort houses linked to this battery by distance
             # to other battery from low to high
             # distance_list = self.sort_linked_houses(battery)
-            distance_list = sort_linked_houses(self, battery)
 
-            # Determine the cheapest option first, if any
-            # else transfer option with lowest output
-            try:
-                house, to_batt = find_best(self, distance_list, "strict")
-            except TypeError:
-                house, to_batt = find_best(self, distance_list, "not-strict")
-
-            # Switch the house from battery
-            curr_batt = house.link
-            changes += 1
-            swap_houses(self, house, curr_batt, to_batt, changes)
-            if (changes % 5) is 0 and PLOT:
-                self.plot_houses(changes)
             # break
+
+
+
         self.plot_houses("FINAL")
-        for i in self.batteries:
-            print(self.batteries[i].filled())
-            print(f"{self.batteries[i].x}/{self.batteries[i].y}")
-            # for house in self.batteries[i].linked_houses:
-            #     print(house.output)
+        # for i in self.batteries:
+        #     print(self.batteries[i].filled())
+        #     print(f"{self.batteries[i].x}/{self.batteries[i].y}")
+        #     # for house in self.batteries[i].linked_houses:
+        #     #     print(house.output)
+        print(f"min: {min(prices)}")
+        print(f"max: {max(prices)}")
+        print(f"mean: {np.mean(prices)}")
+        print(f"unsuccesfull iterations: {misses}")
 
 
+    def check_linked(self):
+        """
+        Checks whether every house is linked to a battery
+        """
+        count = 0
+        for house in self.houses.values():
+            if house.link:
+                count += 1
+        if count is 150:
+            return True
+        else:
+            return False
     def check_full(self):
         """
         Returns True if one or more of the batteries is over it's
@@ -296,6 +333,30 @@ class Smartgrid(object):
             if battery.full() is True:
                 switch = True
         return switch
+    def disconnect(self):
+        """
+        Delete all connections
+        """
+        for house in self.houses.values():
+            house.link = None
+        for battery in self.batteries.values():
+            battery.linked_houses = []
+    def calculate_cost(self):
+        cost = 0
+        for house in list(self.houses.values()):
+
+            x_house, y_house = house.x, house.y
+            x_batt, y_batt = house.link.x, house.link.y
+
+            # calculate the new coordinate for the vertical line
+            x_diff = x_batt - x_house
+            new_x = x_house + x_diff
+
+            line_colour = house.link.colour
+
+            # calculate line cost
+            cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
+        return cost
 
 
 if __name__ == "__main__":
