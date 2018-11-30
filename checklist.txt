@@ -24,3 +24,4 @@ Algorithms:
   o Hill climber implementeren.
   o DFS implementeren.
   o Branch-and-bound implementeren.
+  o Moonwalk Down
