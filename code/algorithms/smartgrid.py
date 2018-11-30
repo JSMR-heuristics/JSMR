@@ -91,6 +91,7 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data\wijk{INPUT}_batterijen.txt"
+        # subpath = f"data\Wijk_{INPUT}_cluster_4.txt"
         path_mand = str(Path.cwd()).replace("algorithms", "")
         path = str(path_mand.replace("code\\", subpath))
 
@@ -217,7 +218,7 @@ class Smartgrid(object):
         #     y = battery.y
         #     plt.text(x, y, f"{count}")
         #     count += 1
-        # plt.show()
+        plt.show()
         # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         # path = str(Path.cwd()).replace("scripts", subpath)
 
@@ -244,16 +245,23 @@ class Smartgrid(object):
         #     print(f"Battery{num}: {self.batteries[num].filled()}")
         #     for ding in self.batteries[num].linked_houses:
         #         print(f"House: {ding.output}")
+<<<<<<< HEAD
 
         # While one or more batteries are over their capacity
         while self.check_full() and changes < 50:
 
             # kan korter
+=======
+         # While one or more batteries are over their capacity
+        while self.check_full() and changes < 50:
+             # kan korter
+>>>>>>> 6fbf3f47c058b6ad4ab7ce8198a6c5dc3fdf1d8b
             # Sorts batteries based off total inputs from high to low
             total_inputs = []
             for battery in self.batteries.values():
                 total_inputs.append([battery.filled(), battery])
             high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
+<<<<<<< HEAD
 
             # Prioritize battery with highest inputs
             # to disconnect a house from
@@ -266,13 +274,28 @@ class Smartgrid(object):
             distance_list = sort_linked_houses(self, battery)
 
             # Determine the cheapest option first, if any
+=======
+             # Prioritize battery with highest inputs
+            # to disconnect a house from
+            # for i in high_low:
+            battery = high_low[0][1]
+             # Sort houses linked to this battery by distance
+            # to other battery from low to high
+            # distance_list = self.sort_linked_houses(battery)
+            distance_list = sort_linked_houses(self, battery)
+             # Determine the cheapest option first, if any
+>>>>>>> 6fbf3f47c058b6ad4ab7ce8198a6c5dc3fdf1d8b
             # else transfer option with lowest output
             try:
                 house, to_batt = find_best(self, distance_list, "strict")
             except TypeError:
                 house, to_batt = find_best(self, distance_list, "not-strict")
+<<<<<<< HEAD
 
             # Switch the house from battery
+=======
+             # Switch the house from battery
+>>>>>>> 6fbf3f47c058b6ad4ab7ce8198a6c5dc3fdf1d8b
             curr_batt = house.link
             changes += 1
             swap_houses(self, house, curr_batt, to_batt, changes)
@@ -280,6 +303,10 @@ class Smartgrid(object):
                 self.plot_houses(changes)
             # break
         self.plot_houses("FINAL")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6fbf3f47c058b6ad4ab7ce8198a6c5dc3fdf1d8b
         for i in self.batteries:
             print(self.batteries[i].filled())
             print(f"{self.batteries[i].x}/{self.batteries[i].y}")
