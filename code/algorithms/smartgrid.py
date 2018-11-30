@@ -48,7 +48,7 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
-        # self.optimize()
+        self.optimize()
 
 
     def load_houses(self):
@@ -91,7 +91,7 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         # subpath = f"data\wijk{INPUT}_batterijen.txt"
-        subpath = f"data\Wijk_{INPUT}_cluster_1.txt"
+        subpath = f"data\Wijk_{INPUT}_cluster_3.txt"
         path_mand = str(Path.cwd()).replace("algorithms", "")
         path = str(path_mand.replace("code\\", subpath))
 
@@ -159,12 +159,12 @@ class Smartgrid(object):
             distances = list(all_distances[index].values())
 
             house.link = self.batteries[batteries[0]]
-            # self.batteries[batteries[0]].linked_houses.append(house)
-            # diff, distance_diffs = distances[0], distances[1:]
-            # diffs = {}
-            # for index in range(len(distance_diffs)):
-            #     diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
-            # house.diffs = diffs
+            self.batteries[batteries[0]].linked_houses.append(house)
+            diff, distance_diffs = distances[0], distances[1:]
+            diffs = {}
+            for index in range(len(distance_diffs)):
+                diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
+            house.diffs = diffs
 
     def plot_houses(self, changes):
         """
