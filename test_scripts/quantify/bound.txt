@@ -1,4 +1,4 @@
-1
+1 step-down
 closest: 53188.0
 furthest: 103030.0
 our: 56401
@@ -8,7 +8,17 @@ closest: 53188.0
 furthest: 103030.0
 our: 58417
 
-2
+1 hill
+closest: 53188.0
+furthest: 103030.0
+our: 55753
+
+1 random_1000
+closest: 53188.0
+furthest: 103030.0
+our: 71341
+
+2 step-down
 closest: 45268.0
 furthest: 96253.0
 our: 46401
@@ -18,7 +28,17 @@ closest: 45268.0
 furthest: 96253.0
 our: 46636
 
-3
+2 random_1000
+closest: 45268.0
+furthest: 96253.0
+our: 65131
+
+2 hill
+closest: 45268.0
+furthest: 96253.0
+our: 45520
+
+3 step-down
 closest: 42757.0
 furthest: 101491.0
 our: 45300.0
@@ -28,17 +48,67 @@ closest: 42757.0
 furthest: 101491.0
 our: 46537
 
-1 random_1000
-closest: 42757.0
-furthest: 101491.0
-our: 71341
-
-2 random_1000
-closest: 42757.0
-furthest: 101491.0
-our: 65131
-
 3 random_1000
 closest: 42757.0
 furthest: 101491.0
 our: 66535
+
+3 hill
+closest: 42757.0
+furthest: 101491.0
+our: 43765
+
+3 hill 2
+closest: 42757.0
+furthest: 101491.0
+our: 43819
+
+1 step-down_protobatt_1
+closest: 53188.0
+furthest: 103030.0
+our: 32676
+
+1 step-down_protobatt_2
+closest: 53188.0
+furthest: 103030.0
+our: 31866
+
+1 step-down_protobatt_3
+closest: 53188.0
+furthest: 103030.0
+our: 31686
+
+2 step-down_protobatt_1
+closest: 53188.0
+furthest: 103030.0
+our: 50488
+
+2 step-down_protobatt_2
+closest: 53188.0
+furthest: 103030.0
+our: 44260
+
+2 step-down_protobatt_3
+closest: 53188.0
+furthest: 103030.0
+our: 42181
+
+3 step-down_protobatt_1
+closest: 53188.0
+furthest: 103030.0
+our: 50488
+
+3 step-down_protobatt_2
+closest: 53188.0
+furthest: 103030.0
+our: 44260
+
+3 step-down_protobatt_3
+closest: 53188.0
+furthest: 103030.0
+our: 42181
+
+3 step-down_protobatt_4
+closest: 53188.0
+furthest: 103030.0
+our: 42181

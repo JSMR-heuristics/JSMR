@@ -8,42 +8,56 @@ import matplotlib.ticker as ticker
 import re
 import operator
 import os
-import copy
 import random
+import statistics
 import pickle
+from pathlib import Path
 import time
 
 
-from pathlib import Path
-from helpers import *
-
-from battery import Battery
-from house import House
 
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
 
-PLOT = False
-ALGORITHM = "hill"
+ITER = 0
+ALGORITHM = "GREEDY"
 
-if len(sys.argv) not in [2, 3]:
-        print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
+if len(sys.argv) not in [3]:
+        print("Usage: python smartgrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
         sys.exit(2)
-elif len(sys.argv) is 2:
-    if int(sys.argv[1]) not in [1, 2, 3]:
-        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-        sys.exit(2)
-    else:
-        INPUT = sys.argv[1]
 elif len(sys.argv) is 3:
-    if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
+    if int(sys.argv[1]) not in [1, 2, 3] or isinstance(sys.argv[2], int):
         print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
         print("If you want plots type\n python smargrid.py <wijknummer> plot")
         sys.exit(2)
     else:
         INPUT = sys.argv[1]
-        PLOT = True
+        ITER = sys.argv[2]
+
+
+start = str(Path.home())
+print(f"start = {start}")
+quit()
+for dirpath, dirnames, filenames in os.walk(start):
+    for filename in filenames:
+        if filename == ("battery.py" or "house.py" or f"wijk{INPUT}_huizen.csv" or f"wijk{INPUT}_batterijen.txt" or "helpers.py"):
+            filename = os.path.join(dirpath, filename)
+            print(filename)
+            print(dirpath)
+
+from battery import Battery
+from house import House
+from helpers import *
+
+
+# promt user
+"""
+Willen jullie deze methode of de commandline methode?
+"""
+
+# INPUT = input("Give Neighbourhood number (1, 2 or 3): ")
+# ITER = input("Give Number of Iterations: ")
 
 class Smartgrid(object):
     def __init__(self):
@@ -51,23 +65,15 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
-        self.hill_climber()
-        house_count = 0
-        for house in self.houses.values():
-            if house.link:
-                house_count += 1
-        print(f"housecount = {house_count}")
-        for battery in self.batteries.values():
-            print(battery.filled())
+        self.optimize()
+
+
     def load_houses(self):
         """
         Parses through csv file and saves houses as house.House
         objects. Returns instances in dict to __init__
         """
-        # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_huizen.csv"
-        path = str(Path.cwd()).replace("test_area", "")
-        path = str(path.replace("Test_Scripts", subpath))
+
         # open file
         with open(path, newline="") as houses_csv:
 
@@ -90,15 +96,12 @@ class Smartgrid(object):
 
         # returns dict, goes to init (self.houses)
         return houses
+
     def load_batteries(self):
         """
         Parses through text file and saves batteries as battery.Battery
         objects. Returns instances in dict to __init__
         """
-        # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_batterijen.txt"
-        path = str(Path.cwd()).replace("test_area", "")
-        path = str(path.replace("Test_Scripts", subpath))
 
         with open(path) as batteries_text:
 
@@ -126,6 +129,8 @@ class Smartgrid(object):
 
         # return dict to INIT
         return batteries
+
+    # kan weggewerkt worden
     def get_coordinates(self):
         x_houses, y_houses, x_batt, y_batt = [], [], [], []
 
@@ -144,184 +149,87 @@ class Smartgrid(object):
             y_batt.append(battery.y)
 
         return [x_houses, y_houses, x_batt, y_batt]
+
     def link_houses(self):
         """
-        Links houses to batteries regardless of capacity, choses the
-        closest option
-
-        LINK_HOUSES CALCULATE_CABLE EN GET_COORDINATES MOGEN LATER DENK
-        IK WEL IN 1 METHOD GESCHREVEN
+        DOES NOT LINK HOUSES YET, JUST PROVIDES DISTANCES
         """
         # order the batteries for each house
         all_distances = calculate_distance(self)
         for index, house in enumerate(list(self.houses.values())):
-            # for right now, the link is the shortest
-            # regardless of battery capacity
+
             batteries = list(all_distances[index].keys())
             distances = list(all_distances[index].values())
 
-            house.link = self.batteries[batteries[0]]
-            self.batteries[batteries[0]].linked_houses.append(house)
-            diff, distance_diffs = distances[0], distances[1:]
+            diff, distance_diffs = distances[0], distances
             diffs = {}
             for index in range(len(distance_diffs)):
-                diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
+                diffs[batteries[index]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
-    def plot_houses(self, changes):
-        """
-        Plots houses, batteries and cables. Also calculates the total
-        cost of the cable
-        """
 
-        x_houses, y_houses, x_batt, y_batt  = self.coordinates[0], self.coordinates[1], self.coordinates[2], self.coordinates[3]
-
-        # make plot
-        ax = plt.gca()
-        ax.axis([-2, 52, -2 , 52])
-        ax.scatter(x_houses , y_houses, marker = ".")
-        ax.scatter(x_batt, y_batt, marker = "o", s = 40, c = "r" )
-        ax.set_xticks(np.arange(0, 52, 1), minor = True)
-        ax.set_yticks(np.arange(0, 52, 1), minor = True)
-        ax.grid(b = True, which="major", linewidth=1)
-        ax.grid(b = True, which="minor", linewidth=.2)
-
-        total = 0
-        for house in list(self.houses.values()):
-
-            x_house, y_house = house.x, house.y
-            x_batt, y_batt = house.link.x, house.link.y
-
-            # calculate the new coordinate for the vertical line
-            x_diff = x_batt - x_house
-            new_x = x_house + x_diff
-
-            line_colour = house.link.colour
-
-            # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], \
-            color=f'{line_colour}',linestyle='-', linewidth=1)
-
-            # place vertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], \
-            color=f'{line_colour}',linestyle='-', linewidth=1)
-
-            # calculate line cost
-            total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
-
-        print(f"Total cost of cable: {total}")
-        plt.title(f"Total cost of cable: {total}")
-
-        ## adds the id to the batteries on the plot
-        ## alter in the sub3,4 to type of battery
-        # count = 0
-        # for battery in list(self.batteries.values()):
-        #     x = battery.x
-        #     y = battery.y
-        #     plt.text(x, y, f"{count}")
-        #     count += 1
-        # plt.show()
-        # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
-        # path = str(Path.cwd()).replace("scripts", subpath)
-
-        subpath = f"/plot{changes}_{ALGORITHM}.png"
-        path = str(Path.cwd()) + "\\hill_test\\" + subpath
-
-        plt.savefig(path)
-
-
-    def hill_climber(self):
+    def optimize(self):
         """
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
-        """
 
+
+        SEQUENCES ONTHOUDEN VOOR EXTRA PUNTEN!!!!!!!!!! id's
+        """
+        # turn houses into list
         random_houses = list(self.houses.values())
-        random_houses_2 = list(self.houses.values())
-        iterations = 1000
+        print(ITER)
+
+        iterations = int(ITER)
+
+        prices = []
         count = 0
         misses = -iterations
-        prices = []
 
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
             self.disconnect()
-            # connect random houses to the closest option  within the constraints
-            # ----------------------------------------------------------------
             # While one or more batteries are over their capacity or not every
             # house is linked to a battery
             while self.check_linked() is False or self.check_full() is True:
-                # print(misses)
                 misses += 1
 
                 # shuffle order of houses
                 random.shuffle(random_houses)
+
                 # remove connections, if any
                 self.disconnect()
 
                 # for every house find closest battery to connect to provided
                 # that this house wont over-cap the battery
                 for house in random_houses:
-
-                    for i in range(4):
+                    for i in range(5):
                         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                             house.link = self.batteries[list(house.diffs)[i]]
                             self.batteries[list(house.diffs)[i]].linked_houses.append(house)
                             break
-            base_copy = copy.copy([self.houses, self.batteries])
-            base_cost = self.calculate_cost()
-            # ----------------------------------------------------------------
-            print("MEH")
-            post_random_cost = 0
-            step_back_cost = base_cost
-            step_cost = 99999
-            climbs = 0
-            step_back = base_copy
-            hillcount = 0
-            meh = 150 * 150
 
-            random.shuffle(random_houses)
-            random.shuffle(random_houses_2)
+            # calculate price
+            price = self.calculate_cost()
+            prices.append(price)
 
-            while hillcount < meh:
-                # loop while the new step is inefficient
-                for house_1 in random_houses:
-                    for house_2 in random_houses_2:
-                        # take a step if not the same batteries
-                        if not (house_1.link == house_2.link):
-                            switch_houses(self, house_1, house_2)
-                            step_cost = self.calculate_cost()
-                            if (step_cost < step_back_cost) and (self.check_full() is False):
-                                climbs += 1
-                                # print(climbs)
-                                # print(step_cost)
-                                # necessary to copy step back?
-                                step_back = copy.copy([self.houses, self.batteries])
-                                step_back_cost = step_cost
-                                hillcount = 0
-                            else:
-                                switch_houses(self, house_1, house_2)
-                                #self.houses, self.batteries = step_back[0], step_back[1]
-                        hillcount += 1
-
-            print(f"bc={base_cost}, hilltop = {step_cost}")
-            time_var = time.strftime("%d%m%Y")
-            prices.append(step_cost)
-
-            if step_cost is min(prices):
+            # pickle cheapest configuration so far + sequence of houses
+            # include time
+            time_var = time.strftime("%d%m%Y_%H%M")
+            if price is min(prices):
                 house_batt = [self.houses, self.batteries]
-                with open(f"hill_climber_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                with open(f"greedy_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(house_batt, f)
                 with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
+
+
             count += 1
             print(count)
-
         print(f"min: {min(prices)}")
         print(f"max: {max(prices)}")
         print(f"mean: {np.mean(prices)}")
         print(f"unsuccesfull iterations: {misses}")
-
 
     def check_linked(self):
         """
@@ -335,6 +243,7 @@ class Smartgrid(object):
             return True
         else:
             return False
+
     def check_full(self):
         """
         Returns True if one or more of the batteries is over it's
@@ -345,6 +254,7 @@ class Smartgrid(object):
             if battery.full() is True:
                 switch = True
         return switch
+
     def disconnect(self):
         """
         Delete all connections
@@ -353,6 +263,7 @@ class Smartgrid(object):
             house.link = None
         for battery in self.batteries.values():
             battery.linked_houses = []
+
     def calculate_cost(self):
         cost = 0
         for house in list(self.houses.values()):
@@ -369,7 +280,6 @@ class Smartgrid(object):
             # calculate line cost
             cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
         return cost
-
 
 if __name__ == "__main__":
     start_time = time.clock()

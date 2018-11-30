@@ -146,27 +146,21 @@ class Smartgrid(object):
         return [x_houses, y_houses, x_batt, y_batt]
     def link_houses(self):
         """
-        Links houses to batteries regardless of capacity, choses the
-        closest option
-
-        LINK_HOUSES CALCULATE_CABLE EN GET_COORDINATES MOGEN LATER DENK
-        IK WEL IN 1 METHOD GESCHREVEN
+        DOES NOT LINK HOUSES YET, JUST PROVIDES DISTANCES
         """
         # order the batteries for each house
         all_distances = calculate_distance(self)
         for index, house in enumerate(list(self.houses.values())):
-            # for right now, the link is the shortest
-            # regardless of battery capacity
+
             batteries = list(all_distances[index].keys())
             distances = list(all_distances[index].values())
 
-            house.link = self.batteries[batteries[0]]
-            self.batteries[batteries[0]].linked_houses.append(house)
-            diff, distance_diffs = distances[0], distances[1:]
+            diff, distance_diffs = distances[0], distances
             diffs = {}
             for index in range(len(distance_diffs)):
-                diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
+                diffs[batteries[index]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
+
     def plot_houses(self, changes):
         """
         Plots houses, batteries and cables. Also calculates the total
@@ -263,7 +257,7 @@ class Smartgrid(object):
                 # that this house wont over-cap the battery
                 for house in random_houses:
 
-                    for i in range(4):
+                    for i in range(5):
                         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                             house.link = self.batteries[list(house.diffs)[i]]
                             self.batteries[list(house.diffs)[i]].linked_houses.append(house)

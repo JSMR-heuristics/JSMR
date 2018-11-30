@@ -75,3 +75,11 @@ def swap_houses(self, house, current_batt, next_batt, changes):
     print(f"house capacity = {house.output}")
     print(f"capacity = {current_batt.filled()}")
     print(f"changes = {changes}")
+
+def switch_houses(self, house1, house2):
+    # print(f"house1 x{house1.x}/y{house1.y} battery at x{house1.link.x}/y{house1.link.y} --> at x{house2.link.x}/y{house2.link.y}")
+    # print(f"house2 x{house2.x}/y{house2.y} battery at x{house2.link.x}/y{house2.link.y} --> at x{house1.link.x}/y{house1.link.y}")
+    house2.link, house1.link = house1.link, house2.link
+
+    # print(f"chouse1 x{house1.x}/y{house1.y} now at x {house1.link.x}/y{house1.link.y} was at x{house2.link.x}/y{house2.link.y}")
+    # print(f"chouse2 x{house2.x}/y{house2.y} now at x {house2.link.x}/y{house2.link.y} was at x{house1.link.x}/y{house1.link.y}")

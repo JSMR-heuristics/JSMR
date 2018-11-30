@@ -10,3 +10,12 @@ S. Optimalize ver. 2
 1 56401 , 6.44637
 2 46401 , 2.22222
 3 45300 , 4,32969
+
+HillClimber?
+1
+2
+-min: 20646
+-max: 21969
+-mean: 21115.215
+-unsuccesfull: 14601
+3
