@@ -64,51 +64,51 @@ furthest: 101491.0
 our: 43819
 
 1 step-down_protobatt_1
-closest: 53188.0
-furthest: 103030.0
-our: 32676
+closest: 39967
+furthest: 97639
+our: 42676
 
 1 step-down_protobatt_2
-closest: 53188.0
-furthest: 103030.0
-our: 31866
+closest: 39985
+furthest: 96838
+our: 41866
 
 1 step-down_protobatt_3
-closest: 53188.0
-furthest: 103030.0
-our: 31686
+closest: 40228
+furthest: 96964
+our: 41686
 
 2 step-down_protobatt_1
-closest: 53188.0
-furthest: 103030.0
+closest: 44692
+furthest: 98899
 our: 50488
 
 2 step-down_protobatt_2
-closest: 53188.0
-furthest: 103030.0
+closest: 43054
+furthest: 95407
 our: 44260
 
 2 step-down_protobatt_3
-closest: 53188.0
-furthest: 103030.0
+closest: 40903
+furthest: 98899
 our: 42181
 
 3 step-down_protobatt_1
-closest: 53188.0
-furthest: 103030.0
-our: 50488
+closest: 41659
+furthest: 109555
+our: 0
 
 3 step-down_protobatt_2
-closest: 53188.0
-furthest: 103030.0
-our: 44260
+closest: 41542
+furthest: 97612
+our: 45772
 
 3 step-down_protobatt_3
-closest: 53188.0
-furthest: 103030.0
-our: 42181
+closest: 41659
+furthest: 93355
+our: 42073
 
 3 step-down_protobatt_4
-closest: 53188.0
-furthest: 103030.0
-our: 42181
+closest: 43090
+furthest: 89089
+our: 0
