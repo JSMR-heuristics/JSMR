@@ -20,9 +20,11 @@ from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
 from geopy.distance import great_circle
 from shapely.geometry import MultiPoint
-
-
-
+from statistics import mean
+"""
+DIT IS EEN TEST MET EEN LIBRARY VAN INTERNET. IMPLEMENTATIE MOET NOG
+VERANDERT WORDEN
+"""
 path = str(Path.cwd()).replace("test_scripts", "code/classes")
 sys.path.append(path)
 from battery import Battery
@@ -111,6 +113,7 @@ class Smartgrid(object):
 
     def find_clusters(self):
         # Generate sample data
+        big_counter = 1
         X = []
         for house in self.houses.values():
             X.append([int(house.x), int(house.y)])
@@ -122,7 +125,6 @@ class Smartgrid(object):
                 settings_list.append([(i + 1), (j + 1)])
         counter = 0
 
-        print("mand")
         working_settings = []
 
         while counter < len(settings_list):
@@ -131,12 +133,12 @@ class Smartgrid(object):
 
             if n_clusters_ is 5:
                 working_settings.append([settings_list[counter][0], settings_list[counter][1]])
-                self.plot_cluster(X, labels, core_samples_mask, n_clusters_)
-
+                self.plot_cluster(X, labels, core_samples_mask, n_clusters_, big_counter)
+                big_counter += 1
             # print('Estimated number of clusters: %d' % n_clusters_)
             # print('Estimated number of noise points: %d' % n_noise_)
 
-        print(working_settings)
+        # print(working_settings)
 
     def cluster_scan(self, X, settings_list, counter):
         a, b = settings_list[counter][0], settings_list[counter][1]
@@ -152,12 +154,16 @@ class Smartgrid(object):
         return n_clusters_, n_noise_, X, labels, core_samples_mask
         # Plot result
 
-    def plot_cluster(self, X, labels, core_samples_mask, n_clusters_):
+    def plot_cluster(self, X, labels, core_samples_mask, n_clusters_, big_counter):
 
         # Black removed and is used for noise instead.
         unique_labels = set(labels)
         colors = [plt.cm.Spectral(each)
                   for each in np.linspace(0, 1, len(unique_labels))]
+        cap = [1507.0, 1508.25, 1506.75]
+
+        all_coords = "pos\t\tcap\n"
+        # battery_index = 0
         for k, col in zip(unique_labels, colors):
             if k == -1:
                 # Black used for noise.
@@ -166,14 +172,33 @@ class Smartgrid(object):
             class_member_mask = (labels == k)
 
             # print(X)
+            list_X , list_Y = [], []
 
             xy = X[class_member_mask & core_samples_mask]
+            if xy[:,0].any() and xy[:,1].any():
+                for i in range(3):
+                    list_X.append(mean(xy[:,0]))
+                    list_Y.append(mean(xy[:,1]))
+
             plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
                      markeredgecolor='k', markersize=14)
 
             xy = X[class_member_mask & ~core_samples_mask]
+            if xy[:,0].any() and xy[:,1].any() and col[0] is not 0:
+                    list_X.append(mean(xy[:,0]))
+                    list_Y.append(mean(xy[:,1]))
+
             plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
                      markeredgecolor='k', markersize=6)
+
+            if list_X and list_Y:
+                all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(INPUT) - 1]}\n"
+
+        print(f"mean x, y: {all_coords}")
+
+        with open (f"Wijk_{INPUT}_cluster_{big_counter}.txt", "w") as f:
+            f.write(all_coords)
+
 
         plt.title('Estimated number of clusters: %d' % n_clusters_)
         plt.show()
