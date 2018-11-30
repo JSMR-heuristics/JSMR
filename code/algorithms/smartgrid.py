@@ -91,6 +91,7 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data\wijk{INPUT}_batterijen.txt"
+        # subpath = f"data\Wijk_{INPUT}_cluster_4.txt"
         path_mand = str(Path.cwd()).replace("algorithms", "")
         path = str(path_mand.replace("code\\", subpath))
 
@@ -217,7 +218,7 @@ class Smartgrid(object):
         #     y = battery.y
         #     plt.text(x, y, f"{count}")
         #     count += 1
-        # plt.show()
+        plt.show()
         # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         # path = str(Path.cwd()).replace("scripts", subpath)
 
