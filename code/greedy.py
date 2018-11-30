@@ -65,8 +65,8 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_huizen.csv"
-        path = str(Path.cwd()).replace("test_scripts", subpath)
+        subpath = f"Huizen&Batterijen\wijk{INPUT}_huizen.csv"
+        path = str(Path.cwd()).replace("scripts", subpath)
         # open file
         with open(path, newline="") as houses_csv:
 
@@ -97,7 +97,7 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         subpath = f"data\wijk{INPUT}_batterijen.txt"
-        path = str(Path.cwd()).replace("test_scripts", subpath)
+        path = str(Path.cwd()).replace("test_sripts", subpath)
         print(path)
 
         with open(path) as batteries_text:
