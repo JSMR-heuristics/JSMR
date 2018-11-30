@@ -139,41 +139,43 @@ class Smartgrid(object):
         for house in self.houses.values():
             X.append([int(house.x), int(house.y)])
         X = np.array(X)
-        # centers = [[1, 1], [-1, -1], [1, -1]]
-        # X, labels_true = make_blobs(n_samples=750, centers=centers, cluster_std=0.4,
-        #                             random_state=0)
-        # print(X)
-        #
-        # X = StandardScaler().fit_transform(X)
-        # print(X)
 
-        # #############################################################################
-        # Compute DBSCAN
-        db = DBSCAN(eps=6, min_samples=10, algorithm="brute").fit(X)
+        settings_list = []
+        for i in range(15):
+            for j in range(15):
+                settings_list.append([(i + 1), (j + 1)])
+        counter = 0
+
+        working_settings = []
+
+        while counter < len(settings_list):
+            n_clusters_, n_noise_, X, labels, core_samples_mask = self.cluster_scan(X, settings_list, counter)
+            counter += 1
+
+            if n_clusters_ is 5:
+                working_settings.append([settings_list[counter][0], settings_list[counter][1]])
+                self.plot_cluster(X, labels, core_samples_mask, n_clusters_)
+
+            # print('Estimated number of clusters: %d' % n_clusters_)
+            # print('Estimated number of noise points: %d' % n_noise_)
+
+        print(working_settings)
+
+    def cluster_scan(self, X, settings_list, counter):
+        a, b = settings_list[counter][0], settings_list[counter][1]
+        db = DBSCAN(eps=a, min_samples=b, algorithm="auto").fit(X)
         core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
         core_samples_mask[db.core_sample_indices_] = True
         labels = db.labels_
-        print(labels)
 
         # Number of clusters in labels, ignoring noise if present.
         n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
         n_noise_ = list(labels).count(-1)
 
-        print('Estimated number of clusters: %d' % n_clusters_)
-        print('Estimated number of noise points: %d' % n_noise_)
-        # print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
-        # print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
-        # print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
-        # print("Adjusted Rand Index: %0.3f"
-        #       % metrics.adjusted_rand_score(labels_true, labels))
-        # print("Adjusted Mutual Information: %0.3f"
-        #       % metrics.adjusted_mutual_info_score(labels_true, labels))
-        # print("Silhouette Coefficient: %0.3f"
-        #       % metrics.silhouette_score(X, labels))
-
-        # #############################################################################
+        return n_clusters_, n_noise_, X, labels, core_samples_mask
         # Plot result
-        import matplotlib.pyplot as plt
+
+    def plot_cluster(self, X, labels, core_samples_mask, n_clusters_):
 
         # Black removed and is used for noise instead.
         unique_labels = set(labels)
