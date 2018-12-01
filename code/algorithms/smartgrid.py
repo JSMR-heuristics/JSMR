@@ -90,8 +90,8 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        # subpath = f"data\wijk{INPUT}_batterijen.txt"
-        subpath = f"data\Wijk_{INPUT}_cluster_3.txt"
+        subpath = f"data\wijk{INPUT}_batterijen.txt"
+        # subpath = f"data\Wijk_{INPUT}_cluster_4.txt"
         path_mand = str(Path.cwd()).replace("algorithms", "")
         path = str(path_mand.replace("code\\", subpath))
 
@@ -249,7 +249,7 @@ class Smartgrid(object):
         # While one or more batteries are over their capacity
         while self.check_full() and changes < 50:
 
-             # kan korter
+            # kan korter
             # Sorts batteries based off total inputs from high to low
             total_inputs = []
             for battery in self.batteries.values():
@@ -267,22 +267,13 @@ class Smartgrid(object):
             distance_list = sort_linked_houses(self, battery)
 
             # Determine the cheapest option first, if any
-             # Prioritize battery with highest inputs
-            # to disconnect a house from
-            # for i in high_low:
-            battery = high_low[0][1]
-             # Sort houses linked to this battery by distance
-            # to other battery from low to high
-            # distance_list = self.sort_linked_houses(battery)
-            distance_list = sort_linked_houses(self, battery)
-             # Determine the cheapest option first, if any
             # else transfer option with lowest output
             try:
                 house, to_batt = find_best(self, distance_list, "strict")
             except TypeError:
                 house, to_batt = find_best(self, distance_list, "not-strict")
 
-            # Switch the house from battery             # Switch the house from battery
+            # Switch the house from battery
             curr_batt = house.link
             changes += 1
             swap_houses(self, house, curr_batt, to_batt, changes)
@@ -290,7 +281,6 @@ class Smartgrid(object):
                 self.plot_houses(changes)
             # break
         self.plot_houses("FINAL")
-
         for i in self.batteries:
             print(self.batteries[i].filled())
             print(f"{self.batteries[i].x}/{self.batteries[i].y}")

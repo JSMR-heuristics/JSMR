@@ -11,7 +11,7 @@ import os
 import random
 import statistics
 import pickle
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import time
 
 
@@ -36,15 +36,30 @@ elif len(sys.argv) is 3:
         ITER = sys.argv[2]
 
 
-start = str(Path.home())
-print(f"start = {start}")
-quit()
-for dirpath, dirnames, filenames in os.walk(start):
-    for filename in filenames:
-        if filename == ("battery.py" or "house.py" or f"wijk{INPUT}_huizen.csv" or f"wijk{INPUT}_batterijen.txt" or "helpers.py"):
-            filename = os.path.join(dirpath, filename)
-            print(filename)
-            print(dirpath)
+path = str(Path.cwd())
+print(f"PATH: {path}")
+loc = path.find("JSMR")
+path = path[0:loc+5]
+print(path)
+
+for dirpath, dirnames, filenames in os.walk(path):
+        for filename in filenames:
+            if (filename == "battery.py" or
+               filename == "house.py" or
+               filename == "helpers.py"):
+                sys.path.append(dirpath)
+                print(dirpath)
+            elif f"wijk{INPUT}_huizen.csv" in filename:
+                house_file = Path(dirpath + "\\" + filename)
+
+            elif f"wijk{INPUT}_batterijen.txt" in filename:
+                batt_file = Path(dirpath + "\\" + filename)
+
+# data_folder = Path(path)
+# house_file = data_folder / f"wijk{INPUT}_huizen.csv"
+# print(f"h_file: {house_file}")
+# batt_file = data_folder / f"wijk{INPUT}_batterijen.txt"
+# print(f"b_file: {batt_file}")
 
 from battery import Battery
 from house import House
@@ -75,7 +90,7 @@ class Smartgrid(object):
         """
 
         # open file
-        with open(path, newline="") as houses_csv:
+        with open(house_file, newline="") as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -103,7 +118,7 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
 
-        with open(path) as batteries_text:
+        with open(batt_file) as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()

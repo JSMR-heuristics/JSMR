@@ -12,10 +12,22 @@ S. Optimalize ver. 2
 3 45300 , 4,32969
 
 HillClimber?
+1st try
+  2
+  -min: 20646
+  -max: 21969
+  -mean: 21115.215
+  -unsuccesfull: 14601
+2nd try
+  3
+  min: 18819
+  max: 20133
+  mean: 19319.796
+  unsuccesfull iterations: 79701
+3rd try
 1
-2
--min: 20646
--max: 21969
--mean: 21115.215
--unsuccesfull: 14601
-3
+min: 30618
+max: 33030
+mean: 31543.02
+unsuccesfull iterations: 18333451
+34576.014978528 seconds
