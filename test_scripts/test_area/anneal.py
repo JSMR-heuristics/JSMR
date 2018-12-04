@@ -12,6 +12,7 @@ import copy
 import random
 import pickle
 import time
+import math
 
 
 from pathlib import Path
@@ -51,7 +52,7 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
-        self.hill_climber()
+        self.sim_anneal()
         house_count = 0
         for house in self.houses.values():
             if house.link:
@@ -223,7 +224,7 @@ class Smartgrid(object):
         plt.savefig(path)
 
 
-    def hill_climber(self):
+    def sim_anneal(self):
         """
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
@@ -236,6 +237,7 @@ class Smartgrid(object):
         count = 0
         misses = -iterations
         prices = []
+        climbs_list = []
 
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
@@ -257,7 +259,7 @@ class Smartgrid(object):
                 # that this house wont over-cap the battery
                 for house in random_houses:
 
-                    for i in range(5):
+                    for i in range(4):
                         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                             house.link = self.batteries[list(house.diffs)[i]]
                             self.batteries[list(house.diffs)[i]].linked_houses.append(house)
@@ -265,19 +267,32 @@ class Smartgrid(object):
             base_copy = copy.copy([self.houses, self.batteries])
             base_cost = self.calculate_cost()
             # ----------------------------------------------------------------
-            print("MEH")
-            post_random_cost = 0
+            print("Start Hillclimb")
             step_back_cost = base_cost
-            step_cost = 99999
-            climbs = 0
             step_back = base_copy
+
+            climbs = 0
             hillcount = 0
-            meh = 150 * 150
+            alt_direction = 150 * 150
 
             random.shuffle(random_houses)
             random.shuffle(random_houses_2)
 
-            while hillcount < meh:
+            # Linear Cooling Scheme
+            T0 = 130
+            i = climbs
+            Tn = 0
+            N =
+            Ti = T0 - i * (T0 -Tn)/N
+
+            # calculate the "verkorting"
+            verkorting = self.calculate_cost() - step_back_cost
+
+            math.exp()
+
+
+
+            while hillcount < alt_directions:
                 # loop while the new step is inefficient
                 for house_1 in random_houses:
                     for house_2 in random_houses_2:
@@ -309,12 +324,15 @@ class Smartgrid(object):
                 with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
             count += 1
+            climbs_list.append(climbs)
             print(count)
 
+        # print("results wijk2 cluster 3")
         print(f"min: {min(prices)}")
         print(f"max: {max(prices)}")
         print(f"mean: {np.mean(prices)}")
         print(f"unsuccesfull iterations: {misses}")
+        print(f"average # of climbs: {np.mean(climbs_list)}")
 
 
     def check_linked(self):

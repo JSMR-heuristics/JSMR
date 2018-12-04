@@ -21,9 +21,6 @@ from battery import Battery
 from house import House
 
 
-
-
-
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
