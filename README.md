@@ -10,8 +10,8 @@ economic set-up can result into an astronomically large range of battery and
 cable layouts. Thus this program is made to return the most beneficial layout
 according to our set of priorities.
 
-#### State Space & Bounds
-##### Bounds
+### State Space & Bounds
+#### Bounds
 The absolute upper and lower bounds of the total costs can be calculated by connecting all houses to the most distant and to the closest battery without checking if the battery is overloaded, which results in:
 * Neighbourhood 1:
   * lower: 53188
@@ -24,8 +24,13 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
   * upper: 101491
   
 However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in [bound.txt](test_scripts/quantify/bound.txt)
+
+##### Bound-dependent Quantification
+To quantify the results per algorithm per neighbourhood we take the 'within-contstraints-impossible absolute upper and lowerbounds' as the margin and see wherein this margin our results exist. This will result in percentile values which can be compared within and between neighbourhoods.
+  
+
  
-##### State Space
+#### State Space
 The State Space encompassing every possible combination can be calculated with:
 * possible house-battery connections: #houses ^ #batteries  
 
