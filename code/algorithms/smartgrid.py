@@ -224,11 +224,10 @@ class Smartgrid(object):
         # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         # path = str(Path.cwd()).replace("scripts", subpath)
 
-        subpath = f"results/wijk_{self.input}/{self.algorithm}/plot{changes}_{self.algorithm}.png"
-        path = str(Path.cwd()).replace("\\algorithms", "")
-        path= path.replace("code", subpath)
-        print(Path.cwd())
-        print(path)
+        cwd = os.getcwd()
+        path = os.path.join(*[cwd, 'results', f'wijk_{self.input}/{self.algorithm}/plot{changes}_{self.algorithm}.png'])
+        sys.path.append(path)
+
 
         plt.savefig(path)
 

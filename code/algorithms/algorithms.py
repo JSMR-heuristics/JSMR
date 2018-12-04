@@ -2,6 +2,8 @@ import operator
 import random
 import numpy as np
 import pickle
+import os, sys
+
 
 from helpers import *
 import time
@@ -22,7 +24,7 @@ def optimize(self):
     #         print(f"House: {ding.output}")
 
     # While one or more batteries are over their capacity
-    while check_full(self) and changes < 50:
+    while check_full(self) and changes < 500:
 
         # kan korter
         # Sorts batteries based off total inputs from high to low
@@ -111,9 +113,16 @@ def greedy(self, iterations):
         time_var = time.strftime("%d%m%Y_%H%M")
         if price is min(prices):
             house_batt = [self.houses, self.batteries]
-            with open(f"greedy_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
+            cwd = os.getcwd()
+            path = os.path.join(*[cwd, 'data', 'pickles', f"greedy_lowest_WIJK{self.input}_{time_var}.dat"])
+            sys.path.append(path)
+            with open(path, "wb") as f:
                 pickle.dump(house_batt, f)
-            with open(f"sequence_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
+
+            cwd = os.getcwd()
+            path = os.path.join(*[cwd, 'data', 'pickles', f"sequence_lowest_WIJK{self.input}_{time_var}.dat"])
+            sys.path.append(path)
+            with open(path, "wb") as f:
                 pickle.dump(random_houses, f)
 
 

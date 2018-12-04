@@ -19,13 +19,13 @@ Exploration:
   o Aangeven minpunten van algoritme(If not mistaken)
 
 Algorithms:
-  o Bestaande algoritmes afmaken.
+  o Bestaande algoritmes afmaken (optimize voor wijk 3 laten werken).
   o "heatmap"-algoritme implementeren.
   o Hill climber implementeren.
   o DFS implementeren.
   o Branch-and-bound implementeren.
   o Moonwalk Down
-  
+
 Reminders
   o requirements.py opnieuw runnen
-  o 
+  o
