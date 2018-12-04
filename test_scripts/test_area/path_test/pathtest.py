@@ -37,10 +37,8 @@ elif len(sys.argv) is 3:
 
 
 path = str(Path.cwd())
-print(f"PATH: {path}")
 loc = path.find("JSMR")
 path = path[0:loc+5]
-print(path)
 
 for dirpath, dirnames, filenames in os.walk(path):
         for filename in filenames:
