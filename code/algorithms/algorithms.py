@@ -148,7 +148,6 @@ def hill_climber(self, iterations):
     while count < iterations:
         disconnect(self)
         # connect random houses to the closest option  within the constraints
-        # ----------------------------------------------------------------
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
         while check_linked(self) is False or check_full(self) is True:
@@ -171,7 +170,7 @@ def hill_climber(self, iterations):
                         break
         base_copy = copy.copy([self.houses, self.batteries])
         base_cost = calculate_cost(self)
-        # ----------------------------------------------------------------
+        
         print("Start Hillclimb")
         step_back_cost = base_cost
         step_back = base_copy

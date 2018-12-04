@@ -278,17 +278,7 @@ class Smartgrid(object):
             random.shuffle(random_houses)
             random.shuffle(random_houses_2)
 
-            # Linear Cooling Scheme
-            T0 = 130
-            i = climbs
-            Tn = 0
-            N =
-            Ti = T0 - i * (T0 -Tn)/N
-
-            # calculate the "verkorting"
-            verkorting = self.calculate_cost() - step_back_cost
-
-            math.exp()
+            
 
 
 
@@ -319,9 +309,9 @@ class Smartgrid(object):
 
             if step_cost is min(prices):
                 house_batt = [self.houses, self.batteries]
-                with open(f"hill_climber_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                with open(f"anneal_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(house_batt, f)
-                with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                with open(f"anneal_sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
             count += 1
             climbs_list.append(climbs)
