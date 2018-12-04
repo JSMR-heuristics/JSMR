@@ -26,7 +26,7 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
 However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in [bound.txt](test_scripts/quantify/bound.txt)
 
 ##### Bound-dependent Quantification
-To quantify the results per algorithm per neighbourhood we take the 'within-contstraints-impossible absolute upper and lowerbounds' as the margin and see wherein this margin our results exist. This will result in percentile values which can be compared within and between neighbourhoods.
+To quantify the results per algorithm per neighbourhood we take the 'within-contstraints-impossible absolute upper and lowerbounds' of the neighbourhood as the margin and see wherein this margin our results exist. This will result in percentile values which can be compared within and between neighbourhoods.
   
 
  
