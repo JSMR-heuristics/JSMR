@@ -39,7 +39,7 @@ Which is 150^5 in the first part of the Case.
 In the 2nd part the formula makes use of:
 * possible batterylocations: gridsize^#batteries = 2500^5
 * possible house-battery connections: #houses ^ #batteries = 150^5  
-Which will be added up in the formula due to being independent variables
+  * is added up in the formula due to being independent variables
 * #houses ^ #batteries + gridsize^#batteries
 
 which results in:
