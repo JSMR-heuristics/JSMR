@@ -11,6 +11,7 @@ import os
 
 from pathlib import Path
 from helpers import *
+from algorithms import *
 
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
@@ -53,7 +54,7 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
-        self.optimize()
+        self.run_algorithm()
 
 
     def load_houses(self):
@@ -161,10 +162,10 @@ class Smartgrid(object):
 
             house.link = self.batteries[batteries[0]]
             self.batteries[batteries[0]].linked_houses.append(house)
-            diff, distance_diffs = distances[0], distances[1:]
+            diff, distance_diffs = distances[0], distances
             diffs = {}
             for index in range(len(distance_diffs)):
-                diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
+                diffs[batteries[index]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
 
     def plot_houses(self, changes):
@@ -233,72 +234,11 @@ class Smartgrid(object):
 
 
 
-    def optimize(self):
-        """
-        This function changes links between houses and batteries
-        so no battery is over it's capacity, this will be done
-        with lowest cost possible for this algorithm
-        """
-        # Initialize changes counter, this gives insight to
-        # the speed of this algorithm
-        changes = 0
-        # for num in self.batteries:
-        #     print(f"Battery{num}: {self.batteries[num].filled()}")
-        #     for ding in self.batteries[num].linked_houses:
-        #         print(f"House: {ding.output}")
-
-        # While one or more batteries are over their capacity
-        while self.check_full() and changes < 50:
-
-            # kan korter
-            # Sorts batteries based off total inputs from high to low
-            total_inputs = []
-            for battery in self.batteries.values():
-                total_inputs.append([battery.filled(), battery])
-            high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
-
-            # Prioritize battery with highest inputs
-            # to disconnect a house from
-            # for i in high_low:
-            battery = high_low[0][1]
-
-            # Sort houses linked to this battery by distance
-            # to other battery from low to high
-            # distance_list = self.sort_linked_houses(battery)
-            distance_list = sort_linked_houses(self, battery)
-
-            # Determine the cheapest option first, if any
-            # else transfer option with lowest output
-            try:
-                house, to_batt = find_best(self, distance_list, "strict")
-            except TypeError:
-                house, to_batt = find_best(self, distance_list, "not-strict")
-
-            # Switch the house from battery
-            curr_batt = house.link
-            changes += 1
-            swap_houses(self, house, curr_batt, to_batt, changes)
-            if (changes % 5) is 0 and self.plot_option == "y":
-                self.plot_houses(changes)
-            # break
-        self.plot_houses("FINAL")
-        for i in self.batteries:
-            print(self.batteries[i].filled())
-            print(f"{self.batteries[i].x}/{self.batteries[i].y}")
-            # for house in self.batteries[i].linked_houses:
-            #     print(house.output)
-
-
-    def check_full(self):
-        """
-        Returns True if one or more of the batteries is over it's
-        capacity, False if not.
-        """
-        switch = False
-        for battery in self.batteries.values():
-            if battery.full() is True:
-                switch = True
-        return switch
+    def run_algorithm(self):
+        if self.algorithm == "optimize":
+            optimize(self)
+        elif self.algorithm == "greedy":
+            greedy(self, self.iterations)
 
 
 if __name__ == "__main__":

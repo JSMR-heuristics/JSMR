@@ -75,3 +75,64 @@ def swap_houses(self, house, current_batt, next_batt, changes):
     print(f"house capacity = {house.output}")
     print(f"capacity = {current_batt.filled()}")
     print(f"changes = {changes}")
+
+def check_linked(self):
+    """
+    Checks whether every house is linked to a battery
+    """
+    count = 0
+    for house in self.houses.values():
+        if house.link:
+            count += 1
+    if count is 150:
+        return True
+    else:
+        return False
+
+def check_full(self):
+    """
+    Returns True if one or more of the batteries is over it's
+    capacity, False if not.
+    """
+    switch = False
+    for battery in self.batteries.values():
+        if battery.full() is True:
+            switch = True
+    return switch
+
+def disconnect(self):
+    """
+    Delete all connections
+    """
+    for house in self.houses.values():
+        house.link = None
+    for battery in self.batteries.values():
+        battery.linked_houses = []
+
+def calculate_cost(self):
+    cost = 0
+    for house in list(self.houses.values()):
+
+        x_house, y_house = house.x, house.y
+        x_batt, y_batt = house.link.x, house.link.y
+
+        # calculate the new coordinate for the vertical line
+        x_diff = x_batt - x_house
+        new_x = x_house + x_diff
+
+        line_colour = house.link.colour
+
+        # calculate line cost
+        cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
+    return cost
+
+def check_full(self):
+    """
+    Returns True if one or more of the batteries is over it's
+    capacity, False if not.
+    """
+    switch = False
+    for battery in self.batteries.values():
+        if battery.full() is True:
+            switch = True
+    return switch

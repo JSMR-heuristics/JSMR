@@ -21,7 +21,7 @@ our: 71341
 2 step-down
 closest: 45268.0
 furthest: 96253.0
-our: 46401
+our: 46474
 
 2 greedy
 closest: 45268.0
@@ -41,7 +41,7 @@ our: 45520
 3 step-down
 closest: 42757.0
 furthest: 101491.0
-our: 45300.0
+our: 44674.0
 
 3 greedy
 closest: 42757.0
