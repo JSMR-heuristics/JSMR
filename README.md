@@ -51,7 +51,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ![alt text](results/Wijk_1/No_algorithm_SG1_lower.png)
 
 ### And this is what the neighbourhood looks like when our greedy algorithm has been implemented:
-![alt text](results/Wijk_1/greedy/GREEDY_random_1000_wijk_1.png)
+![alt text](results/pres_figures/optimize_wijk_1.png)
 
 ### And this is the configuration of neighbourhood when battery placement is customized
 ![alt_text](results/pres_figures/cluster_wijk_1.png)
