@@ -45,11 +45,12 @@ from house import House
 #         PLOT = True
 
 class Smartgrid(object):
-    def __init__(self, neighbourhood, algorithm, iterations, plot):
+    def __init__(self, neighbourhood, algorithm, iterations, plot, cluster_option, battery_file):
         self.input = neighbourhood
         self.algorithm = algorithm
         self.iterations = iterations
         self.plot_option = plot
+        self.cluster_option = cluster_option
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
@@ -95,7 +96,11 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
-        path = os.path.join(*[cwd, 'data', f'wijk{self.input}_batterijen.txt'])
+
+        if not self.cluster_option:
+            path = os.path.join(*[cwd, 'data', f'wijk{self.input}_batterijen.txt'])
+        else:
+            path = os.path.join(*[cwd, 'data', f'wijk{self.input}_cluster_{self.cluster_option}.txt'])
 
         with open(path) as batteries_text:
 

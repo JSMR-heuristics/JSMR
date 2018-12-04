@@ -25,7 +25,8 @@ from statistics import mean
 DIT IS EEN TEST MET EEN LIBRARY VAN INTERNET. IMPLEMENTATIE MOET NOG
 VERANDERT WORDEN
 """
-path = str(Path.cwd()).replace("test_scripts", "code/classes")
+cwd = os.getcwd()
+path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
 from battery import Battery
 from house import House
@@ -37,30 +38,13 @@ from helpers import *
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
 
-ITER = 0
-ALGORITHM = "GREEDY"
 
-if len(sys.argv) not in [3]:
-        print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
-        sys.exit(2)
-elif len(sys.argv) is 3:
-    if int(sys.argv[1]) not in [1, 2, 3] or isinstance(sys.argv[2], int):
-        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-        print("If you want plots type\n python smargrid.py <wijknummer> plot")
-        sys.exit(2)
-    else:
-        INPUT = sys.argv[1]
-        ITER = sys.argv[2]
-
-class Smartgrid(object):
-    def __init__(self):
+class Cluster(object):
+    def __init__(self, input):
+        self.input = input
         self.houses = self.load_houses()
-        self.batteries = self.load_batteries()
-        # self.coordinates = self.get_coordinates()
-        # # self.sequences = []
-        # self.link_houses()
-        # self.optimize()
 
+        self.find_clusters()
 
     def load_houses(self):
         """
@@ -68,10 +52,10 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_huizen.csv"
-        path = str(Path.cwd()).replace("test_scripts", subpath)
+        cwd = os.getcwd()
+        path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
         # open file
-        with open(path, newline="") as houses_csv:
+        with open(path) as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -93,23 +77,6 @@ class Smartgrid(object):
         # returns dict, goes to init (self.houses)
         return houses
 
-    def load_batteries(self):
-        """
-        Parses through text file and saves batteries as battery.Battery
-        objects. Returns instances in dict to __init__
-        """
-        batteries = {}
-        capacity = 1507.0
-        coordinates = [0, 0]
-        x = 0
-        y = 0
-        colour = "r"
-        for i in range(5):
-            print(i)
-            batteries[i] = Battery(capacity, x, y, colour)
-
-        # return dict to INIT
-        return batteries
 
     def find_clusters(self):
         # Generate sample data
@@ -127,87 +94,99 @@ class Smartgrid(object):
 
         working_settings = []
 
+        subplot_data = []
+
         while counter < len(settings_list):
-            n_clusters_, n_noise_, X, labels, core_samples_mask = self.cluster_scan(X, settings_list, counter)
+            n_clusters, noise_points, X, labels, mask_samples = self.cluster_scan(X, settings_list, counter)
             counter += 1
 
-            if n_clusters_ is 5:
+            if n_clusters is 5:
                 working_settings.append([settings_list[counter][0], settings_list[counter][1]])
-                self.plot_cluster(X, labels, core_samples_mask, n_clusters_, big_counter)
+                subplot_data.append([X, labels, mask_samples, n_clusters, big_counter])
                 big_counter += 1
-            # print('Estimated number of clusters: %d' % n_clusters_)
-            # print('Estimated number of noise points: %d' % n_noise_)
 
-        # print(working_settings)
+        self.plot_cluster(subplot_data)
 
     def cluster_scan(self, X, settings_list, counter):
         a, b = settings_list[counter][0], settings_list[counter][1]
         db = DBSCAN(eps=a, min_samples=b, algorithm="ball_tree", metric="manhattan").fit(X)
-        core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-        core_samples_mask[db.core_sample_indices_] = True
+        mask_samples = np.zeros_like(db.labels_, dtype=bool)
+        mask_samples[db.core_sample_indices_] = True
         labels = db.labels_
 
         # Number of clusters in labels, ignoring noise if present.
-        n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-        n_noise_ = list(labels).count(-1)
+        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        noise_points = list(labels).count(-1)
 
-        return n_clusters_, n_noise_, X, labels, core_samples_mask
+        return n_clusters, noise_points, X, labels, mask_samples
         # Plot result
 
-    def plot_cluster(self, X, labels, core_samples_mask, n_clusters_, big_counter):
+    def plot_cluster(self, data):
+        n_plots = len(data)
 
-        # Black removed and is used for noise instead.
-        unique_labels = set(labels)
-        colors = [plt.cm.Spectral(each)
-                  for each in np.linspace(0, 1, len(unique_labels))]
-        cap = [1507.0, 1508.25, 1506.75]
+        fig, axs = plt.subplots(1, n_plots, figsize=(18, 6))
 
-        all_coords = "pos\t\tcap\n"
-        # battery_index = 0
-        for k, col in zip(unique_labels, colors):
-            if k == -1:
-                # Black used for noise.
-                col = [0, 0, 0, 1]
+        for index in range(n_plots):
+            # Black removed and is used for noise instead.
+            X = data[index][0]
+            labels = data[index][1]
+            mask_samples = data[index][2]
+            n_clusters = data[index][3]
+            big_counter = data[index][4]
+            unique_labels = set(labels)
+            colors = [plt.cm.Spectral(each)
+                      for each in np.linspace(0, 1, len(unique_labels))]
+            cap = [1507.0, 1508.25, 1506.75]
 
-            class_member_mask = (labels == k)
+            all_coords = "pos\t\tcap\n"
+            # battery_index = 0
+            for k, col in zip(unique_labels, colors):
+                if k == -1:
+                    # Black used for noise.
+                    col = [0, 0, 0, 1]
 
-            # print(X)
-            list_X , list_Y = [], []
+                class_member_mask = (labels == k)
 
-            xy = X[class_member_mask & core_samples_mask]
-            if xy[:,0].any() and xy[:,1].any():
-                for i in range(3):
-                    list_X.append(mean(xy[:,0]))
-                    list_Y.append(mean(xy[:,1]))
+                # print(X)
+                list_X , list_Y = [], []
 
-            plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
-                     markeredgecolor='k', markersize=14)
+                xy = X[class_member_mask & mask_samples]
+                if xy[:,0].any() and xy[:,1].any():
+                    for i in range(3):
+                        list_X.append(mean(xy[:,0]))
+                        list_Y.append(mean(xy[:,1]))
 
-            xy = X[class_member_mask & ~core_samples_mask]
-            if xy[:,0].any() and xy[:,1].any() and col[0] is not 0:
-                    list_X.append(mean(xy[:,0]))
-                    list_Y.append(mean(xy[:,1]))
+                axs[index].plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+                         markeredgecolor='k', markersize=14)
 
-            plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
-                     markeredgecolor='k', markersize=6)
+                xy = X[class_member_mask & ~mask_samples]
+                if xy[:,0].any() and xy[:,1].any() and col[0] is not 0:
+                        list_X.append(mean(xy[:,0]))
+                        list_Y.append(mean(xy[:,1]))
 
-            if list_X and list_Y:
-                all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(INPUT) - 1]}\n"
+                axs[index].plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+                         markeredgecolor='k', markersize=6)
 
-        print(f"mean x, y: {all_coords}")
+                axs[index].set_title(index + 1)
 
-        with open (f"Wijk_{INPUT}_cluster_{big_counter}.txt", "w") as f:
-            f.write(all_coords)
+                if list_X and list_Y:
+                    all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(self.input) - 1]}\n"
 
+            cwd = os.getcwd()
+            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}.txt"])
+            sys.path.append(path)
 
-        plt.title('Estimated number of clusters: %d' % n_clusters_)
+            with open (path, "w") as f:
+                f.write(all_coords)
+
+        fig.suptitle("Choose one of these plots and enter after closing this window")
         plt.show()
 
 if __name__ == "__main__":
     start_time = time.clock()
     print(f"Start: {start_time}")
+
     smart = Smartgrid()
     smart.find_clusters()
-    # smart = Smartgrid()
-    # print(len(smart.sequences))
+
     print(time.clock() - start_time, "seconds")
