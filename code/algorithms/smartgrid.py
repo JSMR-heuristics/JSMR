@@ -16,8 +16,10 @@ from algorithms import *
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
+
 from battery import Battery
 from house import House
+
 
 # nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
 # en voor tussenplots, die maken het algorimte een stuk slomer
@@ -66,9 +68,9 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
-        path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
+        house_file = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
         # open file
-        with open(path) as houses_csv:
+        with open(house_file) as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -103,7 +105,7 @@ class Smartgrid(object):
         else:
             path = os.path.join(*[cwd, 'data', f'wijk{self.input}_cluster_{self.cluster_option}.txt'])
 
-        with open(path) as batteries_text:
+        with open(batt_file) as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()

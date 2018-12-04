@@ -242,7 +242,7 @@ class Smartgrid(object):
         count = 0
         misses = -iterations
         prices = []
-
+        climbs_list = []
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
             self.disconnect()
@@ -271,19 +271,18 @@ class Smartgrid(object):
             base_copy = copy.copy([self.houses, self.batteries])
             base_cost = self.calculate_cost()
             # ----------------------------------------------------------------
-            print("MEH")
-            post_random_cost = 0
+            print("Start Hillclimb")
             step_back_cost = base_cost
-            step_cost = 99999
-            climbs = 0
             step_back = base_copy
+
+            climbs = 0
             hillcount = 0
-            meh = 150 * 150
+            alt_direction = 150 * 150
 
             random.shuffle(random_houses)
             random.shuffle(random_houses_2)
 
-            while hillcount < meh:
+            while hillcount < alt_directions:
                 # loop while the new step is inefficient
                 for house_1 in random_houses:
                     for house_2 in random_houses_2:
@@ -315,12 +314,15 @@ class Smartgrid(object):
                 with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
             count += 1
+            climbs_list.append(climbs)
             print(count)
 
+        # print("results wijk2 cluster 3")
         print(f"min: {min(prices)}")
         print(f"max: {max(prices)}")
         print(f"mean: {np.mean(prices)}")
         print(f"unsuccesfull iterations: {misses}")
+        print(f"average # of climbs: {np.mean(climbs_list)}")
 
 
     def check_linked(self):
