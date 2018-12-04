@@ -45,13 +45,16 @@ Thus having a state space not exceeding:
 
 
 ## Progress:
-Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode!
+Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode! Also, the placement of the batteries can be changed.
 
 ### This is what our neighbourhood would look like when all houses are simply linked to the nearest battery:
 ![alt text](results/Wijk_1/No_algorithm_SG1_lower.png)
 
 ### And this is what the neighbourhood looks like when our greedy algorithm has been implemented:
 ![alt text](results/Wijk_1/greedy/GREEDY_random_1000_wijk_1.png)
+
+### And this is the configuration of neighbourhood when battery placement is customized
+![alt_text](JSMR/results/pres_figures/cluster_wijk_1.png)
 
 ## Repository layout:
 * Our datafiles are stored in the "Huizen&batterijen" folder.
