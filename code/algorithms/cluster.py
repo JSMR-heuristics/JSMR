@@ -139,6 +139,7 @@ class Cluster(object):
             cap = [1507.0, 1508.25, 1506.75]
 
             all_coords = "pos\t\tcap\n"
+            weights = []
             # battery_index = 0
             for k, col in zip(unique_labels, colors):
                 if k == -1:
@@ -150,27 +151,29 @@ class Cluster(object):
                 # print(X)
                 list_X , list_Y = [], []
 
-                xy = X[class_member_mask & mask_samples]
-                if xy[:,0].any() and xy[:,1].any():
-                    for i in range(3):
-                        list_X.append(mean(xy[:,0]))
-                        list_Y.append(mean(xy[:,1]))
 
-                axs[index].plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+                xy_big = X[class_member_mask & mask_samples]
+                if xy_big[:,0].any() and xy_big[:,1].any():
+                    for i in range(3):
+                        list_X.append(mean(xy_big[:,0]))
+                        list_Y.append(mean(xy_big[:,1]))
+
+                axs[index].plot(xy_big[:, 0], xy_big[:, 1], 'o', markerfacecolor=tuple(col),
                          markeredgecolor='k', markersize=14)
 
-                xy = X[class_member_mask & ~mask_samples]
-                if xy[:,0].any() and xy[:,1].any() and col[0] is not 0:
-                        list_X.append(mean(xy[:,0]))
-                        list_Y.append(mean(xy[:,1]))
+                xy_small = X[class_member_mask & ~mask_samples]
+                if xy_small[:,0].any() and xy_small[:,1].any() and col[0] is not 0:
+                        list_X.append(mean(xy_small[:,0]))
+                        list_Y.append(mean(xy_small[:,1]))
 
-                axs[index].plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+                axs[index].plot(xy_small[:, 0], xy_small[:, 1], 'o', markerfacecolor=tuple(col),
                          markeredgecolor='k', markersize=6)
 
                 axs[index].set_title(index + 1)
 
                 if list_X and list_Y:
                     all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(self.input) - 1]}\n"
+                    weights.append(len(xy_big) * 3 + len(xy_small))
 
             cwd = os.getcwd()
             path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}.txt"])
@@ -178,6 +181,13 @@ class Cluster(object):
 
             with open (path, "w") as f:
                 f.write(all_coords)
+
+            cwd = os.getcwd()
+            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}_weigth.txt"])
+            sys.path.append(path)
+
+            with open (path, "w") as f:
+                f.write(str(weights))
 
         fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
         plt.show()
