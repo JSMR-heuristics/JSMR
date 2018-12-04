@@ -22,6 +22,8 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
 * Neighbourhood 3:
   * lower: 42757
   * upper: 101491
+  
+However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in bound.txt
  
 ##### State Space
 The State Space encompassing every possible combination can be calculated with:
@@ -45,13 +47,20 @@ Thus having a state space not exceeding:
 
 
 ## Progress:
-Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode!
+Currently we have implemented a greedy algorithm which runs until the constraints are satisfied. The constraint here being maximal capacity of the batteries. We wouldn't want them to explode! Also, the placement of the batteries can be changed.
 
 ### This is what our neighbourhood would look like when all houses are simply linked to the nearest battery:
 ![alt text](results/Wijk_1/No_algorithm_SG1_lower.png)
 
 ### And this is what the neighbourhood looks like when our greedy algorithm has been implemented:
-![alt text](results/Wijk_1/greedy/GREEDY_random_1000_wijk_1.png)
+![alt text](results/pres_figures/optimize_wijk_1.png)
+
+### And this is the configuration of neighbourhood when battery placement is customized:
+![alt_text](results/pres_figures/cluster_wijk_1.png)
+
+### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
+![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
+*Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
 
 ## Repository layout:
 * Our datafiles are stored in the "Huizen&batterijen" folder.
@@ -61,7 +70,5 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 
 ## Running the code:
 
- * run "python smartgrid.py 'Number' 'plot'" in the code folder
- * for number use 1, 2 or 3, this indicates which neighbourhood you want to use
- * for plot either type "plot" if you want intermediate plots to be saved or leave it empty if you don't want intermediate plots.
-   * example: "python smartgrid.py 1 plot"
+ * run "main.py" in the JSMR repo
+ * follow the prompt instructions to run our program

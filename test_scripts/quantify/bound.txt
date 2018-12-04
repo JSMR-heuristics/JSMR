@@ -112,3 +112,53 @@ our: 42073
 closest: 43090
 furthest: 89089
 our: 0
+
+1 greedy_1000_random_protobatt_1
+closest: 39967
+furthest: 97639
+our: 44323
+
+1 greedy_1000_random_protobatt_2
+closest: 39985
+furthest: 96838
+our: 43135
+
+1 greedy_1000_random_protobatt_3
+closest: 40228
+furthest: 96964
+our: 42406
+
+2 greedy_1000_random_protobatt_1
+closest: 44692
+furthest: 98899
+our: 52117
+
+2 greedy_1000_random_protobatt_2
+closest: 43054
+furthest: 95407
+our: 45043
+
+2 greedy_1000_random_protobatt_3
+closest: 40903
+furthest: 98899
+our: 43612
+
+3 greedy_1000_random_protobatt_1
+closest: 41659
+furthest: 109555
+our: 48805
+
+3 greedy_1000_random_protobatt_2
+closest: 41542
+furthest: 97612
+our: 47095
+
+3 greedy_1000_random_protobatt_3
+closest: 41659
+furthest: 93355
+our: 42289
+
+3 greedy_1000_random_protobatt_4
+closest: 43090
+furthest: 89089
+our: 47311
