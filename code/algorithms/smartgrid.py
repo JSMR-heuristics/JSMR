@@ -56,6 +56,7 @@ class Smartgrid(object):
         self.coordinates = self.get_coordinates()
         self.link_houses()
         self.run_algorithm()
+        self.plot_houses()
 
 
     def load_houses(self):
