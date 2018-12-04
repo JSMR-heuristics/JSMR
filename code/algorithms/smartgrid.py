@@ -12,7 +12,8 @@ import os
 from pathlib import Path
 from helpers import *
 
-path = str(Path.cwd()).replace("algorithms", "classes")
+cwd = os.getcwd()
+path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
 from battery import Battery
 from house import House
@@ -57,12 +58,10 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_huizen.csv"
-        path_mand = str(Path.cwd()).replace("algorithms", "")
-        path = str(path_mand.replace("code\\", subpath))
-        print(path)
+        cwd = os.getcwd()
+        path = os.path.join(*[cwd, 'data', f'wijk{INPUT}_huizen.csv'])
         # open file
-        with open(path, newline="") as houses_csv:
+        with open(path) as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -90,10 +89,8 @@ class Smartgrid(object):
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
-        subpath = f"data\wijk{INPUT}_batterijen.txt"
-        # subpath = f"data\Wijk_{INPUT}_cluster_4.txt"
-        path_mand = str(Path.cwd()).replace("algorithms", "")
-        path = str(path_mand.replace("code\\", subpath))
+        cwd = os.getcwd()
+        path = os.path.join(*[cwd, 'data', f'wijk{INPUT}_batterijen.txt'])
 
         with open(path) as batteries_text:
 
