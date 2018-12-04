@@ -58,6 +58,10 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ### And this is the configuration of neighbourhood when battery placement is customized:
 ![alt_text](results/pres_figures/cluster_wijk_1.png)
 
+### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
+![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
+*step down is our combined algorithm where every house is linked to the closest battery. After this we iteratively change the configuration untill the constraints are met.*
+
 ## Repository layout:
 * Our datafiles are stored in the "Huizen&batterijen" folder.
 * Processing takes place in the "scripts" folder.
