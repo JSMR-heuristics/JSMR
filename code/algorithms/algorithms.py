@@ -183,6 +183,7 @@ def hill_climber(self):
         random.shuffle(random_houses)
         random.shuffle(random_houses_2)
 
+        # shorten time by checking calbe diff instead of whole gridcost
         while hillcount < alt_directions:
             # loop while the new step is inefficient
             for house_1 in random_houses:
@@ -193,9 +194,6 @@ def hill_climber(self):
                         step_cost = self.calculate_cost()
                         if (step_cost < step_back_cost) and (self.check_full() is False):
                             climbs += 1
-                            # print(climbs)
-                            # print(step_cost)
-                            # necessary to copy step back?
                             step_back = copy.copy([self.houses, self.batteries])
                             step_back_cost = step_cost
                             hillcount = 0
