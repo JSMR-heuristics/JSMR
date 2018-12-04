@@ -238,6 +238,8 @@ class Smartgrid(object):
             optimize(self)
         elif self.algorithm == "greedy":
             greedy(self, self.iterations)
+        elif self.algorithm == "hill":
+            hill_climber(self, self.iterations)
 
 
 if __name__ == "__main__":

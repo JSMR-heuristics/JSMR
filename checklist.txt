@@ -16,7 +16,7 @@ Exploration:
   o Berekenen upper- en lower bounds.
   o Metingen en vergelijkingen van beste met andere algoritmes.
   o Omschrijving van problemen van de case en welke oplossingen wij daar voor hebben bedacht.
-  o Aangeven minpunten van algoritme(If not mistaken)
+  o Aangeven minpunten van algoritme
 
 Algorithms:
   o Bestaande algoritmes afmaken (optimize voor wijk 3 laten werken).

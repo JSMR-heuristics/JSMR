@@ -1,4 +1,4 @@
-import operator, random, os, sys, pickle, time
+import operator, random, os, sys, pickle, time, copy
 import numpy as np
 
 
@@ -130,7 +130,7 @@ def greedy(self, iterations):
     print(f"unsuccesfull iterations: {misses}")
 
 
-def hill_climber(self):
+def hill_climber(self, iterations):
     """
     This function changes links between houses and batteries
     so no battery is over it's capacity, this will be done
@@ -139,26 +139,26 @@ def hill_climber(self):
 
     random_houses = list(self.houses.values())
     random_houses_2 = list(self.houses.values())
-    iterations = 1000
+    iterations = int(iterations)
     count = 0
     misses = -iterations
     prices = []
 
     # Do untill we have <iterations> succesfull configurations
     while count < iterations:
-        self.disconnect()
+        disconnect(self)
         # connect random houses to the closest option  within the constraints
         # ----------------------------------------------------------------
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
-        while self.check_linked() is False or self.check_full() is True:
+        while check_linked(self) is False or check_full(self) is True:
             # print(misses)
             misses += 1
 
             # shuffle order of houses
             random.shuffle(random_houses)
             # remove connections, if any
-            self.disconnect()
+            disconnect(self)
 
             # for every house find closest battery to connect to provided
             # that this house wont over-cap the battery
@@ -170,7 +170,7 @@ def hill_climber(self):
                         self.batteries[list(house.diffs)[i]].linked_houses.append(house)
                         break
         base_copy = copy.copy([self.houses, self.batteries])
-        base_cost = self.calculate_cost()
+        base_cost = calculate_cost(self)
         # ----------------------------------------------------------------
         print("Start Hillclimb")
         step_back_cost = base_cost
@@ -190,8 +190,8 @@ def hill_climber(self):
                     # take a step if not the same batteries
                     if not (house_1.link == house_2.link):
                         switch_houses(self, house_1, house_2)
-                        step_cost = self.calculate_cost()
-                        if (step_cost < step_back_cost) and (self.check_full() is False):
+                        step_cost = calculate_cost(self)
+                        if (step_cost < step_back_cost) and (check_full(self) is False):
                             climbs += 1
                             # print(climbs)
                             # print(step_cost)
@@ -210,9 +210,9 @@ def hill_climber(self):
 
         if step_cost is min(prices):
             house_batt = [self.houses, self.batteries]
-            with open(f"hill_climber_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+            with open(f"hill_climber_batt_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
                 pickle.dump(house_batt, f)
-            with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+            with open(f"sequence_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
                 pickle.dump(random_houses, f)
         count += 1
         print(count)
