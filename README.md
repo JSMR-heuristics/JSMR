@@ -54,7 +54,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ![alt text](results/Wijk_1/greedy/GREEDY_random_1000_wijk_1.png)
 
 ### And this is the configuration of neighbourhood when battery placement is customized
-![alt_text](JSMR/results/pres_figures/cluster_wijk_1.png)
+![alt_text](results/pres_figures/cluster_wijk_1.png)
 
 ## Repository layout:
 * Our datafiles are stored in the "Huizen&batterijen" folder.
