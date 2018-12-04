@@ -62,6 +62,9 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
 *Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
 
+### Other considerations
+We considered to implement an archive for the algorithm so we can ensure a randomized starting point which has not been used before, however the odds of that happening is 1 in 150^5. Moreover we don't keep an archive of every house-battery combination at the end of its respective iteration and only keep track of which iteration thus far has found the lowest value, because the only relevance a certain set of combination has, is if it is the lowest cost of all the iterations.
+
 ## Repository layout:
 * Our datafiles are stored in the "Huizen&batterijen" folder.
 * Processing takes place in the "scripts" folder.
