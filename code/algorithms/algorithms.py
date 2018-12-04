@@ -128,3 +128,97 @@ def greedy(self, iterations):
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
+
+
+def hill_climber(self):
+    """
+    This function changes links between houses and batteries
+    so no battery is over it's capacity, this will be done
+    with lowest cost possible for this algorithm
+    """
+
+    random_houses = list(self.houses.values())
+    random_houses_2 = list(self.houses.values())
+    iterations = 1000
+    count = 0
+    misses = -iterations
+    prices = []
+
+    # Do untill we have <iterations> succesfull configurations
+    while count < iterations:
+        self.disconnect()
+        # connect random houses to the closest option  within the constraints
+        # ----------------------------------------------------------------
+        # While one or more batteries are over their capacity or not every
+        # house is linked to a battery
+        while self.check_linked() is False or self.check_full() is True:
+            # print(misses)
+            misses += 1
+
+            # shuffle order of houses
+            random.shuffle(random_houses)
+            # remove connections, if any
+            self.disconnect()
+
+            # for every house find closest battery to connect to provided
+            # that this house wont over-cap the battery
+            for house in random_houses:
+
+                for i in range(4):
+                    if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
+                        house.link = self.batteries[list(house.diffs)[i]]
+                        self.batteries[list(house.diffs)[i]].linked_houses.append(house)
+                        break
+        base_copy = copy.copy([self.houses, self.batteries])
+        base_cost = self.calculate_cost()
+        # ----------------------------------------------------------------
+        print("MEH")
+        post_random_cost = 0
+        step_back_cost = base_cost
+        step_cost = 99999
+        climbs = 0
+        step_back = base_copy
+        hillcount = 0
+        meh = 150 * 150
+
+        random.shuffle(random_houses)
+        random.shuffle(random_houses_2)
+
+        while hillcount < meh:
+            # loop while the new step is inefficient
+            for house_1 in random_houses:
+                for house_2 in random_houses_2:
+                    # take a step if not the same batteries
+                    if not (house_1.link == house_2.link):
+                        switch_houses(self, house_1, house_2)
+                        step_cost = self.calculate_cost()
+                        if (step_cost < step_back_cost) and (self.check_full() is False):
+                            climbs += 1
+                            # print(climbs)
+                            # print(step_cost)
+                            # necessary to copy step back?
+                            step_back = copy.copy([self.houses, self.batteries])
+                            step_back_cost = step_cost
+                            hillcount = 0
+                        else:
+                            switch_houses(self, house_1, house_2)
+                            #self.houses, self.batteries = step_back[0], step_back[1]
+                    hillcount += 1
+
+        print(f"bc={base_cost}, hilltop = {step_cost}")
+        time_var = time.strftime("%d%m%Y")
+        prices.append(step_cost)
+
+        if step_cost is min(prices):
+            house_batt = [self.houses, self.batteries]
+            with open(f"hill_climber_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                pickle.dump(house_batt, f)
+            with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                pickle.dump(random_houses, f)
+        count += 1
+        print(count)
+
+    print(f"min: {min(prices)}")
+    print(f"max: {max(prices)}")
+    print(f"mean: {np.mean(prices)}")
+    print(f"unsuccesfull iterations: {misses}")
