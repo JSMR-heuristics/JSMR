@@ -22,6 +22,8 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
 * Neighbourhood 3:
   * lower: 42757
   * upper: 101491
+  
+However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in bound.txt
  
 ##### State Space
 The State Space encompassing every possible combination can be calculated with:
@@ -53,7 +55,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ### And this is what the neighbourhood looks like when our greedy algorithm has been implemented:
 ![alt text](results/pres_figures/optimize_wijk_1.png)
 
-### And this is the configuration of neighbourhood when battery placement is customized
+### And this is the configuration of neighbourhood when battery placement is customized:
 ![alt_text](results/pres_figures/cluster_wijk_1.png)
 
 ## Repository layout:
@@ -64,7 +66,5 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 
 ## Running the code:
 
- * run "python smartgrid.py 'Number' 'plot'" in the code folder
- * for number use 1, 2 or 3, this indicates which neighbourhood you want to use
- * for plot either type "plot" if you want intermediate plots to be saved or leave it empty if you don't want intermediate plots.
-   * example: "python smartgrid.py 1 plot"
+ * run "main.py in the JSMR repo
+ * follow the prompt instructions to run our program
