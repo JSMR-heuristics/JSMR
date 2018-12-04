@@ -1,12 +1,8 @@
-import operator
-import random
+import operator, random, os, sys, pickle, time
 import numpy as np
-import pickle
-import os, sys
 
 
 from helpers import *
-import time
 
 
 def optimize(self):
