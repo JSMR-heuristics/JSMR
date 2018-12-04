@@ -22,29 +22,33 @@ from house import House
 # en voor tussenplots, die maken het algorimte een stuk slomer
 # Validates user input and gives instructions if it's wrong
 
-PLOT = False
-ALGORITHM = "optimize"
-
-if len(sys.argv) not in [2, 3]:
-        print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
-        sys.exit(2)
-elif len(sys.argv) is 2:
-    if int(sys.argv[1]) not in [1, 2, 3]:
-        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-        sys.exit(2)
-    else:
-        INPUT = sys.argv[1]
-elif len(sys.argv) is 3:
-    if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
-        print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-        print("If you want plots type\n python smargrid.py <wijknummer> plot")
-        sys.exit(2)
-    else:
-        INPUT = sys.argv[1]
-        PLOT = True
+# PLOT = False
+# ALGORITHM = "optimize"
+#
+# if len(sys.argv) not in [2, 3]:
+#         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
+#         sys.exit(2)
+# elif len(sys.argv) is 2:
+#     if int(sys.argv[1]) not in [1, 2, 3]:
+#         print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+#         sys.exit(2)
+#     else:
+#         INPUT = sys.argv[1]
+# elif len(sys.argv) is 3:
+#     if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
+#         print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
+#         print("If you want plots type\n python smargrid.py <wijknummer> plot")
+#         sys.exit(2)
+#     else:
+#         INPUT = sys.argv[1]
+#         PLOT = True
 
 class Smartgrid(object):
-    def __init__(self):
+    def __init__(self, neighbourhood, algorithm, iterations, plot):
+        self.input = neighbourhood
+        self.algorithm = algorithm
+        self.iterations = iterations
+        self.plot_option = plot
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
@@ -59,7 +63,7 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
-        path = os.path.join(*[cwd, 'data', f'wijk{INPUT}_huizen.csv'])
+        path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
         # open file
         with open(path) as houses_csv:
 
@@ -90,7 +94,7 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
-        path = os.path.join(*[cwd, 'data', f'wijk{INPUT}_batterijen.txt'])
+        path = os.path.join(*[cwd, 'data', f'wijk{self.input}_batterijen.txt'])
 
         with open(path) as batteries_text:
 
@@ -219,7 +223,7 @@ class Smartgrid(object):
         # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
         # path = str(Path.cwd()).replace("scripts", subpath)
 
-        subpath = f"results/wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
+        subpath = f"results/wijk_{self.input}/{self.algorithm}/plot{changes}_{self.algorithm}.png"
         path = str(Path.cwd()).replace("\\algorithms", "")
         path= path.replace("code", subpath)
         print(Path.cwd())
@@ -274,7 +278,7 @@ class Smartgrid(object):
             curr_batt = house.link
             changes += 1
             swap_houses(self, house, curr_batt, to_batt, changes)
-            if (changes % 5) is 0 and PLOT:
+            if (changes % 5) is 0 and self.plot_option == "y":
                 self.plot_houses(changes)
             # break
         self.plot_houses("FINAL")
