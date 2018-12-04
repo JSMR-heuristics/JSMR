@@ -179,7 +179,7 @@ class Cluster(object):
             with open (path, "w") as f:
                 f.write(all_coords)
 
-        fig.suptitle("Choose one of these plots and enter after closing this window")
+        fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
         plt.show()
 
 if __name__ == "__main__":

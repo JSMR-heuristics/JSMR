@@ -12,7 +12,7 @@ class Main(object):
     def __init__(self):
         iterations = None
         battery_file = None
-        neighbourhood = input("Neighbourhood: ")
+        neighbourhood = input("Neighbourhood (1/2/3): ")
 
         cluster_option = input("Do you want to optimize the battery location? (y/n):")
         if str(cluster_option) == "y":
