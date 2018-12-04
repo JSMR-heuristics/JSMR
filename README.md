@@ -23,7 +23,7 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
   * lower: 42757
   * upper: 101491
   
-However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in bound.txt
+However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in [bound.txt](JSMR/test_scripts/quantify/bound.txt)
  
 ##### State Space
 The State Space encompassing every possible combination can be calculated with:
