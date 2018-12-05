@@ -260,6 +260,7 @@ def backup(self):
             # Determine the cheapest option first, if any
             # else transfer option with lowest output
             try:
+                print(distance_list)
                 house, to_batt = find_best_backup(self, distance_list, "strict")
             except TypeError:
                 house, to_batt = find_best_backup(self, distance_list, "not-strict")
