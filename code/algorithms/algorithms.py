@@ -263,6 +263,7 @@ def backup(self):
                 print(distance_list)
                 house, to_batt = find_best_backup(self, distance_list, "strict")
             except TypeError:
+                print("type-error")
                 house, to_batt = find_best_backup(self, distance_list, "not-strict")
 
             # Switch the house from battery
