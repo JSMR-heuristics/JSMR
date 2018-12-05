@@ -26,6 +26,9 @@ DIT IS EEN TEST MET EEN LIBRARY VAN INTERNET. IMPLEMENTATIE MOET NOG
 VERANDERT WORDEN
 """
 cwd = os.getcwd()
+cwd = os.path.dirname(cwd)
+cwd = os.path.dirname(cwd)
+print(cwd)
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
 from battery import Battery
@@ -53,6 +56,8 @@ class Cluster(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
+        cwd = os.path.dirname(cwd)
+        cwd = os.path.dirname(cwd)
         path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
         # open file
         with open(path) as houses_csv:
@@ -176,6 +181,8 @@ class Cluster(object):
                     weights.append(len(xy_big) * 3 + len(xy_small))
 
             cwd = os.getcwd()
+            cwd = os.path.dirname(cwd)
+            cwd = os.path.dirname(cwd)
             path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}.txt"])
             sys.path.append(path)
 
@@ -183,6 +190,8 @@ class Cluster(object):
                 f.write(all_coords)
 
             cwd = os.getcwd()
+            cwd = os.path.dirname(cwd)
+            cwd = os.path.dirname(cwd)
             path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}_weigth.txt"])
             sys.path.append(path)
 
@@ -195,8 +204,8 @@ class Cluster(object):
 if __name__ == "__main__":
     start_time = time.clock()
     print(f"Start: {start_time}")
-
-    smart = Smartgrid()
+    input = input("input: ")
+    smart = Cluster(input)
     smart.find_clusters()
 
     print(time.clock() - start_time, "seconds")

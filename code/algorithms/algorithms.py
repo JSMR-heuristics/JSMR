@@ -222,9 +222,7 @@ def hill_climber(self, iterations):
 
 def backup(self):
     """
-    This function changes links between houses and batteries
-    so no battery is over it's capacity, this will be done
-    with lowest cost possible for this algorithm
+    Probeer wijk 3 weer te laten werken maar zonder succes
     """
     # Initialize changes counter, this gives insight to
     # the speed of this algorithm
