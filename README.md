@@ -25,9 +25,8 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
 
 However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in [bound.txt](test_scripts/quantify/bound.txt)
 
-##### Bound-dependent Quantification
+##### Bound-Dependent Quantification
 To quantify the results per algorithm per neighbourhood we take the 'within-contstraints-impossible absolute upper and lowerbounds' of the neighbourhood as the margin and see wherein this margin our results exist. This will result in percentile values which can be compared within and between neighbourhoods.
-
 
 
 #### State Space
@@ -74,13 +73,15 @@ The greedy  algorithm is very fast with iteration durations ranging from 0.008 t
 
 
 ### The Hill-Climber Algorithm
-The way the Hill Climber Algorithm operates is using the Greedy Algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using the Greedy Algorithm is to reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction randomness can be compensated by a proper amount of iterations, which is by our standards 1000
+The way the Hill Climber Algorithm operates is using the Greedy Algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using the Greedy Algorithm is to reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction in randomness can be compensated by a proper amount of iterations, which is by our standards 1000
 
-After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations. The length of a single iteration is partially dependent on the Greedy algorithm, and due to it has the same "weakness" as the greedy algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).  
+After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations.  
+
+The length of a single iteration is partially dependent on the Greedy Algorithm, and due to it has the same "weakness" as the Greedy Algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).  
+The other part which influences the length of one iteration is the hillclimber itself and takes in the most time ranging around 7.6-7.9 on average for neighberhood 2 and neighbourhood 1 respectively and around 12.8 seconds on average for neighbourhood 3. The main reason why neighborhood 3 takes almost twice as long is probably the same reason as with the greedy algorithm, the small variation between outputs of houses, that makes it longer to find a suitable direction. Another interesting detail is that neighbourhood not only takes slightly longer on average than neighberhood 2, but also makes twice as much climbs before finding a peak(67 and 30). This can be explained due to neighbourhood 1 having a cluster of batteries of its own which might result into a lot of climbs, but each climb will only make include a small increase in cost-efficiency.
 
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
-When looking at the average amount of climbs and the average amount
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
 ![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
