@@ -244,6 +244,8 @@ class Smartgrid(object):
         prices = []
         climbs_list = []
         lowest_list = []
+        time_list1 = []
+        time_list2 = []
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
             self.disconnect()
@@ -273,7 +275,7 @@ class Smartgrid(object):
                             break
             base_copy = copy.copy([self.houses, self.batteries])
             base_cost = self.calculate_cost()
-            print(time.clock() - start_time, "seconds")
+            time1 = time.clock() - start_time
             # ----------------------------------------------------------------
             print("Start Hillclimb")
             start_time = time.clock()
@@ -310,18 +312,20 @@ class Smartgrid(object):
                         hillcount += 1
 
             print(f"bc={base_cost}, hilltop = {step_cost}")
-            print(time.clock() - start_time, "seconds")
+            time2 = time.clock() - start_time
             time_var = time.strftime("%d%m%Y")
             prices.append(step_cost)
 
             if step_cost is min(prices):
-                lowest_list.append(step_cost)
+                lowest_list.append([step_cost, count+misses])
                 house_batt = [self.houses, self.batteries]
                 with open(f"hill_climber_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(house_batt, f)
                 with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
             count += 1
+            time_list1.append(time1)
+            time_list2.append(time2)
             climbs_list.append(climbs)
             print(count)
 
@@ -331,8 +335,10 @@ class Smartgrid(object):
         print(f"mean: {np.mean(prices)}")
         print(f"unsuccesfull iterations: {misses}")
         print(f"average # of climbs: {np.mean(climbs_list)}")
-        with open(f"hill_climber_lowest_list_WIJK{INPUT}_{time_var}_{count}/{iterations}.dat", "wb") as f:
-            pickle.dump(lowest_list f)
+        print(f"average time greedy: {np.mean(time_list1)}")
+        print(f"average time hillclimber: {np.mean(time_list2)}")
+        with open(f"hill_climber_lowest_list_WIJK{INPUT}_{time_var}_{iterations}.dat", "wb") as f:
+            pickle.dump(lowest_list, f)
 
 
     def check_linked(self):
