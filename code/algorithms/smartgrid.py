@@ -251,7 +251,7 @@ class Smartgrid(object):
         elif self.algorithm == "backup":
             backup(self)
         elif self.algorithm == "dfs":
-            dfs()
+            dfs(self)
 
 
 if __name__ == "__main__":

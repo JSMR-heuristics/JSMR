@@ -104,22 +104,22 @@ def greedy(self, iterations):
         price = calculate_cost(self)
         prices.append(price)
 
-        # pickle cheapest configuration so far + sequence of houses
-        # include time
-        time_var = time.strftime("%d%m%Y_%H%M")
-        if price is min(prices):
-            house_batt = [self.houses, self.batteries]
-            cwd = os.getcwd()
-            path = os.path.join(*[cwd, 'data', 'pickles', f"greedy_lowest_WIJK{self.input}_{time_var}.dat"])
-            sys.path.append(path)
-            with open(path, "wb") as f:
-                pickle.dump(house_batt, f)
-
-            cwd = os.getcwd()
-            path = os.path.join(*[cwd, 'data', 'pickles', f"sequence_lowest_WIJK{self.input}_{time_var}.dat"])
-            sys.path.append(path)
-            with open(path, "wb") as f:
-                pickle.dump(random_houses, f)
+        # # pickle cheapest configuration so far + sequence of houses
+        # # include time
+        # time_var = time.strftime("%d%m%Y_%H%M")
+        # if price is min(prices):
+        #     house_batt = [self.houses, self.batteries]
+        #     cwd = os.getcwd()
+        #     path = os.path.join(*[cwd, 'data', 'pickles', f"greedy_lowest_WIJK{self.input}_{time_var}.dat"])
+        #     sys.path.append(path)
+        #     with open(path, "wb") as f:
+        #         pickle.dump(house_batt, f)
+        #
+        #     cwd = os.getcwd()
+        #     path = os.path.join(*[cwd, 'data', 'pickles', f"sequence_lowest_WIJK{self.input}_{time_var}.dat"])
+        #     sys.path.append(path)
+        #     with open(path, "wb") as f:
+        #         pickle.dump(random_houses, f)
 
 
         count += 1
@@ -128,6 +128,8 @@ def greedy(self, iterations):
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
+
+    return int(min(prices))
 
 
 def hill_climber(self, iterations):
@@ -269,39 +271,54 @@ def backup(self):
             swap_houses(self, house, curr_batt, to_batt, changes)
 
 
-def dfs():
+def dfs(self):
     solutions = 0
     cost_list = []
-    best = 99999999
+    best = 33660
     a, b, c, d, e = 0, 1, 2, 3, 4
+    x, y = 0, 0
+    for i in self.houses:
+        self.houses[i].link = self.batteries[0]
+        self.batteries[0].linked_houses.append(self.houses[i])
     for one in self.houses:
-        one.link = self.batteries[a]
+        swap_houses(self, self.houses[one], self.houses[one].link, self.batteries[a])
+        print(f"x = {x}")
+        x += 1
         for two in self.houses:
-            if two == one:
+            print(f"y = {y % 150}")
+            y += 1
+            if self.houses[two] == self.houses[one]:
                 pass
             else:
-                two.link = self.batteries[b]
+                swap_houses(self, self.houses[two], self.houses[two].link, self.batteries[b])
             for three in self.houses:
-                if three == one or three == two:
+                if self.houses[three] == self.houses[one] or self.houses[three] == self.houses[two]:
                     pass
                 else:
-                    three.link = self.batteries[c]
+                    swap_houses(self, self.houses[three], self.houses[three].link, self.batteries[c])
                 for four in self.houses:
-                    if four == one or four == two or four == three:
+                    # print(d)
+                    if self.houses[four] == self.houses[one] or self.houses[four] == self.houses[two] or self.houses[four] == self.houses[three]:
                         pass
                     else:
-                        four.link = self.batteries[d]
+                        swap_houses(self, self.houses[four], self.houses[four].link, self.batteries[d])
                     for five in self.houses:
-                        if five == one or five == two or five == three or five == four or self.batteries[e].full():
+                        # print(e)
+                        if self.batteries[e].full():
+                            break
+                        if self.houses[five] == self.houses[one] or self.houses[five] == self.houses[two] or self.houses[five] == self.houses[three] or self.houses[five] == self.houses[four] or self.batteries[e].full():
                             pass
                         else:
-                            five.link = self.batteries[e]
-                        if not check_full():
-                            solutions += 1
-                            print(solutions)
-                            new = calculate_cost()
-                            if new < best:
-                                best = new
-                                links_copy = copy.copy([self.houses, self.batteries])
-                                cost_list.append(new)
+                            swap_houses(self, self.houses[five], self.houses[five].link, self.batteries[e])
+                            if not check_full(self):
+                                solutions += 1
+                                print(solutions)
+                                new = calculate_cost(self)
+                                if new < best:
+                                    best = new
+                                    links_copy = copy.copy([self.houses, self.batteries])
+                                    cost_list.append(new)
+
     print(cost_list)
+    with open(f"dfs_result_for_WIJK{self.input}_{time_var}.dat", "wb") as f:
+        pickle.dump(links_copy, f)
