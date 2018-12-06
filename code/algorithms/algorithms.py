@@ -267,3 +267,41 @@ def backup(self):
             curr_batt = house.link
             changes += 1
             swap_houses(self, house, curr_batt, to_batt, changes)
+
+
+def dfs():
+    solutions = 0
+    cost_list = []
+    best = 99999999
+    a, b, c, d, e = 0, 1, 2, 3, 4
+    for one in self.houses.values():
+        one.link = self.batteries[a].values()
+        for two in self.houses.values():
+            if two == one:
+                pass
+            else:
+                two.link = self.batteries[b].values()
+            for three in self.houses.values():
+                if three == one or three == two:
+                    pass
+                else:
+                    three.link = self.batteries[c].values()
+                for four in self.houses.values():
+                    if four == one or four == two or four == three:
+                        pass
+                    else:
+                        four.link = self.batteries[d].values()
+                    for five in self.houses.values():
+                        if five == one or five == two or five == three or five == four or self.batteries[e].full():
+                            pass
+                        else:
+                            five.link = self.batteries[e].values()
+                        if not check_full():
+                            solutions += 1
+                            print(solutions)
+                            new = calculate_cost()
+                            if new < best:
+                                best = new
+                                links_copy = copy.copy([self.houses, self.batteries])
+                                cost_list.append(new)
+    print(cost_list)

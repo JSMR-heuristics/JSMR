@@ -58,7 +58,7 @@ class Smartgrid(object):
         self.coordinates = self.get_coordinates()
         self.link_houses()
         self.run_algorithm()
-        self.plot_houses()
+        self.plot_houses(50)
 
 
     def load_houses(self):
@@ -250,6 +250,8 @@ class Smartgrid(object):
             hill_climber(self, self.iterations)
         elif self.algorithm == "backup":
             backup(self)
+        elif self.algorithm == "dfs":
+            dfs()
 
 
 if __name__ == "__main__":
