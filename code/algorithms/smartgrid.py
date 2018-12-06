@@ -58,6 +58,7 @@ class Smartgrid(object):
         self.coordinates = self.get_coordinates()
         self.link_houses()
         self.run_algorithm()
+        self.plot_houses()
 
 
     def load_houses(self):
@@ -67,9 +68,9 @@ class Smartgrid(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
-        house_file = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
+        path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
         # open file
-        with open(house_file) as houses_csv:
+        with open(path) as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -104,7 +105,7 @@ class Smartgrid(object):
         else:
             path = os.path.join(*[cwd, 'data', f'wijk{self.input}_cluster_{self.cluster_option}.txt'])
 
-        with open(batt_file) as batteries_text:
+        with open(path) as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
@@ -247,6 +248,8 @@ class Smartgrid(object):
             greedy(self, self.iterations)
         elif self.algorithm == "hill":
             hill_climber(self, self.iterations)
+        elif self.algorithm == "backup":
+            backup(self)
 
 
 if __name__ == "__main__":

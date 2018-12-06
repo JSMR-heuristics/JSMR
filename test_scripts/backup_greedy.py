@@ -1,11 +1,18 @@
-from house import House
-from battery import Battery
+
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.ticker as ticker
 import re
 import operator
+import os, sys
+
+cwd = os.getcwd()
+cwd = os.path.dirname(cwd)
+path = os.path.join(*[cwd, "code", "classes"])
+sys.path.append(path)
+from house import House
+from battery import Battery
 
 INPUT_HOUSES = "wijk3_huizen.csv"
 INPUT_BATTERIES = "wijk3_batterijen.txt"
@@ -27,7 +34,12 @@ class Smartgrid(object):
     def load_houses(self):
 
         # open file
-        with open(f"Huizen&Batterijen/{INPUT_HOUSES}", newline="") as houses_csv:
+        cwd = os.getcwd()
+        cwd = os.path.dirname(cwd)
+        path = os.path.join(*[cwd, "data", f"{INPUT_HOUSES}"])
+        sys.path.append(path)
+
+        with open(path) as houses_csv:
 
             # read data from csv
             data_houses = csv.reader(houses_csv, delimiter=",")
@@ -50,7 +62,11 @@ class Smartgrid(object):
         return houses
 
     def load_batteries(self):
-        with open(f"Huizen&Batterijen/{INPUT_BATTERIES}") as batteries_text:
+        cwd = os.getcwd()
+        cwd = os.path.dirname(cwd)
+        path = os.path.join(*[cwd, "data", f"{INPUT_BATTERIES}"])
+        sys.path.append(path)
+        with open(path) as batteries_text:
 
             # read text file per line
             data_batteries = batteries_text.readlines()
@@ -150,6 +166,7 @@ class Smartgrid(object):
             diffs = {}
             for index in range(len(ord_dist_diff)):
                 diffs[ord_dist_diff[index][0]] = int(ord_dist_diff[index][1]) - diff
+            print(diffs)
             house.diffs = diffs
             house.ord_dist = dict(ord_dist)
 
@@ -238,9 +255,9 @@ class Smartgrid(object):
                 # Determine the cheapest option first, if any
                 # else transfer option with lowest output
                 try:
-                    house, to_batt = self.find_best(distance_list, "strict")
+                    house, to_batt = self.find_best_backup(distance_list, "strict")
                 except TypeError:
-                    house, to_batt = self.find_best(distance_list, "not-strict")
+                    house, to_batt = self.find_best_backup(distance_list, "not-strict")
 
                 # Switch the house from battery
                 curr_batt = house.link
@@ -260,7 +277,7 @@ class Smartgrid(object):
 
         return switch
 
-    def find_best(self, list, status):
+    def find_best_backup(self, list, status):
         """
         Tries to find either the cheapest house to possibly switch from battery
         or the one with the lowest possible output

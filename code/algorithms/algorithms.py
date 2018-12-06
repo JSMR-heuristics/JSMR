@@ -218,3 +218,52 @@ def hill_climber(self, iterations):
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
+
+def backup(self):
+    """
+    Probeer wijk 3 weer te laten werken maar zonder succes
+    """
+    # Initialize changes counter, this gives insight to
+    # the speed of this algorithm
+    changes = 0
+
+    # While one or more batteries are over their capacity
+    while check_full(self):
+
+        # Sorts batteries based off total inputs from high to low
+        total_inputs = []
+        for battery in self.batteries.values():
+            total_inputs.append([battery.filled(), battery])
+        high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
+
+        # Prioritize battery with highest inputs
+        # to disconnect a battery from
+        for i in high_low:
+            battery = i[1]
+            distance_list = []
+
+            # Sort houses linked to this battery by distance
+            # to other battery from low to high
+            for house in battery.linked_houses:
+                element = []
+                batts = list(house.diffs.keys())
+                distance = list(house.diffs.values())
+                houses = [house] * len(distance)
+                outputs = [house.output] * len(distance)
+                element = list(map(list, zip(batts, distance, houses, outputs)))
+                distance_list += element
+            distance_list = sorted(distance_list, key=operator.itemgetter(1))
+
+            # Determine the cheapest option first, if any
+            # else transfer option with lowest output
+            try:
+                print(distance_list)
+                house, to_batt = find_best_backup(self, distance_list, "strict")
+            except TypeError:
+                print("type-error")
+                house, to_batt = find_best_backup(self, distance_list, "not-strict")
+
+            # Switch the house from battery
+            curr_batt = house.link
+            changes += 1
+            swap_houses(self, house, curr_batt, to_batt, changes)

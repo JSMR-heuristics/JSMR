@@ -50,16 +50,35 @@ def find_best(self, list, status):
             a = self.batteries[option[0]].filled() + option[2].output
             b = self.batteries[option[0]].capacity
             c = b - a
-            if a <= b and not 7 < c < 35:
+            print(a <= b)
+            print(c)
+            print(option)
+            if a <= b:
+            # if a <= b and not 7 < c < 35:
                 return option[2], self.batteries[option[0]]
     # wordt vervangen door output gewicht
     else:
         list = sorted(list, key=operator.itemgetter(3))
         for option in list:
             if (option[2].link.filled() - option[2].output) < option[2].link.capacity:
-                print(option[2].link.filled() - option[2].output)
                 return option[2], self.batteries[option[0]]
 
+def find_best_backup(self, list, status):
+    """
+    Tries to find either the cheapest house to possibly switch from battery
+    or the one with the lowest possible output
+    """
+    print(len(list))
+    if status is "strict":
+        for option in list:
+            if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity and not (option[2].link == self.batteries[option[0]]):
+                return option[2], self.batteries[option[0]]
+    else:
+        list = sorted(list, key=operator.itemgetter(3))
+        # print(list)
+        for option in list:
+            if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity and not (option[2].link == self.batteries[option[0]]):
+                return option[2], self.batteries[option[0]]
 # conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
 # conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
 
