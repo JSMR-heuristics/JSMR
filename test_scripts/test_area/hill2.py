@@ -162,10 +162,10 @@ class Smartgrid(object):
 
             house.link = self.batteries[batteries[0]]
             self.batteries[batteries[0]].linked_houses.append(house)
-            diff, distance_diffs = distances[0], distances
+            diff, distance_diffs = distances[0], distances[1:]
             diffs = {}
             for index in range(len(distance_diffs)):
-                diffs[batteries[index]] = int(distance_diffs[index]) - diff
+                diffs[batteries[index + 1]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
     def plot_houses(self, changes):
         """
@@ -237,13 +237,12 @@ class Smartgrid(object):
         """
 
         random_houses = list(self.houses.values())
-        random_houses_2 = list(self.houses.values())
-        iterations = 1000
+
+        iterations = 100
         count = 0
         misses = -iterations
         prices = []
         climbs_list = []
-        lowest_list = []
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
             self.disconnect()
@@ -251,8 +250,6 @@ class Smartgrid(object):
             # ----------------------------------------------------------------
             # While one or more batteries are over their capacity or not every
             # house is linked to a battery
-            start_time = time.clock()
-            print(f"Start: {start_time}")
             while self.check_linked() is False or self.check_full() is True:
                 # print(misses)
                 misses += 1
@@ -266,60 +263,68 @@ class Smartgrid(object):
                 # that this house wont over-cap the battery
                 for house in random_houses:
 
-                    for i in range(5):
+                    for i in range(4):
                         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                             house.link = self.batteries[list(house.diffs)[i]]
                             self.batteries[list(house.diffs)[i]].linked_houses.append(house)
                             break
             base_copy = copy.copy([self.houses, self.batteries])
             base_cost = self.calculate_cost()
-            print(time.clock() - start_time, "seconds")
             # ----------------------------------------------------------------
             print("Start Hillclimb")
-            start_time = time.clock()
-            print(f"Start: {start_time}")
             step_back_cost = base_cost
             step_back = base_copy
 
             climbs = 0
             hillcount = 0
-            alt_directions = 150 * 150
+            alt_directions = 150 * 150 * 150 * 150
+
+            random_houses_2 = list(self.houses.values())
+            random_houses_3 = list(self.houses.values())
+            random_houses_4 = list(self.houses.values())
 
             random.shuffle(random_houses)
             random.shuffle(random_houses_2)
+            random.shuffle(random_houses_3)
+            random.shuffle(random_houses_4)
+
 
             while hillcount < alt_directions:
                 # loop while the new step is inefficient
                 for house_1 in random_houses:
                     for house_2 in random_houses_2:
-                        # take a step if not the same batteries
-                        if not (house_1.link == house_2.link):
-                            switch_houses(self, house_1, house_2)
-                            step_cost = self.calculate_cost()
-                            if (step_cost < step_back_cost) and (self.check_full() is False):
-                                climbs += 1
-                                # print(climbs)
-                                # print(step_cost)
-                                # necessary to copy step back?
-                                step_back = copy.copy([self.houses, self.batteries])
-                                step_back_cost = step_cost
-                                hillcount = 0
-                            else:
-                                switch_houses(self, house_1, house_2)
-                                #self.houses, self.batteries = step_back[0], step_back[1]
-                        hillcount += 1
+                        for house_3 in random_houses_3:
+                            for house_4 in random_houses_4:
+                                # take a step if not the same batteries
+                                if not ((house_1.link == house_2.link) or (house_3.link == house_4.link)):
+                                    switch_houses(self, house_1, house_2)
+                                    switch_houses(self, house_3, house_4)
+                                    step_cost = self.calculate_cost()
+                                    if (step_cost < step_back_cost) and (self.check_full() is False):
+                                        climbs += 1
+                                        # print(climbs)
+                                        # print(step_cost)
+                                        # necessary to copy step back?
+                                        step_back = copy.copy([self.houses, self.batteries])
+                                        step_back_cost = step_cost
+                                        hillcount = 0
+                                        print(climbs)
+                                    else:
+                                        switch_houses(self, house_3, house_4)
+                                        switch_houses(self, house_1, house_2)
+
+                                        #self.houses, self.batteries = step_back[0], step_back[1]
+                                hillcount += 1
 
             print(f"bc={base_cost}, hilltop = {step_cost}")
-            print(time.clock() - start_time, "seconds")
             time_var = time.strftime("%d%m%Y")
             prices.append(step_cost)
 
             if step_cost is min(prices):
-                lowest_list.append(step_cost)
                 house_batt = [self.houses, self.batteries]
-                with open(f"hill_climber_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                with open(f"hill_climber2_batt_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(house_batt, f)
-                with open(f"sequence_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
+                with open(f"sequence2_lowest_WIJK{INPUT}_{time_var}.dat", "wb") as f:
                     pickle.dump(random_houses, f)
             count += 1
             climbs_list.append(climbs)
@@ -331,8 +336,6 @@ class Smartgrid(object):
         print(f"mean: {np.mean(prices)}")
         print(f"unsuccesfull iterations: {misses}")
         print(f"average # of climbs: {np.mean(climbs_list)}")
-        with open(f"hill_climber_lowest_list_WIJK{INPUT}_{time_var}_{count}/{iterations}.dat", "wb") as f:
-            pickle.dump(lowest_list f)
 
 
     def check_linked(self):
@@ -384,5 +387,7 @@ class Smartgrid(object):
 
 
 if __name__ == "__main__":
-
+    start_time = time.clock()
+    print(f"Start: {start_time}")
     Smartgrid()
+    print(time.clock() - start_time, "seconds")
