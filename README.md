@@ -22,14 +22,14 @@ The absolute upper and lower bounds of the total costs can be calculated by conn
 * Neighbourhood 3:
   * lower: 42757
   * upper: 101491
-  
+
 However, when the battery placement is changed, the upper and lower bounds will change too. Specifics can be found in [bound.txt](test_scripts/quantify/bound.txt)
 
 ##### Bound-dependent Quantification
 To quantify the results per algorithm per neighbourhood we take the 'within-contstraints-impossible absolute upper and lowerbounds' of the neighbourhood as the margin and see wherein this margin our results exist. This will result in percentile values which can be compared within and between neighbourhoods.
-  
 
- 
+
+
 #### State Space
 The State Space encompassing every possible combination can be calculated with:
 * possible house-battery connections: #houses ^ #batteries  
@@ -68,19 +68,19 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 This self-named algorithm operates by first connecting all houses to its nearest battery and subsequently goes through all overloaded batteries and moves houses from that battery to the next closest battery on the condition that it does not overload that battery, else looks at closest battery after that. This is the reason for the name Step-Down, since it starts at a 'within-constraints impossible high point' and slowly descends downwards, whilst making the total-cost worse, until it reaches a valid house-battery configuration. Because it starts at the same point and follows the same sequence, it will always conclude the same answer. This deterministic result allows this algorithm to be the fastest, but it will not find the best answer. However a recurring pattern occurs when comparing all the battery-location variations per neighbourhood. This pattern is that the variation which has the lowest costs found by the Step-Down Algorithm, is also the variation in which the lowest cost will be found when it comes to the Greedy and the Hill-Climber algorithms. Assuming that this pattern is universally applicable to neighbourhoods, even the ones not yet made, makes the results and the speed of the Step-Down Algorithm a very effective and efficient marker in the selection of battery-location varieties.
 
 ### The Greedy Algorithm
-The Greedy Algorithm 
-wijk1: avg: ~0.0078375 sec
-wijk2: avg: ~0.0118677 sec
-wijk3: avg: ~0.221877 sec
+In our case the greedy algorithm starts at a random point and runs until it has found a given number of 'successful' iterations. We chose not to use fixed starting points because these resulted in poor results or infinite loops. Also, by randomizing our starting point we avoid getting stuck in a local optimum. The random starting points mean that the greedy iterates over all houses in a random sequence and finds the cheapest possible solution for each house. The best solution of the given number of iterations is saved with pickle and this configuration can be fully reloaded. We don't keep track of the random sequences that have been used, since the number of variations is immense (factorial of 150).
+
+The greedy  algorithm is very fast with iteration durations ranging from 0.008 to 0.22 seconds. The highest iteration durations occur when running the algorithm for the third dataset (wijk3). This can be explained by the small variation found between the outputs of the houses for this dataset.
+
 
 ### The Hill-Climber Algorithm
 The way the Hill Climber Algorithm operates is using the Greedy Algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using the Greedy Algorithm is to reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction randomness can be compensated by a proper amount of iterations, which is by our standards 1000
-  
+
 After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations. The length of a single iteration is partially dependent on the Greedy algorithm, and due to it has the same "weakness" as the greedy algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).  
-  
+
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
-When looking at the average amount of climbs and the average amount 
+When looking at the average amount of climbs and the average amount
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
 ![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
