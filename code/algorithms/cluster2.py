@@ -105,7 +105,7 @@ class Cluster(object):
             n_clusters, noise_points, X, labels, mask_samples = self.cluster_scan(X, settings_list, counter)
             counter += 1
 
-            if 17 < n_clusters > 4:
+            if n_clusters in [6, 9, 12, 15, 18]:
                 working_settings.append([settings_list[counter][0], settings_list[counter][1]])
                 subplot_data.append([X, labels, mask_samples, n_clusters, big_counter])
                 big_counter += 1
@@ -128,6 +128,10 @@ class Cluster(object):
 
     def plot_cluster(self, data):
         n_plots = len(data)
+        clusters = []
+        total_w = []
+        price = 1800
+        cap_max = 1800
 
         fig, axs = plt.subplots(1, n_plots, figsize=(18, 6))
 
@@ -174,7 +178,8 @@ class Cluster(object):
                 axs[index].plot(xy_small[:, 0], xy_small[:, 1], 'o', markerfacecolor=tuple(col),
                          markeredgecolor='k', markersize=6)
 
-                axs[index].set_title(index + 1)
+                axs[index].set_title(f"{index + 1} - {n_clusters} clusters")
+                clusters.append(n_clusters)
 
                 if list_X and list_Y:
                     all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(self.input) - 1]}\n"
@@ -183,7 +188,7 @@ class Cluster(object):
             cwd = os.getcwd()
             cwd = os.path.dirname(cwd)
             cwd = os.path.dirname(cwd)
-            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}.txt"])
+            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster2_{big_counter}.txt"])
             sys.path.append(path)
 
             with open (path, "w") as f:
@@ -192,12 +197,16 @@ class Cluster(object):
             cwd = os.getcwd()
             cwd = os.path.dirname(cwd)
             cwd = os.path.dirname(cwd)
-            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_{big_counter}_weigth.txt"])
+            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster2_{big_counter}_weigth.txt"])
             sys.path.append(path)
 
             with open (path, "w") as f:
                 f.write(str(weights))
-
+            total_w.append(weights)
+        print(clusters)
+        print(sum(clusters))
+        print(len(total_w))
+        print(sorted(total_w))
         fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
         plt.show()
 
