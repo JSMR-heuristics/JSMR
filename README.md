@@ -63,6 +63,11 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ### And this is the configuration of neighbourhood when battery placement is customized:
 ![alt_text](results/pres_figures/cluster_wijk_1.png)
 
+## The effectiveness of the algorithms
+### The Step-Down Algorithm
+### The Greedy Algorithm
+### The Hill-Climber Algorithm
+
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
 ![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
 *Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
