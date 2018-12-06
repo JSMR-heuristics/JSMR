@@ -242,8 +242,8 @@ class Smartgrid(object):
 
 
     def run_algorithm(self):
-        if self.algorithm == "optimize":
-            optimize(self)
+        if self.algorithm == "stepdown":
+            stepdown(self)
         elif self.algorithm == "greedy":
             greedy(self, self.iterations)
         elif self.algorithm == "hill":

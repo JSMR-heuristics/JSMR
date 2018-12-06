@@ -5,7 +5,7 @@ import numpy as np
 from helpers import *
 
 
-def optimize(self):
+def stepdown(self):
     """
     This function changes links between houses and batteries
     so no battery is over it's capacity, this will be done
