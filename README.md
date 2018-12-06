@@ -69,11 +69,18 @@ This self-named algorithm operates by first connecting all houses to its nearest
 
 ### The Greedy Algorithm
 The Greedy Algorithm 
+wijk1: avg: ~0.0078375 sec
+wijk2: avg: ~0.0118677 sec
+wijk3: avg: ~0.221877 sec
 
 ### The Hill-Climber Algorithm
-The way the Hill Climber Algorithm operates is using the greedy algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. After a swap results into a more cost-efficient configuration which fits within the restraints the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations. The length of a single iteration is partially dependent on the Greedy algorithm, and due to it has the same "weakness" as the greedy algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).
-
+The way the Hill Climber Algorithm operates is using the Greedy Algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using the Greedy Algorithm is to reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction randomness can be compensated by a proper amount of iterations, which is by our standards 1000
+  
+After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations. The length of a single iteration is partially dependent on the Greedy algorithm, and due to it has the same "weakness" as the greedy algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).  
+  
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
+
+When looking at the average amount of climbs and the average amount 
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
 ![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
