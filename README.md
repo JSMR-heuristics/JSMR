@@ -78,7 +78,7 @@ The way the Hill Climber Algorithm operates is using the Greedy Algorithm to gen
 After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations.  
 
 The length of a single iteration is partially dependent on the Greedy Algorithm, and due to it has the same "weakness" as the Greedy Algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).  
-The other part which influences the length of one iteration is the hillclimber itself and takes in the most time ranging around 7.6-7.9 on average for neighberhood 2 and neighbourhood 1 respectively and around 12.8 seconds on average for neighbourhood 3. The main reason why neighborhood 3 takes almost twice as long is probably the same reason as with the greedy algorithm, the small variation between outputs of houses, that makes it longer to find a suitable direction. Another interesting detail is that neighbourhood not only takes slightly longer on average than neighberhood 2, but also makes twice as much climbs before finding a peak(67 and 30). This can be explained due to neighbourhood 1 having a cluster of batteries of its own which might result into a lot of climbs, but each climb will only make include a small increase in cost-efficiency.
+The other part which influences the length of one iteration is the hillclimber itself and takes in the most time ranging around 7.6-7.9 on average for neighberhood 2 and neighbourhood 1 respectively and around 12.8 seconds on average for neighbourhood 3. The main reason why neighborhood 3 takes almost twice as long is probably the same reason as with the greedy algorithm, the small variation between outputs of houses, that makes it longer to find a suitable direction. Another interesting detail is that neighbourhood 1 not only takes slightly longer on average than neighberhood 2, but also makes twice as much climbs before finding a peak(67 and 30). This can be explained due to neighbourhood 1 having a cluster of batteries of its own which might result into a lot of climbs, but each climb will only make include a small increase in cost-efficiency.
 
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
@@ -99,4 +99,6 @@ We considered to implement an archive for the algorithm so we can ensure a rando
 ## Running the code:
 
  * run "main.py" in the JSMR repo
- * follow the prompt instructions to run our program
+ * type in the command line {the number of the neighborhood}-{which algorithm: "stepdown"/"greedy"/"hill"}-{iterations}
+   * you can type "spec" if you prefer to insert the details prompt-based
+   * follow the prompt instructions to run our program
