@@ -36,7 +36,7 @@ else:
         if sys.argv[3].isnumeric():
             iterations = int(sys.argv[3])
         else:
-            print("please insert an integer as 3rd argument")
+            print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
             sys.exit(2)
 
     if "plot" in sys.argv:
