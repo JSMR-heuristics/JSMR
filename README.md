@@ -67,6 +67,7 @@ Currently we have implemented a greedy algorithm which runs until the constraint
 ### The Step-Down Algorithm
 ### The Greedy Algorithm
 ### The Hill-Climber Algorithm
+The way the Hill Climber Algorithm operates is by generating a random House-Battery set-up within the constraints and swapping the connections of two houses which are connected to different batteries. After a swap results into a more cost-efficient set-up which fits within the restraints the swap is kept and the algorithm tries every possible swap again until no better set-ups are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations. The length of single iteration is 
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
 ![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
