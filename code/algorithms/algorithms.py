@@ -5,7 +5,7 @@ import numpy as np
 from helpers import *
 
 
-def optimize(self):
+def stepdown(self):
     """
     This function changes links between houses and batteries
     so no battery is over it's capacity, this will be done
@@ -170,7 +170,7 @@ def hill_climber(self, iterations):
                         break
         base_copy = copy.copy([self.houses, self.batteries])
         base_cost = calculate_cost(self)
-        
+
         print("Start Hillclimb")
         step_back_cost = base_cost
         step_back = base_copy
