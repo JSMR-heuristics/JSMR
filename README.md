@@ -72,7 +72,7 @@ The greedy  algorithm is very fast with iteration durations ranging from 0.008 t
 
 
 ### The Hill-Climber Algorithm
-The way the Hill Climber Algorithm operates is using a random within constraints algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using this algorithm is to more reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction in randomness can be compensated by a proper amount of iterations, which is by our standards 1000. Moreover the reason of using random starting points is the same as the Greedy Algorithm.
+The way the Hill Climber Algorithm operates is using a random within constraints algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using this algorithm is to more reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction in randomness can be compensated by a proper amount of iterations, which is by our standards 1000
 
 After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations.  
 
@@ -81,7 +81,12 @@ The other part which influences the length of one iteration is the hillclimber i
 
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
-### Cluster
+### Clustering:
+To find the optimal location for the battery, a density- based clustering algorithm (DBSCAN) is applied to the 'houses-dataset' of each neighbourhood. This algorithms takes multiple parameters, two of which are eps and minPTS. Eps represents the radius of a datapoint in which other datapoints are regarded as part of a cluster. MinPTS represents the minimal number of datapoints in the given radius needed to define a group of datapoints as a cluster. Since the placement of houses differs between the dataset, we chose to iterate over different settings and use only the eps and minPTS values which result in usable clustering. 
+
+This clustering is applied in two different fashions. The first of which, aims to find 5 clusters. All the results are tested with our greedy algorithm and the configuration with the lowest outcome will be saved, for later testing with our other algorithms. (THIS IS STILL MANUAL). The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 13 or 17 clusters, because these are the only numbers of batteries we can use
+
+[alt_text](/results/pres_figures/batt_tabel.png)
 
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
