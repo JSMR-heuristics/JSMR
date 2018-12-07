@@ -49,7 +49,7 @@ def stepdown(self):
         # Switch the house from battery
         curr_batt = house.link
         changes += 1
-        swap_houses(self, house, curr_batt, to_batt, changes)
+        swap_houses(self, house, curr_batt, to_batt)
         if (changes % 5) is 0 and self.plot_option == "y":
             self.plot_houses(changes)
         # break
@@ -123,13 +123,13 @@ def greedy(self, iterations):
 
 
         count += 1
-        print(count)
+        # print(count)
     print(f"min: {min(prices)}")
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
-    return int(min(prices))
+    return f"greedy_lowest_WIJK{self.input}_{time_var}.dat"
 
 
 def hill_climber(self, iterations):

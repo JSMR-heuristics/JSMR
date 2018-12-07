@@ -41,6 +41,7 @@ from helpers import *
 
 class Cluster(object):
     def __init__(self, input):
+        self.options_list = []
         self.input = input
         self.houses = self.load_houses()
 
@@ -124,7 +125,7 @@ class Cluster(object):
     def plot_cluster(self, data):
         n_plots = len(data)
 
-        fig, axs = plt.subplots(1, n_plots, figsize=(18, 6))
+        # fig, axs = plt.subplots(1, n_plots, figsize=(18, 6))
 
         for index in range(n_plots):
             # Black removed and is used for noise instead.
@@ -158,18 +159,18 @@ class Cluster(object):
                         list_X.append(mean(xy_big[:,0]))
                         list_Y.append(mean(xy_big[:,1]))
 
-                axs[index].plot(xy_big[:, 0], xy_big[:, 1], 'o', markerfacecolor=tuple(col),
-                         markeredgecolor='k', markersize=14)
+                # axs[index].plot(xy_big[:, 0], xy_big[:, 1], 'o', markerfacecolor=tuple(col),
+                #          markeredgecolor='k', markersize=14)
 
                 xy_small = X[class_member_mask & ~mask_samples]
                 if xy_small[:,0].any() and xy_small[:,1].any() and col[0] is not 0:
                         list_X.append(mean(xy_small[:,0]))
                         list_Y.append(mean(xy_small[:,1]))
 
-                axs[index].plot(xy_small[:, 0], xy_small[:, 1], 'o', markerfacecolor=tuple(col),
-                         markeredgecolor='k', markersize=6)
-
-                axs[index].set_title(index + 1)
+                # axs[index].plot(xy_small[:, 0], xy_small[:, 1], 'o', markerfacecolor=tuple(col),
+                #          markeredgecolor='k', markersize=6)
+                #
+                # axs[index].set_title(index + 1)
 
                 if list_X and list_Y:
                     all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(self.input) - 1]}\n"
@@ -189,14 +190,13 @@ class Cluster(object):
             with open (path, "w") as f:
                 f.write(str(weights))
 
-        fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
-        plt.show()
+        # fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
+        for i in range(big_counter):
+            self.options_list.append(i + 1)
+
 
 if __name__ == "__main__":
     start_time = time.clock()
-    print(f"Start: {start_time}")
 
-    smart = Smartgrid()
-    smart.find_clusters()
-
-    print(time.clock() - start_time, "seconds")
+    cluster = Cluster()
+    cluster.find_clusters()

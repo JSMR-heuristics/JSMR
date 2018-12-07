@@ -11,6 +11,7 @@ from smartgrid import Smartgrid
 from cluster import Cluster
 from cluster2 import Cluster2
 from weights import Weights
+from helpers import *
 
 
 class Main(object):
@@ -40,7 +41,7 @@ class Main(object):
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
@@ -48,6 +49,21 @@ class Main(object):
             elif sys.argv[2] == "configure":
                 Cluster2(neighbourhood)
                 Weights(neighbourhood)
+                sys.exit()
+            elif sys.argv[2] == "cluster":
+                cluster = Cluster(neighbourhood)
+                costs = []
+                min_cost = 999999
+                index = 0
+                for i in cluster.options_list:
+                    print(f"Checking option {i}...")
+                    smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
+                    if smart.cost < min_cost:
+                        file = smart.pickle_file
+                        min_cost = smart.cost
+                        index = i
+                print(file)
+                load_pickle(self, file)
                 sys.exit()
 
             else:
