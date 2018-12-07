@@ -40,7 +40,7 @@ class Main(object):
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs",]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
@@ -68,7 +68,6 @@ class Main(object):
                 plot = "y"
             else:
                 plot = "n"
-                print("no")
 
         Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option, battery_file)
 
