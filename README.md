@@ -81,6 +81,8 @@ The other part which influences the length of one iteration is the hillclimber i
 
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
+### Cluster
+
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
 ![alt_text](results/pres_figures/wijken_figure.png)
