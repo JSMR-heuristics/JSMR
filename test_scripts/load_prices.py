@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
 import sys
-from house import House
-from battery import Battery
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -40,6 +38,8 @@ class Smartgrid(object):
 
         L1, L2, L3 = 28188.0, 20268.0, 17757.0
         O1, O2, O3 = 31401, 21401, 20300.0
+        H1, H2, H3 = 30843, 20574, 18801
+        U1, U2, U3 = mode(R1), mode(R2), mode(R3)
 
         n_bins = 20
 
@@ -53,9 +53,15 @@ class Smartgrid(object):
         axs[0].vlines(L1, 0, 200, color = "g")
         axs[1].vlines(L2, 0, 200, color = "g")
         axs[2].vlines(L3, 0, 200, color = "g")
-        axs[0].vlines(O1, 0, 200, color = "r")
-        axs[1].vlines(O2, 0, 200, color = "r")
-        axs[2].vlines(O3, 0, 200, color = "r")
+        axs[0].vlines(O1, 0, 200, color = "purple")
+        axs[1].vlines(O2, 0, 200, color = "purple")
+        axs[2].vlines(O3, 0, 200, color = "purple")
+        axs[0].vlines(H1, 0, 200, color = "brown")
+        axs[1].vlines(H2, 0, 200, color = "brown")
+        axs[2].vlines(H3, 0, 200, color = "brown")
+        axs[0].vlines(U1, 0, 200, color = "r")
+        axs[1].vlines(U2, 0, 200, color = "r")
+        axs[2].vlines(U3, 0, 200, color = "r")
         axs[0].set_ylim(0, 170)
         axs[1].set_ylim(0, 170)
         axs[2].set_ylim(0, 170)
@@ -63,11 +69,13 @@ class Smartgrid(object):
         axs[1].set_title("Wijk 2")
         axs[2].set_title("Wijk 3")
 
-        red_patch = mpatches.Patch(color='red', label='Our Combined Algorithm')
+        red_patch = mpatches.Patch(color='red', label='Upper Bound')
         green_patch = mpatches.Patch(color='g', label='Absolute Lower Bound')
         blue_patch = mpatches.Patch(color='#1f77b4', label='Greedy Algorithm')
         orange_patch = mpatches.Patch(color='#ff7f0e', label='Random Algorithm')
-        handles = [red_patch, green_patch, blue_patch, orange_patch]
+        purple_patch = mpatches.Patch(color='purple', label='Step-down Algorithm')
+        brown_patch = mpatches.Patch(color='brown', label='Hill-climber Algorithm')
+        handles = [red_patch, green_patch, blue_patch, orange_patch, purple_patch, brown_patch]
         axs[2].legend(handles = handles, bbox_to_anchor=(1.4, 1.05))
 
 

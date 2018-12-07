@@ -1,6 +1,12 @@
 #!/usr/bin/python
 
-import sys
+import sys, os
+cwd = os.getcwd()
+cwd = os.path.dirname(cwd)
+cwd = os.path.dirname(cwd)
+path = os.path.join(*[cwd, 'code', 'classes'])
+print(path)
+sys.path.append(path)
 from house import House
 from battery import Battery
 import csv
@@ -81,7 +87,9 @@ class Smartgrid(object):
 
         total = 0
         for house in list(self.houses.values()):
-
+            # print(list(house.diffs.keys())[0])
+            # house.link = self.batteries[list(house.diffs.keys())[0]]
+            # # house.link = self.batteries[list(house.diffs.keys())[len(self.batteries.values()) - 1]]
             x_house, y_house = house.x, house.y
             x_batt, y_batt = house.link.x, house.link.y
 
@@ -104,7 +112,10 @@ class Smartgrid(object):
 
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
-
+        asd = 0
+        for battery in self.batteries.values():
+            asd += battery.cost
+        print(asd)
         plt.show()
         return total
 
@@ -115,7 +126,7 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        with open("greedy_lowest_WIJK1_04122018_1617.dat", "rb") as f:
+        with open("weighted_clusters_WIJK2.dat", "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 
