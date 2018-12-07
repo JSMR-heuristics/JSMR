@@ -9,6 +9,8 @@ sys.path.append(path)
 
 from smartgrid import Smartgrid
 from cluster import Cluster
+from cluster2 import Cluster2
+from weights import Weights
 
 
 class Main(object):
@@ -45,9 +47,14 @@ class Main(object):
                 battery_file = None
                 print("al")
 
+            elif sys.argv[2] == "configure":
+                Cluster2(neighbourhood)
+                Weights(neighbourhood)
+                sys.exit()
+
             else:
                 print("please insert the wanted algorithm as 2nd argument")
-                print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\",\"spec\"")
+                print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\", \"configure\", \"spec\"")
                 sys.exit(2)
 
             if sys.argv[2] == "stepdown":
