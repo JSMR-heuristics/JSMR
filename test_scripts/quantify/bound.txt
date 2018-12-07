@@ -13,6 +13,11 @@ closest: 53188.0
 furthest: 103030.0
 our: 55753
 
+1 hill_update
+closest: 53188.0
+furthest: 103030.0
+our: 55843
+
 1 random_1000
 closest: 53188.0
 furthest: 103030.0
@@ -38,6 +43,11 @@ closest: 45268.0
 furthest: 96253.0
 our: 45520
 
+2 hill_update
+closest: 53188.0
+furthest: 103030.0
+our: 45574
+
 3 step-down
 closest: 42757.0
 furthest: 101491.0
@@ -62,6 +72,11 @@ our: 43765
 closest: 42757.0
 furthest: 101491.0
 our: 43819
+
+3 hill_update
+closest: 42757.0
+furthest: 101491.0
+our: 43801
 
 1 step-down_protobatt_1
 closest: 39967

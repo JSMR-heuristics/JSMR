@@ -115,7 +115,7 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        with open("greedy_lowest_WIJK1_04122018_1617.dat", "rb") as f:
+        with open("hill_climber_batt_lowest_WIJK3_06122018.dat", "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 
