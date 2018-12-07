@@ -2,7 +2,7 @@
 
 ## Problem:
 When enough houses can generate their own energy, it becomes possible that
-excess energy will be generated.  
+excess energy will be generated.
 It's economically beneficial to be able to store that excess energy into batteries for later use, however it is
 economically beneficial as well to place and select batteries as strategically
 as possible to minimize battery and cable costs. What exactly is the most
@@ -31,18 +31,18 @@ To quantify the results per algorithm per neighbourhood we take the 'within-cont
 
 #### State Space
 The State Space encompassing every possible combination can be calculated with:
-* possible house-battery connections: #houses ^ #batteries  
+* possible house-battery connections: #houses ^ #batteries
 
-Which is 150^5 in the first part of the Case.  
+Which is 150^5 in the first part of the Case.
 
 In the 2nd part the formula makes use of:
 * possible batterylocations: gridsize^#batteries = 2500^5
-* possible house-battery connections: #houses ^ #batteries = 150^5  
+* possible house-battery connections: #houses ^ #batteries = 150^5
   * is added up in the formula due to being independent variables
 * #houses ^ #batteries + gridsize^#batteries
 
 which results in:
-total state space with 5 batteries:  
+total state space with 5 batteries:
 * 2500^5 + 150^5
 
 From the possible batttery sets that we've created, we can see that the highest amount of batteries that theoretically will be included equals 17. Thus having a state space not exceeding:
@@ -74,18 +74,33 @@ The greedy  algorithm is very fast with iteration durations ranging from 0.008 t
 ### The Hill-Climber Algorithm
 The way the Hill Climber Algorithm operates is using a random within constraints algorithm to generate a random House-Battery configuration within the constraints and swapping the connections of two houses which are connected to different batteries. The reason for using this algorithm is to more reliably find a random configuration within the constraints, otherwise we'll have to use completely randomly generated combinations and the odds of finding one which also fits within the constraints is around one in five million when using neighbourhood 1 as a measure or one in three million when using either neighbourhood one or two. This is very inefficient in time and the slight reduction in randomness can be compensated by a proper amount of iterations, which is by our standards 1000
 
-After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations.  
+After a battery swap between houses results into a more cost-efficient configuration which fits within the restraints, the swap is kept and the algorithm tries every possible swap again until no better configurations are found. This will with 1000 iterations always result into a more cost-efficient configuration of house-battery combinations than the Step-Down and the Greedy Algorithm, however it takes a significantly longer time to complete the same amount of iterations.
 
-The length of a single iteration is partially dependent on the Greedy Algorithm, and due to it has the same "weakness" as the Greedy Algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).  
+The length of a single iteration is partially dependent on the Greedy Algorithm, and due to it has the same "weakness" as the Greedy Algorithm, which is that the iteration takes longer when there is a very small capacity difference between the total capacity of the batteries and the houses(which is the case in neigbourhood 3).
 The other part which influences the length of one iteration is the hillclimber itself and takes in the most time ranging around 7.6-7.9 on average for neighberhood 2 and neighbourhood 1 respectively and around 12.8 seconds on average for neighbourhood 3. The main reason why neighborhood 3 takes almost twice as long is probably the same reason as with the greedy algorithm, the small variation between outputs of houses, that makes it longer to find a suitable direction. Another interesting detail is that neighbourhood 1 not only takes slightly longer on average than neighberhood 2, but also makes twice as much climbs before finding a peak(67 and 30). This can be explained due to neighbourhood 1 having a cluster of batteries of its own which might result into a lot of climbs, but each climb will only include a small increase in cost-efficiency.
 
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
-### Cluster
+### Depth-First/Branch-and-Bound Algorithm:
+To be able to definitively find the upper and lower bounds for a specific setup, a depth-first algorithm was developed. Due to the enormous state space the problem has, however, running it all the way through was not a realistic option. So before even trying that, it was altered into a branch-and-bound version that follows the same logic. Though it is still in development and not yet fully functional, the way it works is as follows:
+First, the greedy algorithm is run, returning an amount that is known to not be nearly ideal, but low enough to undercut most of the possible outcomes. A list is then made from all the houses, so they can be called through an interger, and the houses are all linked to the first battery. the program then starts a recursive loop, that will include every house on the map.
+The loop in its depth-first stage simple iterated over every one of the five batteries with each of the 150 houses, connecting one to the other, checking if the current house is the last one in the list, and if so checking the situation to see if it is valid as a result. If the house is not the last in the list, a loop for the next house in the list is started. When a house has finished its situation check on its fifth battery, the loop ends and the level above it is re-entered, which will repeat the process, until the very first house has checked for all of the five batteries, and doing the same for every house following it for each of those batteries.
+To cut down on the processing time, two major and one minor bounds were implemented. The minor restriction simply checks if the battery a house is currently connected to is also the one its being checked for, and if so the house isn't swapped, saving a little bit of processing power. the two larger restrictions check the current state to see if the path the algorithm is going down will be reasonably fruitful. A number representing plausible improvement is multiplied by the amount of houses that are still left down the line for both the cable costs and battery capacity. Those numbers are then checked against the numbers of the current situation and, if those numbers are lower than the numbers of the current situation, which indicates a very small chance of getting a good result from the current path, the loop is exited and the loop for the house that was changed before it is re-entered.
+This then runs, saving all fruitful results in the meantime, and, when it has finished, returns those results.
+
+### Clustering:
+To find the optimal location for the battery, a density- based clustering algorithm (DBSCAN) is applied to the 'houses-dataset' of each neighbourhood. This algorithms takes multiple parameters, two of which are eps and minPTS. Eps represents the radius of a datapoint in which other datapoints are regarded as part of a cluster. MinPTS represents the minimal number of datapoints in the given radius needed to define a group of datapoints as a cluster. Since the placement of houses differs between the dataset, we chose to iterate over different settings and use only the eps and minPTS values which result in usable clustering.
+
+This clustering is applied in two different fashions. The first of which, aims to find 5 clusters. All the results are tested with our greedy algorithm and the configuration with the lowest outcome will be saved, for later testing with our other algorithms.
+The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 13 or 17 clusters, because these are the only numbers of batteries we can use to find a profitable battery-set. These sets are profitable because these configurations don't result in redundant amounts of total capacity. This selection also reduces the statespace and runtime immensely.
+
+![alt_text](/results/pres_figures/batt_tabel.png)
+
+*Battery options*
 
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
-![alt_text](results/pres_figures/wijken_figure.png)
+![alt_text](results/pres_figures/Algorithm_compare2.png)
 *Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
 
 ### Other considerations
