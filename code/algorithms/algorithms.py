@@ -270,57 +270,51 @@ def backup(self):
             changes += 1
             swap_houses(self, house, curr_batt, to_batt, changes)
 
-
 def dfs(self):
-    # print(self.batteries[0])
-    # print(self.batteries[1])
-    # print(self.batteries[2])
-    # print(self.batteries[3])
-    # print(self.batteries[4])
-    # nope = 0
-    # yup = 0
-    solutions = 0
-    results_list = []
-    cost_list = []
-    best = 33660
-    a, b, c, d, e = 0, 1, 2, 3, 4
-    x = 0
+    self.best = 300000
+    print(f"Score to beat: {self.best}")
+    self.solutions = 0
+    self.results_list = []
+    self.cost_list = []
+    self.extra = []
+    self.digit = 0
     for i in self.houses:
-        self.houses[i].link = self.batteries[0]
-        self.batteries[0].linked_houses.append(self.houses[i])
-    for one in self.houses:
-        swap_houses(self, self.houses[one], self.houses[one].link, self.batteries[a])
-        print(f"Amount of rounds = {x}")
-        x += 1
-        for two in self.houses:
-            if self.houses[two] == self.houses[one]:
-                continue
-            swap_houses(self, self.houses[two], self.houses[two].link, self.batteries[b])
-            for three in self.houses:
-                if self.houses[three] == self.houses[one] or self.houses[three] == self.houses[two]:
-                    continue
-                swap_houses(self, self.houses[three], self.houses[three].link, self.batteries[c])
-                for four in self.houses:
-                    if self.houses[four] == self.houses[one] or self.houses[four] == self.houses[two] or self.houses[four] == self.houses[three]:
-                        continue
-                    swap_houses(self, self.houses[four], self.houses[four].link, self.batteries[d])
-                    for five in self.houses:
-                        if self.batteries[e].full():
-                            break
-                        if self.houses[five] == self.houses[one] or self.houses[five] == self.houses[two] or self.houses[five] == self.houses[three] or self.houses[five] == self.houses[four]:
-                            continue
-                        swap_houses(self, self.houses[five], self.houses[five].link, self.batteries[e])
-                        print(check_full(self))
-                        if not check_full(self):
-                            solutions += 1
-                            print(solutions)
-                            new = calculate_cost(self)
-                            if new < best:
-                                best = new
-                                links_copy = copy.copy([self.houses, self.batteries])
-                                results_list.append(links_copy)
-                                cost_list.append(new)
-
-    print(cost_list)
+        self.extra.append(self.houses[i])
+    print("Initialized")
+    search(self, self.digit)
+    for i in range(self.solutions):
+        print(f"The costs for solution{i}: {self.cost_list[i]}")
     with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
-        pickle.dump(results_list, f)
+        pickle.dump(self.results_list, f)
+
+def search(self, num):
+    prospect = (150 - self.digit) * 9 * 10
+    lower = (150 - self.digit) * 50 + 1507
+    for battery in self.batteries:
+        if self.batteries[battery].full() > lower:
+            self.digit -= 1
+            return
+    if calculate_cost(self) > self.best + prospect:
+        self.digit -= 1
+        return
+    else:
+        for battery in self.batteries:
+            if self.extra[num].link == self.batteries[battery]:
+                pass
+            else:
+                swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
+            if not check_full(self):
+                self.solutions += 1
+                print(f"Amount of solutions: {self.solutions}")
+                new = calculate_cost(self)
+                self.cost_list.append(new)
+                if new < self.best:
+                    self.best = new
+                    self.links_copy = copy.copy([self.houses, self.batteries])
+                    self.results_list.append(self.links_copy)
+            if self.digit < 149:
+                self.digit += 1
+                search(self, self.digit)
+    if self.digit < 125:
+        print(f"Current house: {self.digit}")
+    self.digit -= 1
