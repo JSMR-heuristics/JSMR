@@ -50,6 +50,7 @@ class Smartgrid(object):
             self.link_houses()
             self.greedy(1000)
 
+
         self.load()
         self.plot_houses()
 
@@ -71,6 +72,8 @@ class Smartgrid(object):
             mini_list = []
             while total_cap > 0:
                 for i in index:
+                    if total_cap <= 0:
+                        break
                     total_cap -= batts[i]
                     mini_list.append(batts[i])
             config_list.append(mini_list)
@@ -163,23 +166,23 @@ class Smartgrid(object):
                     self.calculate_cable()
                     self.link_houses()
                     self.greedy(1000)
+                    # self.plot_houses()
             self.big_iterations = -1
             self.small_iterations = 0
             self.caps = []
 
-        # return dict to INIT
         return batteries
 
     def set_attributes(self):
         for i, battery in enumerate(sorted(self.batteries.values(), key=operator.attrgetter("weight"))):
             setattr(battery, "cap", self.caps[self.big_iterations][i])
-            if self.caps[self.big_iterations][i] == 450:
+            if self.caps[self.big_iterations][i] is 450:
                 cost = 900
-            elif self.caps[self.big_iterations][i] == 900:
+            elif self.caps[self.big_iterations][i] is 900:
                 cost = 1350
             else:
                 cost = 1800
-            setattr(battery, "cost", self.caps[self.big_iterations][i])
+            setattr(battery, "cost", cost)
 
     def plot_houses(self):
 
@@ -189,12 +192,20 @@ class Smartgrid(object):
         ax = plt.gca()
         ax.axis([-2, 52, -2 , 52])
         ax.scatter(x_houses , y_houses, marker = ".")
-        ax.scatter(x_batt, y_batt, marker = "o", s = 40, c = "r" )
+        tot_cap = 0
+        for battery in self.batteries.values():
+            tot_cap += int(battery.cap)
+            if int(battery.cap) == 450:
+                ax.scatter(battery.x, battery.y, marker="o", s=25, c="r")
+            elif int(battery.cap) == 900:
+                ax.scatter(battery.x, battery.y, marker="o", s=50, c="r")
+            elif int(battery.cap) == 1800:
+                ax.scatter(battery.x, battery.y, marker="o", s=75, c="r")
         ax.set_xticks(np.arange(0, 52, 1), minor = True)
         ax.set_yticks(np.arange(0, 52, 1), minor = True)
         ax.grid(b = True, which="major", linewidth=1)
         ax.grid(b = True, which="minor", linewidth=.2)
-
+        print(f"Total capacity of batteries: {tot_cap}")
         total = 0
         for house in list(self.houses.values()):
 
@@ -230,11 +241,12 @@ class Smartgrid(object):
         print(f"Cost of batts: {batt_cost}")
         print(f"Total: {total + batt_cost}")
 
+        # LEGENDA TOEVOEGEN
 
+        plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost}, Total: {total + batt_cost}")
+        plt.suptitle(f"Best configuration found for neighbourhood {self.neighbourhood}", fontsize=15)
         plt.show()
         plt.savefig('plot.png')
-
-
 
     def link_houses(self):
 
@@ -248,7 +260,7 @@ class Smartgrid(object):
             self.batteries[ord_dist[0][0]].linked_houses.append(house)
             diff = ord_dist[0][1]
             ord_dist_diff = ord_dist
-            del ord_dist_diff[0]
+            ord_dist_diff
             diffs = {}
             for index in range(len(ord_dist_diff)):
                 diffs[ord_dist_diff[index][0]] = int(ord_dist_diff[index][1]) - diff
@@ -335,7 +347,7 @@ class Smartgrid(object):
                 # for every house find closest battery to connect to provided
                 # that this house wont over-cap the battery
                 for house in random_houses:
-                    for i in range(5):
+                    for i in range(len(self.batteries.values())):
                         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                             house.link = self.batteries[list(house.diffs)[i]]
                             self.batteries[list(house.diffs)[i]].linked_houses.append(house)
@@ -355,6 +367,7 @@ class Smartgrid(object):
             with open(f"weighted_clusters_WIJK{self.neighbourhood}.dat", "wb") as f:
                 pickle.dump([self.houses, self.batteries], f)
 
+        # self.plot_houses()
         return min(prices)
 
     def check_linked(self):

@@ -2,7 +2,6 @@
 
 import sys
 import csv
-# import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.ticker as ticker
 import re
@@ -105,7 +104,7 @@ class Cluster(object):
             n_clusters, noise_points, X, labels, mask_samples = self.cluster_scan(X, settings_list, counter)
             counter += 1
 
-            if n_clusters in [6, 9, 12, 15, 18]:
+            if n_clusters in [5, 6, 7, 8, 9, 10, 11, 13, 17]:
                 working_settings.append([settings_list[counter][0], settings_list[counter][1]])
                 subplot_data.append([X, labels, mask_samples, n_clusters, big_counter])
                 big_counter += 1
@@ -203,18 +202,11 @@ class Cluster(object):
             with open (path, "w") as f:
                 f.write(str(weights))
             total_w.append(weights)
-        print(clusters)
-        print(sum(clusters))
-        print(len(total_w))
-        print(sorted(total_w))
-        fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
-        plt.show()
+        # fig.suptitle("Choose one of these plots and enter after closing this window", fontsize=16)
+        # plt.show()
 
 if __name__ == "__main__":
-    start_time = time.clock()
-    print(f"Start: {start_time}")
     input = input("input: ")
     smart = Cluster(input)
+    print("Finding battery configurations...")
     smart.find_clusters()
-
-    print(time.clock() - start_time, "seconds")
