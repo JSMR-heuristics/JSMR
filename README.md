@@ -101,4 +101,3 @@ We considered to implement an archive for the algorithm so we can ensure a rando
  * run "main.py" in the JSMR repo
  * type in the command line {the number of the neighborhood}-{which algorithm: "stepdown"/"greedy"/"hill"}-{iterations}
    * you can type "spec" if you prefer to insert the details prompt-based
-   * follow the prompt instructions to run our program
