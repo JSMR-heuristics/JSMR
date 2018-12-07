@@ -81,9 +81,11 @@ The other part which influences the length of one iteration is the hillclimber i
 
 We have also tried to create a Hill-Climber which takes two house-battery pairs, but the increase in time length compared to sub-par improvements, made us conclude that it is not worth it to chase this path.
 
+### Cluster
+
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
-![alt_text](results/pres_figures/Wijken_random_greedy_breed.png)
+![alt_text](results/pres_figures/wijken_figure.png)
 *Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
 
 ### Other considerations
