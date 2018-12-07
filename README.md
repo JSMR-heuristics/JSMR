@@ -88,6 +88,7 @@ This clustering is applied in two different fashions. The first of which, aims t
 The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 13 or 17 clusters, because these are the only numbers of batteries we can use to find a profitable battery-set. These sets are profitable because with these configurations don't result in redundant amounts of total capacity. This selection also reduces the statespace and runtime immensely.
 
 ![alt_text](/results/pres_figures/batt_tabel.png)
+
 *Battery options*
 
 
