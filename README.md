@@ -85,7 +85,7 @@ We have also tried to create a Hill-Climber which takes two house-battery pairs,
 To find the optimal location for the battery, a density- based clustering algorithm (DBSCAN) is applied to the 'houses-dataset' of each neighbourhood. This algorithms takes multiple parameters, two of which are eps and minPTS. Eps represents the radius of a datapoint in which other datapoints are regarded as part of a cluster. MinPTS represents the minimal number of datapoints in the given radius needed to define a group of datapoints as a cluster. Since the placement of houses differs between the dataset, we chose to iterate over different settings and use only the eps and minPTS values which result in usable clustering. 
 
 This clustering is applied in two different fashions. The first of which, aims to find 5 clusters. All the results are tested with our greedy algorithm and the configuration with the lowest outcome will be saved, for later testing with our other algorithms. 
-The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 13 or 17 clusters, because these are the only numbers of batteries we can use to find a profitable battery-set. These sets are profitable because with these configurations don't result in redundant amounts of total capacity.
+The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 13 or 17 clusters, because these are the only numbers of batteries we can use to find a profitable battery-set. These sets are profitable because with these configurations don't result in redundant amounts of total capacity. This selection also reduces the statespace and runtime immensely.
 
 ![alt_text](/results/pres_figures/batt_tabel.png)
 
