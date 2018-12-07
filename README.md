@@ -86,7 +86,7 @@ To find the optimal location for the battery, a density- based clustering algori
 
 This clustering is applied in two different fashions. The first of which, aims to find 5 clusters. All the results are tested with our greedy algorithm and the configuration with the lowest outcome will be saved, for later testing with our other algorithms. (THIS IS STILL MANUAL). The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 13 or 17 clusters, because these are the only numbers of batteries we can use
 
-[alt_text](/results/pres_figures/batt_tabel.png)
+![alt_text](/results/pres_figures/batt_tabel.png)
 
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
