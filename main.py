@@ -35,17 +35,15 @@ class Main(object):
         else:
             if sys.argv[1] in ["1", "2", "3"]:
                 neighbourhood = int(sys.argv[1])
-                print("n")
             else:
                 print("please insert either a valid neighbourhood number or \"spec\" as 1st argument")
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs", "configure"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
-                print("al")
 
             elif sys.argv[2] == "configure":
                 Cluster2(neighbourhood)
@@ -59,11 +57,9 @@ class Main(object):
 
             if sys.argv[2] == "stepdown":
                     iterations = 1
-                    print("num2")
             else:
                 if sys.argv[3].isnumeric():
                     iterations = int(sys.argv[3])
-                    print("num2")
                 else:
                     print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
                     sys.exit(2)
