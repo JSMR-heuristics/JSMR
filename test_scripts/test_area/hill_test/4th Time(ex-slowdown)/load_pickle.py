@@ -126,7 +126,11 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
+<<<<<<< HEAD:test_scripts/test_area/load_pickle.py
         with open("weighted_clusters_WIJK2.dat", "rb") as f:
+=======
+        with open("hill_climber_batt_lowest_WIJK3_06122018.dat", "rb") as f:
+>>>>>>> 346c75e746c5d506605dbbd56a8e0bc6d2d4722f:test_scripts/test_area/hill_test/4th Time(ex-slowdown)/load_pickle.py
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 

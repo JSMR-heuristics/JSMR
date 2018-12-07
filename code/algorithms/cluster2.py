@@ -27,7 +27,6 @@ VERANDERT WORDEN
 cwd = os.getcwd()
 cwd = os.path.dirname(cwd)
 cwd = os.path.dirname(cwd)
-print(cwd)
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
 from battery import Battery
@@ -41,9 +40,10 @@ from helpers import *
 # Validates user input and gives instructions if it's wrong
 
 
-class Cluster(object):
-    def __init__(self, input):
-        self.input = input
+class Cluster2(object):
+    def __init__(self, neighbourhood):
+        print("Finding battery configurations...")
+        self.input = neighbourhood
         self.houses = self.load_houses()
 
         self.find_clusters()
@@ -55,8 +55,6 @@ class Cluster(object):
         """
         # find specific directory with the data
         cwd = os.getcwd()
-        cwd = os.path.dirname(cwd)
-        cwd = os.path.dirname(cwd)
         path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
         # open file
         with open(path) as houses_csv:
@@ -132,7 +130,7 @@ class Cluster(object):
         price = 1800
         cap_max = 1800
 
-        fig, axs = plt.subplots(1, n_plots, figsize=(18, 6))
+        # fig, axs = plt.subplots(1, n_plots, figsize=(18, 6))
 
         for index in range(n_plots):
             # Black removed and is used for noise instead.
@@ -166,27 +164,25 @@ class Cluster(object):
                         list_X.append(mean(xy_big[:,0]))
                         list_Y.append(mean(xy_big[:,1]))
 
-                axs[index].plot(xy_big[:, 0], xy_big[:, 1], 'o', markerfacecolor=tuple(col),
-                         markeredgecolor='k', markersize=14)
+                # axs[index].plot(xy_big[:, 0], xy_big[:, 1], 'o', markerfacecolor=tuple(col),
+                #          markeredgecolor='k', markersize=14)
 
                 xy_small = X[class_member_mask & ~mask_samples]
                 if xy_small[:,0].any() and xy_small[:,1].any() and col[0] is not 0:
                         list_X.append(mean(xy_small[:,0]))
                         list_Y.append(mean(xy_small[:,1]))
-
-                axs[index].plot(xy_small[:, 0], xy_small[:, 1], 'o', markerfacecolor=tuple(col),
-                         markeredgecolor='k', markersize=6)
-
-                axs[index].set_title(f"{index + 1} - {n_clusters} clusters")
-                clusters.append(n_clusters)
+                #
+                # axs[index].plot(xy_small[:, 0], xy_small[:, 1], 'o', markerfacecolor=tuple(col),
+                #          markeredgecolor='k', markersize=6)
+                #
+                # axs[index].set_title(f"{index + 1} - {n_clusters} clusters")
+                # clusters.append(n_clusters)
 
                 if list_X and list_Y:
                     all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap[int(self.input) - 1]}\n"
                     weights.append(len(xy_big) * 3 + len(xy_small))
 
             cwd = os.getcwd()
-            cwd = os.path.dirname(cwd)
-            cwd = os.path.dirname(cwd)
             path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster2_{big_counter}.txt"])
             sys.path.append(path)
 
@@ -194,8 +190,6 @@ class Cluster(object):
                 f.write(all_coords)
 
             cwd = os.getcwd()
-            cwd = os.path.dirname(cwd)
-            cwd = os.path.dirname(cwd)
             path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster2_{big_counter}_weigth.txt"])
             sys.path.append(path)
 
@@ -206,7 +200,4 @@ class Cluster(object):
         # plt.show()
 
 if __name__ == "__main__":
-    input = input("input: ")
-    smart = Cluster(input)
-    print("Finding battery configurations...")
-    smart.find_clusters()
+    self.find_clusters()

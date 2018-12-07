@@ -47,7 +47,7 @@ from house import House
 #         PLOT = True
 
 class Smartgrid(object):
-    def __init__(self, neighbourhood, algorithm, iterations, plot, cluster_option, battery_file):
+    def __init__(self, neighbourhood, algorithm, iterations, plot, cluster_option):
         self.input = neighbourhood
         self.algorithm = algorithm
         self.iterations = iterations
@@ -57,8 +57,11 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
+        self.pickle_file = ""
         self.run_algorithm()
-        self.plot_houses(50)
+        self.cost = calculate_cost(self)
+        if self.plot_option is "y":
+            self.plot_houses(50)
 
 
     def load_houses(self):
@@ -100,6 +103,7 @@ class Smartgrid(object):
         # find specific directory with the data
         cwd = os.getcwd()
 
+        # Not clusteroptions will be called more often so is pu in if statement
         if not self.cluster_option:
             path = os.path.join(*[cwd, 'data', f'wijk{self.input}_batterijen.txt'])
         else:
@@ -245,7 +249,7 @@ class Smartgrid(object):
         if self.algorithm == "stepdown":
             stepdown(self)
         elif self.algorithm == "greedy":
-            greedy(self, self.iterations)
+            self.pickle_file = greedy(self, self.iterations)
         elif self.algorithm == "hill":
             hill_climber(self, self.iterations)
         elif self.algorithm == "backup":
