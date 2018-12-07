@@ -82,7 +82,7 @@ def find_best_backup(self, list, status):
 # conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
 # conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
 
-def swap_houses(self, house, current_batt, next_batt, changes):
+def swap_houses(self, house, current_batt, next_batt):
     """
     Switches house from battery it's currently linked to, to the next
     one
@@ -90,10 +90,6 @@ def swap_houses(self, house, current_batt, next_batt, changes):
     house.link = next_batt
     next_batt.linked_houses.append(house)
     current_batt.linked_houses.remove(house)
-    print(f"house at x{house.x}/y{house.y} changed from battery at x{current_batt.x}/y{current_batt.y} to battery at x{next_batt.x}/y{next_batt.y}")
-    print(f"house capacity = {house.output}")
-    print(f"capacity = {current_batt.filled()}")
-    print(f"changes = {changes}")
 
 def check_linked(self):
     """
@@ -113,11 +109,10 @@ def check_full(self):
     Returns True if one or more of the batteries is over it's
     capacity, False if not.
     """
-    switch = False
     for battery in self.batteries.values():
         if battery.full() is True:
-            switch = True
-    return switch
+            return True
+    return False
 
 def disconnect(self):
     """

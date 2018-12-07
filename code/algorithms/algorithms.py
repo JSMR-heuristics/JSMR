@@ -129,6 +129,8 @@ def greedy(self, iterations):
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
+    return int(min(prices))
+
 
 def hill_climber(self, iterations):
     """
@@ -269,39 +271,70 @@ def backup(self):
             swap_houses(self, house, curr_batt, to_batt, changes)
 
 
-def dfs():
+def dfs(self):
+    # print(self.batteries[0])
+    # print(self.batteries[1])
+    # print(self.batteries[2])
+    # print(self.batteries[3])
+    # print(self.batteries[4])
+    # nope = 0
+    # yup = 0
     solutions = 0
+    results_list = []
     cost_list = []
-    best = 99999999
+    best = 33660
     a, b, c, d, e = 0, 1, 2, 3, 4
-    for one in self.houses.values():
-        one.link = self.batteries[a].values()
-        for two in self.houses.values():
-            if two == one:
+    x = 0
+    for i in self.houses:
+        self.houses[i].link = self.batteries[0]
+        self.batteries[0].linked_houses.append(self.houses[i])
+    for one in self.houses:
+        swap_houses(self, self.houses[one], self.houses[one].link, self.batteries[a])
+        print(f"Amount of rounds = {x}")
+        x += 1
+        for two in self.houses:
+            if self.houses[two] == self.houses[one]:
+                # nope += 1
+                # print(f"nope = {nope}")
                 pass
             else:
-                two.link = self.batteries[b].values()
-            for three in self.houses.values():
-                if three == one or three == two:
+                # yup += 1
+                # print(f"yup = {yup}")
+                # print(self.houses[one].link)
+                # print(self.houses[two].link)
+                # print(self.houses[three].link)
+                # print(self.houses[four].link)
+                # print(self.houses[five].link)
+                swap_houses(self, self.houses[two], self.houses[two].link, self.batteries[b])
+            for three in self.houses:
+                if self.houses[three] == self.houses[one] or self.houses[three] == self.houses[two]:
                     pass
                 else:
-                    three.link = self.batteries[c].values()
-                for four in self.houses.values():
-                    if four == one or four == two or four == three:
+                    swap_houses(self, self.houses[three], self.houses[three].link, self.batteries[c])
+                for four in self.houses:
+                    # print(d)
+                    if self.houses[four] == self.houses[one] or self.houses[four] == self.houses[two] or self.houses[four] == self.houses[three]:
                         pass
                     else:
-                        four.link = self.batteries[d].values()
-                    for five in self.houses.values():
-                        if five == one or five == two or five == three or five == four or self.batteries[e].full():
-                            pass
+                        swap_houses(self, self.houses[four], self.houses[four].link, self.batteries[d])
+                    for five in self.houses:
+                        # print(e)
+                        if self.batteries[e].full():
+                            break
+                        if self.houses[five] == self.houses[one] or self.houses[five] == self.houses[two] or self.houses[five] == self.houses[three] or self.houses[five] == self.houses[four]:
+                            continue
                         else:
-                            five.link = self.batteries[e].values()
-                        if not check_full():
+                            swap_houses(self, self.houses[five], self.houses[five].link, self.batteries[e])
+                        if not check_full(self):
                             solutions += 1
                             print(solutions)
-                            new = calculate_cost()
+                            new = calculate_cost(self)
                             if new < best:
                                 best = new
                                 links_copy = copy.copy([self.houses, self.batteries])
+                                results_list.append(links_copy)
                                 cost_list.append(new)
+
     print(cost_list)
+    with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
+        pickle.dump(results_list, f)

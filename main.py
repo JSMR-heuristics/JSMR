@@ -20,7 +20,7 @@ else:
         print("select from: 1, 2, 3, \"spec\"")
         sys.exit(2)
 
-    if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster"]:
+    if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
         algorithm = sys.argv[2]
         cluster_option = None
         battery_file = None
