@@ -45,9 +45,8 @@ which results in:
 total state space with 5 batteries:  
 * 2500^5 + 150^5
 
-and we predict that no more than 10 batteries will be used.  
-Thus having a state space not exceeding:
-* 2500^10 + 150^10
+From the possible batttery sets that we've created, we can see that the highest amount of batteries that theoretically will be included equals 17. Thus having a state space not exceeding:
+* 2500^17 + 150^17
 
 
 ## Progress:
