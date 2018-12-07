@@ -271,7 +271,7 @@ def backup(self):
             swap_houses(self, house, curr_batt, to_batt, changes)
 
 def dfs(self):
-    self.best = 300000
+    self.best = greedy(self, 500)
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
@@ -288,7 +288,7 @@ def dfs(self):
         pickle.dump(self.results_list, f)
 
 def search(self, num):
-    prospect = (150 - self.digit) * 9 * 10
+    prospect = (150 - self.digit) * 90
     lower = (150 - self.digit) * 50 + 1507
     for battery in self.batteries:
         if self.batteries[battery].full() > lower:
