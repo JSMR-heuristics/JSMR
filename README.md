@@ -91,7 +91,7 @@ The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 1
 
 
 ### The effectiveness of our greedy and combined "step-down" algorithms are demonstrated in these charts:
-![alt_text](results/pres_figures/wijken_figure.png)
+![alt_text](results/pres_figures/compare_algorithms2.png)
 *Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
 
 ### Other considerations
