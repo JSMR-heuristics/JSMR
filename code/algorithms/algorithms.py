@@ -294,37 +294,23 @@ def dfs(self):
         x += 1
         for two in self.houses:
             if self.houses[two] == self.houses[one]:
-                # nope += 1
-                # print(f"nope = {nope}")
-                pass
-            else:
-                # yup += 1
-                # print(f"yup = {yup}")
-                # print(self.houses[one].link)
-                # print(self.houses[two].link)
-                # print(self.houses[three].link)
-                # print(self.houses[four].link)
-                # print(self.houses[five].link)
-                swap_houses(self, self.houses[two], self.houses[two].link, self.batteries[b])
+                continue
+            swap_houses(self, self.houses[two], self.houses[two].link, self.batteries[b])
             for three in self.houses:
                 if self.houses[three] == self.houses[one] or self.houses[three] == self.houses[two]:
-                    pass
-                else:
-                    swap_houses(self, self.houses[three], self.houses[three].link, self.batteries[c])
+                    continue
+                swap_houses(self, self.houses[three], self.houses[three].link, self.batteries[c])
                 for four in self.houses:
-                    # print(d)
                     if self.houses[four] == self.houses[one] or self.houses[four] == self.houses[two] or self.houses[four] == self.houses[three]:
-                        pass
-                    else:
-                        swap_houses(self, self.houses[four], self.houses[four].link, self.batteries[d])
+                        continue
+                    swap_houses(self, self.houses[four], self.houses[four].link, self.batteries[d])
                     for five in self.houses:
-                        # print(e)
                         if self.batteries[e].full():
                             break
                         if self.houses[five] == self.houses[one] or self.houses[five] == self.houses[two] or self.houses[five] == self.houses[three] or self.houses[five] == self.houses[four]:
                             continue
-                        else:
-                            swap_houses(self, self.houses[five], self.houses[five].link, self.batteries[e])
+                        swap_houses(self, self.houses[five], self.houses[five].link, self.batteries[e])
+                        print(check_full(self))
                         if not check_full(self):
                             solutions += 1
                             print(solutions)

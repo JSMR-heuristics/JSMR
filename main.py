@@ -10,43 +10,10 @@ sys.path.append(path)
 from smartgrid import Smartgrid
 from cluster import Cluster
 
-if "spec" in sys.argv:
-    spec = True
-else:
-    if sys.argv[1] in ["1", "2", "3"]:
-        neighbourhood = int(sys.argv[1])
-    else:
-        print("please insert either a valid neighbourhood number or \"spec\" as 1st argument")
-        print("select from: 1, 2, 3, \"spec\"")
-        sys.exit(2)
-
-    if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
-        algorithm = sys.argv[2]
-        cluster_option = None
-        battery_file = None
-
-    else:
-        print("please insert the wanted algorithm as 2nd argument")
-        print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\",\"spec\"")
-        sys.exit(2)
-
-    if sys.argv[2] == "stepdown":
-            iterations = 1
-    else:
-        if sys.argv[3].isnumeric():
-            iterations = int(sys.argv[3])
-        else:
-            print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
-            sys.exit(2)
-
-    if "plot" in sys.argv:
-        plot = "y"
-    else:
-        plot = "n"
 
 class Main(object):
     def __init__(self):
-        if spec is True:
+        if "spec" in sys.argv:
             iterations = None
             battery_file = None
             neighbourhood = input("Neighbourhood (1/2/3): ")
@@ -63,6 +30,42 @@ class Main(object):
                 iterations = input("Iterations: ")
             plot = input("Do you want intermediate plots to be made? (y/n): ")
 
+        else:
+            if sys.argv[1] in ["1", "2", "3"]:
+                neighbourhood = int(sys.argv[1])
+                print("n")
+            else:
+                print("please insert either a valid neighbourhood number or \"spec\" as 1st argument")
+                print("select from: 1, 2, 3, \"spec\"")
+                sys.exit(2)
+
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
+                algorithm = sys.argv[2]
+                cluster_option = None
+                battery_file = None
+                print("al")
+
+            else:
+                print("please insert the wanted algorithm as 2nd argument")
+                print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\",\"spec\"")
+                sys.exit(2)
+
+            if sys.argv[2] == "stepdown":
+                    iterations = 1
+                    print("num2")
+            else:
+                if sys.argv[3].isnumeric():
+                    iterations = int(sys.argv[3])
+                    print("num2")
+                else:
+                    print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
+                    sys.exit(2)
+
+            if "plot" in sys.argv:
+                plot = "y"
+            else:
+                plot = "n"
+                print("no")
 
         Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option, battery_file)
 
