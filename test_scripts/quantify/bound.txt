@@ -23,6 +23,11 @@ closest: 53188.0
 furthest: 103030.0
 our: 71341
 
+1 cluster_EX
+.: 13860
+.: 76518
+.: 15174
+
 2 step-down
 closest: 45268.0
 furthest: 96253.0
@@ -44,8 +49,8 @@ furthest: 96253.0
 our: 45520
 
 2 hill_update
-closest: 53188.0
-furthest: 103030.0
+closest: 45268.0
+furthest: 96253.0
 our: 45574
 
 3 step-down

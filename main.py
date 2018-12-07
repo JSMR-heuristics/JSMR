@@ -27,7 +27,7 @@ class Main(object):
             else:
                 cluster_option = None
 
-            algorithm = str(input("Algorithm (stepdown/greedy/hill): "))
+            algorithm = str(input("Algorithm (stepdown/greedy/hill/configure): "))
             if algorithm == "greedy" or algorithm == "hill":
                 iterations = input("Iterations: ")
             plot = input("Do you want intermediate plots to be made? (y/n): ")
@@ -41,7 +41,7 @@ class Main(object):
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs", "configure"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
