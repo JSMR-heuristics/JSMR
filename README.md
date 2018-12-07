@@ -121,3 +121,4 @@ We considered to implement an archive for the algorithm so we can ensure a rando
    * you can type "spec" if you prefer to insert the details prompt-based
    * you can type "plot" behind the necessary command line arguments if you would like mid-process plots te be made
    * currently the stepdown algorithm does not function with neighborhood 3
+   * The amount of iterations is only taken into consideration towards algorithms that make use of it, but it should always be entered
