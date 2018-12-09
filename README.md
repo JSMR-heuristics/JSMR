@@ -104,17 +104,17 @@ The second approach aims to find any configuration with 5, 6, 7, 8, 9, 10, 11, 1
 *Step down is our combined algorithm where every house is linked to the closest battery, regardless of over-capacity. After this we iteratively change the configuration until the constraints are met. This algorithm is deterministic and therefore will is represented as a line in this graph*
 
 ### Other considerations
-We considered to implement an archive for the algorithm so we can ensure a randomized starting point which has not been used before, however the odds of that happening is 1 in 150^5. Moreover we don't keep an archive of every house-battery combination at the end of its respective iteration and only keep track of which iteration thus far has found the lowest value, due to the only relevance a certain set of combination has, is if it is the lowest cost of all the iterations.
+We considered implementing an archive into the algorithm, ensuring a randomized starting point that has not been used before. However, the odds of that happening are so small (1 in 7.59e10) we did not deem it usefull. Moreover, we don't keep an archive of every house-battery combination at the end of its respective iteration, and only keep track of which iteration thus far has found the lowest value. This is because the only set of combinations that is usefull to us is the one that has the lowest cost.
 
 ## Repository layout:
 * Our datafiles are stored in the "Huizen&batterijen" folder.
 * Processing takes place in the "scripts" folder.
-* Output files are stored in the "figures" folder.
-* Our testing area is contained in "test_scripts".
+* Our output files are stored in the "figures" folder.
+* We use the "test_scripts" folder as a testing area.
 
 ## Running the code:
 
- * run "main.py" in the JSMR repo
+ * Open a command window in the main folder, "JSMR".
  * In the command line, type:
  * Python main.py [the neighborhood: 1/2/3] [the algorithm: stepdown/greedy/hill/dfs/configure/cluster] [the amount of iterations: any interger of 0 or higher]
    * Entering "cluster" will return a result in accordance with this case's subgoal C, while "configure" will return a result in accordance with subgoal D.
