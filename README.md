@@ -116,9 +116,9 @@ We considered to implement an archive for the algorithm so we can ensure a rando
 
  * run "main.py" in the JSMR repo
  * In the command line, type:
- * Python main.py <the neighborhood: 1/2/3> <the algorithm: "stepdown"/"greedy"/"hill"/"dfs/"configure"/"cluster"> <the amount of iterations: any interger of 0 or higher>
-   * "cluster" gives a result in accordance with subgoal C from the case, whilst configure will give a result in accordance with subgoal D
-   * you can type "spec" if you prefer to insert the details prompt-based
-   * you can type "plot" behind the necessary command line arguments if you would like mid-process plots te be made
-   * currently the stepdown algorithm does not function with neighborhood 3
-   * The amount of iterations is only taken into consideration towards algorithms that make use of it, but it should always be entered
+ * Python main.py [the neighborhood: 1/2/3] [the algorithm: stepdown/greedy/hill/dfs/configure/cluster] [the amount of iterations: any interger of 0 or higher]
+   * Entering "cluster" will return a result in accordance with this case's subgoal C, while "configure" will return a result in accordance with subgoal D.
+   * Entering "spec" will allow you to insert the details through prompts.
+   * Entering "plot" behind the necessary command line arguments will return an number of mid-process plots.
+   * *Currently the stepdown algorithm does not function with neighborhood 3. For that neighborhood, an algorithm that uses the same logic, but is less effective, can be used by entering "backup".
+   * The amount of iterations entered is only taken into consideration towards algorithms that make use of it, but it should always be entered.
