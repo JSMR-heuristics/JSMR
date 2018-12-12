@@ -267,7 +267,7 @@ class Smartgrid(object):
                 # for every house find closest battery to connect to provided
                 # that this house wont over-cap the battery
                 for house in random_houses:
-
+                    number_list = [0]
                     for i in range(5):
                         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                             house.link = self.batteries[list(house.diffs)[i]]

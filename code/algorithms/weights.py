@@ -10,6 +10,7 @@ import ast
 import random
 import time
 import pickle
+from algorithms import *
 
 cwd = os.getcwd()
 path = os.path.join(*[cwd, "code", "classes"])
@@ -23,8 +24,10 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
                "fuchsia", "lime", "peru"]
 
 class Weights(object):
-    def __init__(self, neighbourhood):
+    def __init__(self, neighbourhood, algorithm, iterations):
         self.neighbourhood = neighbourhood
+        self.algorithm = algorithm
+        self.iterations = iterations
         self.configs = self.get_configs()
         self.houses = self.load_houses()
         self.big_iterations = -1
@@ -34,6 +37,8 @@ class Weights(object):
         self.lowest = 99999
         self.index = 0
         cluster_index = 1
+
+
         print("Checking all possible configurations with greedy...")
         for i in range(9):
             try:
@@ -43,7 +48,12 @@ class Weights(object):
                 break
             self.calculate_cable()
             self.link_houses()
-            self.greedy(1000)
+
+            if self.algorithm == "stepdown":
+                stepdown()
+            elif self.algorithm == "greedy":
+                greedy(self, self.iterations)
+                # self.greedy(1000)
 
 
         self.load()

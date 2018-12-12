@@ -77,7 +77,6 @@ class Cluster(object):
         # returns dict, goes to init (self.houses)
         return houses
 
-
     def find_clusters(self):
         # Generate sample data
         big_counter = 1

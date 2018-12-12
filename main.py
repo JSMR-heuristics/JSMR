@@ -33,30 +33,15 @@ class Main(object):
             plot = input("Do you want intermediate plots to be made? (y/n): ")
 
         else:
+            # neighbourhood
             if sys.argv[1] in ["1", "2", "3"]:
                 neighbourhood = int(sys.argv[1])
-                print("n")
             else:
                 print("please insert either a valid neighbourhood number or \"spec\" as 1st argument")
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs", "configure"]:
-                algorithm = sys.argv[2]
-                cluster_option = None
-                battery_file = None
-                print("al")
-
-            elif sys.argv[2] == "configure":
-                Cluster2(neighbourhood)
-                Weights(neighbourhood)
-                sys.exit()
-
-            else:
-                print("please insert the wanted algorithm as 2nd argument")
-                print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\", \"configure\", \"spec\"")
-                sys.exit(2)
-
+            # iteration here due to configure needing iterations
             if sys.argv[2] == "stepdown":
                     iterations = 1
                     print("num2")
@@ -65,8 +50,27 @@ class Main(object):
                     iterations = int(sys.argv[3])
                     print("num2")
                 else:
-                    print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
-                    sys.exit(2)
+                    # print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
+                    # sys.exit(2)
+                    print("No #iteration given, will be set to 1000")
+                    iterations = 1000
+
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
+                algorithm = sys.argv[2]
+                cluster_option = None
+                battery_file = None
+
+                if ("configure" in sys.argv) and not (sys.argv[2] == "cluster"):
+                    Cluster2(neighbourhood)
+                    Weights(neighbourhood, algorithm, iterations)
+                    sys.exit()
+
+            else:
+                print("please insert the wanted algorithm as 2nd argument")
+                print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\", \"configure\", \"spec\"")
+                sys.exit(2)
+
+
 
             if "plot" in sys.argv:
                 plot = "y"
