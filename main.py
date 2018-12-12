@@ -37,6 +37,7 @@ class Main(object):
             plot = input("Do you want intermediate plots to be made? (y/n): ")
 
         else:
+            # neighbourhood
             if sys.argv[1] in ["1", "2", "3"]:
                 neighbourhood = int(sys.argv[1])
             else:
@@ -44,47 +45,53 @@ class Main(object):
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
+            # iteration here due to configure needing iterations
+            if sys.argv[2] == "stepdown":
+                    iterations = 1
+                    print("num2")
+            else:
+                if sys.argv[3].isnumeric():
+                    iterations = int(sys.argv[3])
+                    print("num2")
+                else:
+                    # print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
+                    # sys.exit(2)
+                    print("No #iteration given, will be set to 1000")
+                    iterations = 1000
+
             if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
 
-            elif sys.argv[2] == "configure":
-                Cluster2(neighbourhood)
-                Weights(neighbourhood)
-                sys.exit()
-            elif sys.argv[2] == "cluster":
-                cluster = Cluster(neighbourhood)
-                costs = []
-                min_cost = 999999
-                index = 0
-                for i in cluster.options_list:
-                    print(f"Checking option {i}...")
-                    smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
-                    if smart.cost < min_cost:
-                        file = smart.pickle_file
-                        min_cost = smart.cost
-                        index = i
-                print(file)
-                load_pickle(self, file)
-                sys.exit()
+
+                if ("cluster" in sys.argv) and not("configure" in sys.argv):
+                    cluster = Cluster(neighbourhood)
+                    costs = []
+                    min_cost = 999999
+                    index = 0
+                    for i in cluster.options_list:
+                        print(f"Checking option {i}...")
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
+                        if smart.cost < min_cost:
+                            file = smart.pickle_file
+                            min_cost = smart.cost
+                            index = i
+                    print(file)
+                    load_pickle(self, file)
+                    sys.exit()
+
+                elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
+                    Cluster2(neighbourhood)
+                    Weights(neighbourhood)
+                    sys.exit()
 
             else:
                 print("please insert the wanted algorithm as 2nd argument")
                 print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\", \"configure\", \"spec\"")
                 sys.exit(2)
 
-            if sys.argv[2] == "stepdown":
-                    iterations = 1
-            else:
-                if len(sys.argv) < 4:
-                    print("Number of iterations should be given")
-                    sys.exit()
-                elif sys.argv[3].isnumeric():
-                    iterations = int(sys.argv[3])
-                else:
-                    print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
-                    sys.exit(2)
+
 
             if "plot" in sys.argv:
                 plot = "y"
