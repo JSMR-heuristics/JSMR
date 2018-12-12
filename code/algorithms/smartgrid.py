@@ -20,34 +20,8 @@ sys.path.append(path)
 from battery import Battery
 from house import House
 
-
-# nog aanpassen als we meerdere algoritmes en/of eigen wijken gaan maken
-# en voor tussenplots, die maken het algorimte een stuk slomer
-# Validates user input and gives instructions if it's wrong
-
-# PLOT = False
-# ALGORITHM = "optimize"
-#
-# if len(sys.argv) not in [2, 3]:
-#         print("Usage: python smargrid.py <wijknummer> <plot>\nwijknummer should be 1,2 or 3")
-#         sys.exit(2)
-# elif len(sys.argv) is 2:
-#     if int(sys.argv[1]) not in [1, 2, 3]:
-#         print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-#         sys.exit(2)
-#     else:
-#         INPUT = sys.argv[1]
-# elif len(sys.argv) is 3:
-#     if int(sys.argv[1]) not in [1, 2, 3] or sys.argv[2] != "plot":
-#         print("Usage: python smargrid.py <wijknummer>\nwijknummer should be 1,2 or 3")
-#         print("If you want plots type\n python smargrid.py <wijknummer> plot")
-#         sys.exit(2)
-#     else:
-#         INPUT = sys.argv[1]
-#         PLOT = True
-
 class Smartgrid(object):
-    def __init__(self, neighbourhood, algorithm, iterations, plot, cluster_option, battery_file):
+    def __init__(self, neighbourhood, algorithm, iterations, plot, cluster_option):
         self.input = neighbourhood
         self.algorithm = algorithm
         self.iterations = iterations
@@ -57,8 +31,11 @@ class Smartgrid(object):
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
+        self.pickle_file = ""
         self.run_algorithm()
-        self.plot_houses(50)
+        self.cost = calculate_cost(self)
+        if self.plot_option is "y":
+            self.plot_houses(50)
 
 
     def load_houses(self):
@@ -100,6 +77,7 @@ class Smartgrid(object):
         # find specific directory with the data
         cwd = os.getcwd()
 
+        # Not clusteroptions will be called more often so is pu in if statement
         if not self.cluster_option:
             path = os.path.join(*[cwd, 'data', f'wijk{self.input}_batterijen.txt'])
         else:
@@ -219,18 +197,7 @@ class Smartgrid(object):
 
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
-
-        ## adds the id to the batteries on the plot
-        ## alter in the sub3,4 to type of battery
-        # count = 0
-        # for battery in list(self.batteries.values()):
-        #     x = battery.x
-        #     y = battery.y
-        #     plt.text(x, y, f"{count}")
-        #     count += 1
         plt.show()
-        # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
-        # path = str(Path.cwd()).replace("scripts", subpath)
 
         cwd = os.getcwd()
         path = os.path.join(*[cwd, 'results', f'wijk_{self.input}/{self.algorithm}/plot{changes}_{self.algorithm}.png'])
@@ -245,7 +212,7 @@ class Smartgrid(object):
         if self.algorithm == "stepdown":
             stepdown(self)
         elif self.algorithm == "greedy":
-            greedy(self, self.iterations)
+            self.pickle_file = greedy(self, self.iterations)
         elif self.algorithm == "hill":
             hill_climber(self, self.iterations)
         elif self.algorithm == "backup":

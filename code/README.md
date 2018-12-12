@@ -1,9 +1,9 @@
 code folder consists of:
 * algorithms folder
-  * contains the: 
+  * contains the:
     * main file(smartgrid)
     * helpers file
 * classes folder
-  * contains the two classes files, 
+  * contains the two classes files,
     * battery
     * house

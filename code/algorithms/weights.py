@@ -1,14 +1,13 @@
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.ticker as ticker
 import re
 import operator
 from operator import itemgetter
-import os, sys
+import os
+import sys
 import ast
 import random
-import time
 import pickle
 from algorithms import *
 
@@ -23,8 +22,14 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
                "grey", "maroon", "yellow", "orange",
                "fuchsia", "lime", "peru"]
 
+
 class Weights(object):
+<<<<<<< HEAD
     def __init__(self, neighbourhood, algorithm, iterations):
+=======
+    """ Calculates battery conformation"""
+    def __init__(self, neighbourhood):
+>>>>>>> f47193143e909b54f039c6019ce889e358ed60b9
         self.neighbourhood = neighbourhood
         self.algorithm = algorithm
         self.iterations = iterations
@@ -203,7 +208,7 @@ class Weights(object):
             elif int(battery.cap) == 900:
                 ax.scatter(battery.x, battery.y, marker="o", s=50, c="r")
             elif int(battery.cap) == 1800:
-                ax.scatter(battery.x, battery.y, marker="o", s=75, c="r")
+                ax.scatter(battery.x, battery.y, marker="o", s=100, c="r")
         ax.set_xticks(np.arange(0, 52, 1), minor = True)
         ax.set_yticks(np.arange(0, 52, 1), minor = True)
         ax.grid(b = True, which="major", linewidth=1)
@@ -248,6 +253,17 @@ class Weights(object):
 
         plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost}, Total: {total + batt_cost}")
         plt.suptitle(f"Best configuration found for neighbourhood {self.neighbourhood}", fontsize=15)
+
+        color_list = ["r", "r", "r"]
+        text_list = ["450-900", "900-1350", "1800-1800"]
+        size_list = [5, 7.5, 10]
+
+        patches = [plt.plot([], [], marker="o", ms=size_list[i], ls="",
+                            color=color_list[i],
+                            label="{:s}".format(text_list[i]))[0] for i in range(len(text_list))]
+
+        plt.legend(handles=patches, bbox_to_anchor=(.5, -.15),
+                   loc="lower center", ncol=3, facecolor="white")
         plt.show()
         plt.savefig('plot.png')
 
@@ -261,19 +277,15 @@ class Weights(object):
             # for right now, the link is the shortest
             # regardless of battery capacity
             self.batteries[ord_dist[0][0]].linked_houses.append(house)
-            diff = ord_dist[0][1]
-            ord_dist_diff = ord_dist
-            ord_dist_diff
             diffs = {}
-            for index in range(len(ord_dist_diff)):
-                diffs[ord_dist_diff[index][0]] = int(ord_dist_diff[index][1]) - diff
+            for index in range(len(ord_dist)):
+                diffs[ord_dist[index][0]] = int(ord_dist[index][1])
             house.diffs = diffs
             house.ord_dist = dict(ord_dist)
 
     def calculate_cable(self):
-
         # get coordinates
-        x_houses, y_houses, x_batt, y_batt  = self.get_coordinates()
+        x_houses, y_houses, x_batt, y_batt = self.get_coordinates()
 
         all_diff = []
         for x_house, y_house in list(zip(x_houses, y_houses)):
@@ -351,9 +363,13 @@ class Weights(object):
                 # that this house wont over-cap the battery
                 for house in random_houses:
                     for i in range(len(self.batteries.values())):
-                        if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
-                            house.link = self.batteries[list(house.diffs)[i]]
-                            self.batteries[list(house.diffs)[i]].linked_houses.append(house)
+                        output = house.output
+                        curr = self.batteries[list(house.diffs)[i]].filled()
+                        cap = self.batteries[list(house.diffs)[i]].capacity
+                        if output + curr <= cap:
+                            batt = self.batteries[list(house.diffs)[i]]
+                            house.link = batt
+                            batt.linked_houses.append(house)
                             break
 
             # calculate price
@@ -367,7 +383,8 @@ class Weights(object):
 
         if min(prices) < self.lowest:
             self.lowest = min(prices)
-            with open(f"weighted_clusters_WIJK{self.neighbourhood}.dat", "wb") as f:
+            with open(f"weighted_clusters_WIJK{self.neighbourhood}.dat",
+                      "wb") as f:
                 pickle.dump([self.houses, self.batteries], f)
 
         # self.plot_houses()
@@ -414,12 +431,6 @@ class Weights(object):
             x_house, y_house = house.x, house.y
             x_batt, y_batt = house.link.x, house.link.y
 
-            # calculate the new coordinate for the vertical line
-            x_diff = x_batt - x_house
-            new_x = x_house + x_diff
-
-            line_colour = house.link.colour
-
             # calculate line cost
             cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
 
@@ -438,6 +449,7 @@ class Weights(object):
             house_batt = unpickler.load()
 
         self.houses, self.batteries = house_batt[0], house_batt[1]
+
 
 if __name__ == "__main__":
     Weights()

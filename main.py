@@ -11,10 +11,14 @@ from smartgrid import Smartgrid
 from cluster import Cluster
 from cluster2 import Cluster2
 from weights import Weights
+from helpers import *
 
 
 class Main(object):
     def __init__(self):
+        if len(sys.argv) is 1:
+            print("python main.py <1, 2, 3> <algorithm> <iterations>")
+            sys.exit()
         if "spec" in sys.argv:
             iterations = None
             battery_file = None
@@ -55,14 +59,31 @@ class Main(object):
                     print("No #iteration given, will be set to 1000")
                     iterations = 1000
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
 
-                if ("configure" in sys.argv) and not (sys.argv[2] == "cluster"):
+
+                if ("cluster" in sys.argv) and not("configure" in sys.argv):
+                    cluster = Cluster(neighbourhood)
+                    costs = []
+                    min_cost = 999999
+                    index = 0
+                    for i in cluster.options_list:
+                        print(f"Checking option {i}...")
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
+                        if smart.cost < min_cost:
+                            file = smart.pickle_file
+                            min_cost = smart.cost
+                            index = i
+                    print(file)
+                    load_pickle(self, file)
+                    sys.exit()
+
+                elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
                     Cluster2(neighbourhood)
-                    Weights(neighbourhood, algorithm, iterations)
+                    Weights(neighbourhood)
                     sys.exit()
 
             else:
@@ -76,9 +97,8 @@ class Main(object):
                 plot = "y"
             else:
                 plot = "n"
-                print("no")
 
-        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option, battery_file)
+        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option)
 
 
 if __name__ == "__main__":
