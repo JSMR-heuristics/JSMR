@@ -145,16 +145,6 @@ def calculate_cost(self):
         cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
     return cost
 
-def check_full(self):
-    """
-    Returns True if one or more of the batteries is over it's
-    capacity, False if not.
-    """
-    switch = False
-    for battery in self.batteries.values():
-        if battery.full() is True:
-            switch = True
-    return switch
 
 def switch_houses(self, house1, house2):
     # print(f"house1 x{house1.x}/y{house1.y} battery at x{house1.link.x}/y{house1.link.y} --> at x{house2.link.x}/y{house2.link.y}")
