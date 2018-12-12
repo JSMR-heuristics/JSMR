@@ -42,9 +42,9 @@ class Weights(object):
     def run_algorithm(self):
         print(f"Checking all possible configurations with {self.algorithm}...")
 
-        for i in range(9):
+        while True:
             try:
-                self.index = i + 1
+                self.index += 1
                 self.batteries = self.load_batteries(self.index)
             except FileNotFoundError:
                 break

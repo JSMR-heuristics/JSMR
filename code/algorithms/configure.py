@@ -40,7 +40,7 @@ from helpers import *
 # Validates user input and gives instructions if it's wrong
 
 
-class Cluster2(object):
+class Configure(object):
     def __init__(self, neighbourhood):
         print("Finding battery configurations...")
         self.input = neighbourhood

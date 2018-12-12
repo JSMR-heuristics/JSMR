@@ -9,7 +9,7 @@ sys.path.append(path)
 
 from smartgrid import Smartgrid
 from cluster import Cluster
-from cluster2 import Cluster2
+from configure import Configure
 from weights import Weights
 from helpers import *
 
@@ -83,7 +83,7 @@ class Main(object):
                     sys.exit()
 
                 elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
-                    Cluster2(neighbourhood)
+                    Configure(neighbourhood)
                     Weights(neighbourhood, algorithm, iterations)
                     sys.exit()
 
