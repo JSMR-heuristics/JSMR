@@ -25,11 +25,7 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
 
 class Weights(object):
     def __init__(self, neighbourhood, algorithm, iterations):
-<<<<<<< HEAD
-        self.neighbourhood = neighbourhood
-=======
         self.input = neighbourhood
->>>>>>> 2cf47476660d5d380edbdbdc4df3920fe3fb76ba
         self.algorithm = algorithm
         self.iterations = int(iterations)
         self.configs = self.get_configs()
@@ -40,10 +36,6 @@ class Weights(object):
         self.batteries = {}
         self.lowest = 99999
         self.index = 0
-<<<<<<< HEAD
-        print("Checking all possible configurations with greedy...")
-        for i in range(999):
-=======
         self.run_algorithm()
 
 
@@ -51,7 +43,6 @@ class Weights(object):
         print(f"Checking all possible configurations with {self.algorithm}...")
 
         for i in range(9):
->>>>>>> 2cf47476660d5d380edbdbdc4df3920fe3fb76ba
             try:
                 self.index = i + 1
                 self.batteries = self.load_batteries(self.index)
