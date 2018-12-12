@@ -237,10 +237,8 @@ class Weights(object):
 
         # LEGENDA TOEVOEGEN
 
-        plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost},",
-                  f"Total: {total + batt_cost}")
-        plt.suptitle(f"Best configuration found for neighbourhood",
-                     f"{self.neighbourhood}", fontsize=15)
+        plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost}, Total: {total + batt_cost}")
+        plt.suptitle(f"Best configuration found for neighbourhood {self.neighbourhood}", fontsize=15)
 
         color_list = ["r", "r", "r"]
         text_list = ["450-900", "900-1350", "1800-1800"]
