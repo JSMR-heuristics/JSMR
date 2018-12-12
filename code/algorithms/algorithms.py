@@ -277,6 +277,10 @@ def dfs(self):
     for i in self.houses:
         self.extra.append(self.houses[i])
     dfs_search(self, 0)
+    for i in range(self.solutions):
+        print(f"The costs for solution{i}: {self.cost_list[i]}")
+    with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
+        pickle.dump(self.results_list, f)
 
 
 def dfs_search(self, num):
@@ -296,11 +300,12 @@ def dfs_search(self, num):
                 self.best = new
                 self.links_copy = copy.copy([self.houses, self.batteries])
                 self.results_list.append(self.links_copy)
-    print(f"Current house: {num}")
+    if num < 125:
+        print(f"Current house: {num}")
 
 
 def bnb(self):
-    self.best = greedy(self, 500)
+    self.best = 22000
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
@@ -308,29 +313,24 @@ def bnb(self):
     self.extra = []
     for i in self.houses:
         self.extra.append(self.houses[i])
+        self.houses[i].filter()
     print("Initialized")
     bnb_search(self, 0)
     for i in range(self.solutions):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
-    with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
+    with open(f"bnb_result_for_WIJK{self.input}.dat", "wb") as f:
         pickle.dump(self.results_list, f)
 
 
 def bnb_search(self, num):
-    for battery in self.batteries:
-        if self.batteries[battery] == "farthest battery":
-            continue
+    lower = (150 - num) * 35 + 1507
+    prospect = (150 - num) * 70
+    for battery in self.extra[num].filtered:
+        if self.extra[num].link == self.batteries[battery]:
+            pass
         else:
-            prospect = (150 - num) * 90
-            lower = (150 - num) * 50 + 1507
-            if self.extra[num].link == self.batteries[battery]:
-                pass
-            else:
-                swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
-            if self.batteries[battery].full() > lower:
-                continue
-            elif calculate_cost(self) > self.best + prospect:
-                continue
+            swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
+        if num > 144:
             if num < 149:
                 bnb_search(self, num + 1)
             elif not check_full(self):
@@ -342,7 +342,23 @@ def bnb_search(self, num):
                     self.best = new
                     self.links_copy = copy.copy([self.houses, self.batteries])
                     self.results_list.append(self.links_copy)
-    if num < 125:
+        elif num > 115:
+            if self.batteries[battery].filled() > lower:
+                continue
+            elif calculate_cost(self) > self.best + prospect:
+                continue
+            else:
+                bnb_search(self, num + 1)
+        elif num < 15:
+            bnb_search(self, num + 1)
+        else:
+            if self.batteries[battery].filled() > lower:
+                return
+            elif calculate_cost(self) > self.best + prospect:
+                return
+            else:
+                bnb_search(self, num + 1)
+    if num < 100:
         print(f"Current house: {num}")
 
 def random_algorithm(self, iterations):

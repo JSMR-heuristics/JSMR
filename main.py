@@ -61,7 +61,11 @@ class Main(object):
                     print("No #iteration given, will be set to 1000")
                     iterations = 1000
 
+<<<<<<< HEAD
             if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "random"]:
+=======
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "bnb"]:
+>>>>>>> a36cb2ad1877347e0b9cbb2d87b418bbda7c0f3b
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None

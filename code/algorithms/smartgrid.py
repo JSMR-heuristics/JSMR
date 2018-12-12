@@ -227,6 +227,8 @@ class Smartgrid(object):
             dfs(self)
         elif self.algorithm == "random":
             random_algorithm(self, self.iterations)
+        elif self.algorithm == "bnb":
+            bnb(self)
 
 
 if __name__ == "__main__":
