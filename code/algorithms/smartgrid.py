@@ -4,9 +4,7 @@ import sys
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.ticker as ticker
 import re
-import operator
 import os
 
 from pathlib import Path
@@ -21,22 +19,22 @@ from battery import Battery
 from house import House
 
 class Smartgrid(object):
-    def __init__(self, neighbourhood, algorithm, iterations, plot, cluster_option):
+    def __init__(self, neighbourhood, algorithm, iterations, plot, c_option):
         self.input = neighbourhood
         self.algorithm = algorithm
         self.iterations = iterations
         self.plot_option = plot
-        self.cluster_option = cluster_option
+        self.c_option = c_option
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()
         self.link_houses()
         self.pickle_file = ""
         self.run_algorithm()
+        self.plot_houses(1)
         self.cost = calculate_cost(self)
         if self.plot_option is "y":
             self.plot_houses(50)
-
 
     def load_houses(self):
         """
@@ -78,10 +76,12 @@ class Smartgrid(object):
         cwd = os.getcwd()
 
         # Not clusteroptions will be called more often so is pu in if statement
-        if not self.cluster_option:
-            path = os.path.join(*[cwd, 'data', f'wijk{self.input}_batterijen.txt'])
+        if not self.c_option:
+            path = os.path.join(*[cwd, 'data',
+                                f'wijk{self.input}_batterijen.txt'])
         else:
-            path = os.path.join(*[cwd, 'data', f'wijk{self.input}_cluster_{self.cluster_option}.txt'])
+            path = os.path.join(*[cwd, 'data',
+                                f'wijk{self.input}_cluster_{self.c_option}.txt'])
 
         with open(path) as batteries_text:
 
@@ -160,17 +160,20 @@ class Smartgrid(object):
         cost of the cable
         """
 
-        x_houses, y_houses, x_batt, y_batt  = self.coordinates[0], self.coordinates[1], self.coordinates[2], self.coordinates[3]
+        x_houses, y_houses, x_batt, y_batt = (self.coordinates[0],
+                                              self.coordinates[1],
+                                              self.coordinates[2],
+                                              self.coordinates[3])
 
         # make plot
         ax = plt.gca()
-        ax.axis([-2, 52, -2 , 52])
-        ax.scatter(x_houses , y_houses, marker = ".")
-        ax.scatter(x_batt, y_batt, marker = "o", s = 40, c = "r" )
-        ax.set_xticks(np.arange(0, 52, 1), minor = True)
-        ax.set_yticks(np.arange(0, 52, 1), minor = True)
-        ax.grid(b = True, which="major", linewidth=1)
-        ax.grid(b = True, which="minor", linewidth=.2)
+        ax.axis([-2, 52, -2, 52])
+        ax.scatter(x_houses, y_houses, marker=".")
+        ax.scatter(x_batt, y_batt, marker="o", s=40, c="r")
+        ax.set_xticks(np.arange(0, 52, 1), minor=True)
+        ax.set_yticks(np.arange(0, 52, 1), minor=True)
+        ax.grid(b=True, which="major", linewidth=1)
+        ax.grid(b=True, which="minor", linewidth=.2)
 
         total = 0
         for house in list(self.houses.values()):
@@ -185,12 +188,12 @@ class Smartgrid(object):
             line_colour = house.link.colour
 
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], \
-            color=f'{line_colour}',linestyle='-', linewidth=1)
+            ax.plot([x_house, x_batt], [y_house, y_house],
+                    color=f'{line_colour}', linestyle='-', linewidth=1)
 
             # place vertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], \
-            color=f'{line_colour}',linestyle='-', linewidth=1)
+            ax.plot([new_x, new_x], [y_house, y_batt],
+                    color=f'{line_colour}', linestyle='-', linewidth=1)
 
             # calculate line cost
             total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
@@ -200,7 +203,10 @@ class Smartgrid(object):
         plt.show()
 
         cwd = os.getcwd()
-        path = os.path.join(*[cwd, 'results', f'wijk_{self.input}/{self.algorithm}/plot{changes}_{self.algorithm}.png'])
+        path = os.path.join(*[cwd, 'results',
+                            (f'wijk_{self.input}') +
+                            (f"/{self.algorithm}") +
+                            (f"/plot{changes}_{self.algorithm}.png")])
         sys.path.append(path)
 
 
