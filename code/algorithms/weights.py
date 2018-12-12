@@ -59,10 +59,11 @@ class Weights(object):
             elif self.algorithm == "hill":
                 hill_climber(self, self.iterations)
             elif self.algorithm == "dfs":
-                print("dfs not in algorithms...I think?...ZEBEZ!")
-            else:
-                print("lolwat")
-                sys.exit()
+                dfs(self)
+            elif self.algorithm == "random":
+                random_algorithm(self, self.iterations)
+            elif self.algorithm == "bnb":
+                bnb(self)
 
         self.load()
         self.plot_houses()
