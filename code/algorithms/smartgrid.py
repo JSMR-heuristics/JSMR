@@ -22,7 +22,7 @@ class Smartgrid(object):
     def __init__(self, neighbourhood, algorithm, iterations, plot, c_option):
         self.input = neighbourhood
         self.algorithm = algorithm
-        self.iterations = iterations
+        self.iterations = int(iterations)
         self.plot_option = plot
         self.c_option = c_option
         self.houses = self.load_houses()

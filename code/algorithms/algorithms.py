@@ -165,7 +165,7 @@ def hill_climber(self, iterations):
             # that this house wont over-cap the battery
             for house in random_houses:
 
-                for i in range(4):
+                for i in range(len(self.batteries.values())):
                     if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                         house.link = self.batteries[list(house.diffs)[i]]
                         self.batteries[list(house.diffs)[i]].linked_houses.append(house)

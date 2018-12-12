@@ -78,7 +78,7 @@ class Main(object):
                     index = 0
                     for i in cluster.options_list:
                         print(f"Checking option {i}...")
-                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
+                        smart = Smartgrid(neighbourhood, f"{algorithm}", iterations, "n", i)
                         if smart.cost < min_cost:
                             file = smart.pickle_file
                             min_cost = smart.cost
