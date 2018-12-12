@@ -4,10 +4,6 @@ class Battery(object):
         self.capacity = float(capacity)
         self.x = int(x)
         self.y = int(y)
-<<<<<<< HEAD
-        # self.id = f"{self.x}/{self.y}"
-=======
->>>>>>> cbc79e24fd035ce6abb25476951a40682bf18ba0
         self.colour = colour
         self.linked_houses = []
         # latere opdrachten de prijs

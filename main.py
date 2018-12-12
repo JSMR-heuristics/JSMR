@@ -16,6 +16,9 @@ from helpers import *
 
 class Main(object):
     def __init__(self):
+        if len(sys.argv) is 1:
+            print("python main.py <1, 2, 3> <algorithm> <iterations>")
+            sys.exit()
         if "spec" in sys.argv:
             iterations = None
             battery_file = None
@@ -41,11 +44,7 @@ class Main(object):
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
-<<<<<<< HEAD
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "cluster", "dfs",]:
-=======
             if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs"]:
->>>>>>> cbc79e24fd035ce6abb25476951a40682bf18ba0
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
@@ -78,7 +77,10 @@ class Main(object):
             if sys.argv[2] == "stepdown":
                     iterations = 1
             else:
-                if sys.argv[3].isnumeric():
+                if len(sys.argv) < 4:
+                    print("Number of iterations should be given")
+                    sys.exit()
+                elif sys.argv[3].isnumeric():
                     iterations = int(sys.argv[3])
                 else:
                     print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
@@ -89,7 +91,7 @@ class Main(object):
             else:
                 plot = "n"
 
-        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option, battery_file)
+        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option)
 
 
 if __name__ == "__main__":
