@@ -270,51 +270,76 @@ def backup(self):
             changes += 1
             swap_houses(self, house, curr_batt, to_batt, changes)
 
-def dfs(self):
+def bnb(self):
     self.best = greedy(self, 500)
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
     self.cost_list = []
     self.extra = []
-    self.digit = 0
     for i in self.houses:
         self.extra.append(self.houses[i])
     print("Initialized")
-    search(self, self.digit)
+    bnb_search(self, 0)
     for i in range(self.solutions):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
     with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
         pickle.dump(self.results_list, f)
 
-def search(self, num):
-    prospect = (150 - self.digit) * 90
-    lower = (150 - self.digit) * 50 + 1507
+def bnb_search(self, num):
     for battery in self.batteries:
-        if self.batteries[battery].full() > lower:
-            self.digit -= 1
-            return
-    if calculate_cost(self) > self.best + prospect:
-        self.digit -= 1
-        return
-    else:
-        for battery in self.batteries:
+        if self.batteries[battery] == "farthest battery":
+            continue
+        else:
+            prospect = (150 - num) * 90
+            lower = (150 - num) * 50 + 1507
             if self.extra[num].link == self.batteries[battery]:
                 pass
             else:
                 swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
+            if self.batteries[battery].full() > lower:
+                return
+            elif: calculate_cost(self) > self.best + prospect:
+                return
+            if num < 149:
+                bnb_search(self, num + 1)
+            else:
+                if not check_full(self):
+                    self.solutions += 1
+                    print(f"Amount of solutions found: {self.solutions}")
+                    new = calculate_cost(self)
+                    self.cost_list.append(new)
+                    if new < self.best:
+                        self.best = new
+                        self.links_copy = copy.copy([self.houses, self.batteries])
+                        self.results_list.append(self.links_copy)    
+    if num < 125:
+        print(f"Current house: {num}")
+
+
+def dfs(self):
+    self.best = greedy(self, 500)
+    self.extra = []
+    for i in self.houses:
+        self.extra.append(self.houses[i])
+    dfs_search(self, 0)
+
+
+def dfs_search(self, num):
+    for battery in self.batteries:
+        if self.extra[num].link == self.batteries[battery]:
+            pass
+        else:
+            swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
+        if num < 149:
+            dfs_search(self, num + 1)
+        else:
             if not check_full(self):
                 self.solutions += 1
-                print(f"Amount of solutions: {self.solutions}")
+                print(f"Amount of solutions found: {self.solutions}")
                 new = calculate_cost(self)
                 self.cost_list.append(new)
-                if new < self.best:
-                    self.best = new
-                    self.links_copy = copy.copy([self.houses, self.batteries])
-                    self.results_list.append(self.links_copy)
-            if self.digit < 149:
-                self.digit += 1
-                search(self, self.digit)
-    if self.digit < 125:
-        print(f"Current house: {self.digit}")
-    self.digit -= 1
+                    if new < self.best:
+                        self.best = new
+                        self.links_copy = copy.copy([self.houses, self.batteries])
+                        self.results_list.append(self.links_copy)
