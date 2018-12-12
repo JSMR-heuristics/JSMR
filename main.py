@@ -61,11 +61,7 @@ class Main(object):
                     print("No #iteration given, will be set to 1000")
                     iterations = 1000
 
-<<<<<<< HEAD
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "random"]:
-=======
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "bnb"]:
->>>>>>> a36cb2ad1877347e0b9cbb2d87b418bbda7c0f3b
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "random", "bnb"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
@@ -78,7 +74,7 @@ class Main(object):
                     index = 0
                     for i in cluster.options_list:
                         print(f"Checking option {i}...")
-                        smart = Smartgrid(neighbourhood, f"{algorithm}", iterations, "n", i)
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
                         if smart.cost < min_cost:
                             file = smart.pickle_file
                             min_cost = smart.cost

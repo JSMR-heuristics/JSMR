@@ -426,4 +426,7 @@ def random_algorithm(self, iterations):
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
-    
+    with open(f"random_greedy_lowest_WIJK{self.input}_{iterations}.dat", "rb") as f:
+        unpickler = pickle.Unpickler(f)
+        house_batt = unpickler.load()
+        self.houses, self.batteries = house_batt[0], house_batt[1]
