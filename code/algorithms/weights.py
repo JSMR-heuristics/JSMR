@@ -24,12 +24,7 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
 
 
 class Weights(object):
-<<<<<<< HEAD
     def __init__(self, neighbourhood, algorithm, iterations):
-=======
-    """ Calculates battery conformation"""
-    def __init__(self, neighbourhood):
->>>>>>> f47193143e909b54f039c6019ce889e358ed60b9
         self.neighbourhood = neighbourhood
         self.algorithm = algorithm
         self.iterations = iterations
@@ -41,14 +36,8 @@ class Weights(object):
         self.batteries = {}
         self.lowest = 99999
         self.index = 0
-<<<<<<< HEAD
-=======
-        cluster_index = 1
-
-
->>>>>>> 7f219f2ebe8698e067b731c3e6309b1d2e02a17c
         print("Checking all possible configurations with greedy...")
-        for i in range(9):
+        for i in range(999):
             try:
                 self.index = i + 1
                 self.batteries = self.load_batteries(self.index)
@@ -182,6 +171,7 @@ class Weights(object):
         return batteries
 
     def set_attributes(self):
+        """ Sets cost and capacity for the batteries. """
         for i, battery in enumerate(sorted(self.batteries.values(),
                                     key=operator.attrgetter("weight"))):
             setattr(battery, "cap", self.caps[self.big_iterations][i])
@@ -270,7 +260,7 @@ class Weights(object):
         plt.savefig('plot.png')
 
     def link_houses(self):
-
+        """NOG SAMENVOEGEN MET CALC CABLE"""
         # order the batteries for each house
         for house in list(self.houses.values()):
             dist = house.dist
@@ -286,7 +276,7 @@ class Weights(object):
             house.ord_dist = dict(ord_dist)
 
     def calculate_cable(self):
-        # get coordinates
+        """ Calculates length of cable between each house and battery. """
         x_houses, y_houses, x_batt, y_batt = self.get_coordinates()
 
         all_diff = []
@@ -307,6 +297,7 @@ class Weights(object):
 
 
     def get_coordinates(self):
+        """ Returns coordinates of houses and batteries"""
         x_houses = []
         y_houses = []
 
@@ -334,9 +325,6 @@ class Weights(object):
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
-
-
-        SEQUENCES ONTHOUDEN VOOR EXTRA PUNTEN!!!!!!!!!! id's
         """
         # turn houses into list
         random_houses = list(self.houses.values())
@@ -393,9 +381,8 @@ class Weights(object):
         return min(prices)
 
     def check_linked(self):
-        """
-        Checks whether every house is linked to a battery
-        """
+        """ Checks whether every house is linked to a battery. """
+
         count = 0
         for house in self.houses.values():
             if house.link:
@@ -406,7 +393,7 @@ class Weights(object):
             return False
 
     def disconnect(self):
-        """ Delete all connections """
+        """ Delete all connections. """
 
         for house in self.houses.values():
             house.link = None
