@@ -308,11 +308,14 @@ def bnb(self):
     self.best = 22000
     print(f"Score to beat: {self.best}")
     self.solutions = 0
+    self.up = 100 / 14641
+    self.per = self.up
     self.results_list = []
     self.cost_list = []
     self.extra = []
     for i in self.houses:
         self.extra.append(self.houses[i])
+        # print(self.houses[i].diffs)
         self.houses[i].filter()
     print("Initialized")
     bnb_search(self, 0)
@@ -323,40 +326,34 @@ def bnb(self):
 
 
 def bnb_search(self, num):
-    lower = (150 - num) * 35 + 1507
-    prospect = (150 - num) * 70
+    lower = (150 - num) * 50 + 1507
+    prospect = (150 - num) * 60 + self.best
     for battery in self.extra[num].filtered:
         if self.extra[num].link == self.batteries[battery]:
             pass
         else:
             swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
-        if num > 144:
-            if num < 149:
-                bnb_search(self, num + 1)
-            elif not check_full(self):
-                self.solutions += 1
-                print(f"Amount of solutions found: {self.solutions}")
-                new = calculate_cost(self)
-                self.cost_list.append(new)
-                if new < self.best:
-                    self.best = new
-                    self.links_copy = copy.copy([self.houses, self.batteries])
-                    self.results_list.append(self.links_copy)
-        elif num > 115:
+        if num < 149:
             if self.batteries[battery].filled() > lower:
                 continue
-            elif calculate_cost(self) > self.best + prospect:
+            elif calculate_cost(self) > prospect:
                 continue
             else:
                 bnb_search(self, num + 1)
-        elif num < 15:
-            bnb_search(self, num + 1)
-        else:
-            if self.batteries[battery].filled() > lower:
-                return
-            elif calculate_cost(self) > self.best + prospect:
-                return
-            else:
-                bnb_search(self, num + 1)
-    if num < 100:
-        print(f"Current house: {num}")
+        elif not check_full(self):
+            self.solutions += 1
+            print(f"Amount of solutions found: {self.solutions}")
+            new = calculate_cost(self)
+            self.cost_list.append(new)
+            if new < self.best:
+                self.best = new
+                self.links_copy = copy.copy([self.houses, self.batteries])
+                self.results_list.append(self.links_copy)
+    if num == 120:
+        # print(num)
+        self.per += self.up
+        print(f"{round(self.per, 3)}%")
+    # print(f"Current battery's filled = {self.batteries[battery].filled()}")
+    # print(f"Current battery's lower = {lower}")
+    # print(f"Current cost = {calculate_cost(self)}")
+    # print(f"Prospected lower cost = {prospect}")
