@@ -31,7 +31,7 @@ class Smartgrid(object):
         self.link_houses()
         self.pickle_file = ""
         self.run_algorithm()
-        self.plot_houses(1)
+        # self.plot_houses(1)
         self.cost = calculate_cost(self)
         if self.plot_option is "y":
             self.plot_houses(50)
