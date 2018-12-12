@@ -225,6 +225,8 @@ class Smartgrid(object):
             backup(self)
         elif self.algorithm == "dfs":
             dfs(self)
+        elif self.algorithm == "bnb":
+            bnb(self)
 
 
 if __name__ == "__main__":
