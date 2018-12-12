@@ -42,9 +42,9 @@ class Weights(object):
     def run_algorithm(self):
         print(f"Checking all possible configurations with {self.algorithm}...")
 
-        for i in range(9):
+        while True:
             try:
-                self.index = i + 1
+                self.index += 1
                 self.batteries = self.load_batteries(self.index)
             except FileNotFoundError:
                 break
@@ -183,6 +183,7 @@ class Weights(object):
         return batteries
 
     def set_attributes(self):
+        """ Sets cost and capacity for the batteries. """
         for i, battery in enumerate(sorted(self.batteries.values(),
                                     key=operator.attrgetter("weight"))):
             setattr(battery, "cap", self.caps[self.big_iterations][i])
@@ -271,7 +272,7 @@ class Weights(object):
         plt.savefig('plot.png')
 
     def link_houses(self):
-
+        """NOG SAMENVOEGEN MET CALC CABLE"""
         # order the batteries for each house
         for house in list(self.houses.values()):
             dist = house.dist
@@ -287,7 +288,7 @@ class Weights(object):
             house.ord_dist = dict(ord_dist)
 
     def calculate_cable(self):
-        # get coordinates
+        """ Calculates length of cable between each house and battery. """
         x_houses, y_houses, x_batt, y_batt = self.get_coordinates()
 
         all_diff = []
@@ -308,6 +309,7 @@ class Weights(object):
 
 
     def get_coordinates(self):
+        """ Returns coordinates of houses and batteries"""
         x_houses = []
         y_houses = []
 
@@ -335,9 +337,6 @@ class Weights(object):
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
-
-
-        SEQUENCES ONTHOUDEN VOOR EXTRA PUNTEN!!!!!!!!!! id's
         """
         # turn houses into list
         random_houses = list(self.houses.values())
@@ -394,9 +393,8 @@ class Weights(object):
         return min(prices)
 
     def check_linked(self):
-        """
-        Checks whether every house is linked to a battery
-        """
+        """ Checks whether every house is linked to a battery. """
+
         count = 0
         for house in self.houses.values():
             if house.link:
@@ -407,7 +405,7 @@ class Weights(object):
             return False
 
     def disconnect(self):
-        """ Delete all connections """
+        """ Delete all connections. """
 
         for house in self.houses.values():
             house.link = None

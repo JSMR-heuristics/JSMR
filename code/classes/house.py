@@ -16,3 +16,11 @@ class House(object):
 
         # {0: 51, 1: 40, etc}
         self.dists = {}
+
+        self.filtered = []
+
+    def filter(self):
+        for key in self.diffs:
+            self.filtered.append(key)
+            if len(self.filtered) == 4:
+                return
