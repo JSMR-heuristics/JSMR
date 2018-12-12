@@ -33,7 +33,7 @@ class Main(object):
                 cluster_option = None
 
             algorithm = str(input("Algorithm (stepdown/greedy/hill/"
-                                  "configure): "))
+                                  "configure/random): "))
 
             if algorithm == "greedy" or algorithm == "hill":
                 iterations = input("Iterations: ")
@@ -61,7 +61,7 @@ class Main(object):
                     print("No #iteration given, will be set to 1000")
                     iterations = 1000
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "random"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
@@ -91,7 +91,7 @@ class Main(object):
             else:
                 print("please insert the preferred algorithm as 2nd argument")
                 print("select from: \"stepdown\", \"greedy\", \"hill\", "
-                      "\"cluster\", \"configure\", \"spec\"")
+                      "\"cluster\", \"configure\", \"spec\", \"random\"")
                 sys.exit(2)
 
             if "plot" in sys.argv:

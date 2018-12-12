@@ -344,3 +344,70 @@ def bnb_search(self, num):
                     self.results_list.append(self.links_copy)
     if num < 125:
         print(f"Current house: {num}")
+
+def random_algorithm(self, iterations):
+    """
+    This function changes links between houses and batteries
+    so no battery is over it's capacity, this will be done
+    with lowest cost possible for this algorithm
+    """
+    # turn houses into list
+    random_houses = list(self.houses.values())
+
+    prices = []
+    count = 0
+    misses = -iterations
+    batt_index = [0, 1, 2, 3, 4]
+
+    # Do untill we have <iterations> succesfull configurations
+    while count < iterations:
+        disconnect(self)
+        # While one or more batteries are over their capacity or not every
+        # house is linked to a battery
+
+        while check_linked(self) is False or check_full(self) is True:
+            misses += 1
+
+            # shuffle order of houses
+            random.shuffle(random_houses)
+
+            # remove connections, if any
+            disconnect(self)
+
+            # for every house find closest battery to connect to provided
+            # that this house wont over-cap the battery
+            for house in random_houses:
+                for i in range(len(self.batteries.values())):
+                    index = sorted(batt_index, key=lambda k: random.random())
+                    output = house.output
+                    curr = self.batteries[index[i]].filled()
+                    batt = self.batteries[index[i]]
+
+                    if output + curr <= batt.capacity:
+                        house.link = batt
+                        batt.linked_houses.append(house)
+                        break
+
+        # calculate price
+        price = calculate_cost(self)
+        prices.append(price)
+
+        # pickle cheapest configuration so far + sequence of houses
+        if price is min(prices):
+            house_batt = [self.houses, self.batteries]
+            with open(f"random_greedy_lowest_WIJK{self.input}_{iterations}.dat", "wb") as f:
+                pickle.dump(house_batt, f)
+            with open(f"sequence_lowest_WIJK{self.input}_{iterations}.dat", "wb") as f:
+                pickle.dump(random_houses, f)
+
+        count += 1
+    with open(f"prices{self.input}_{iterations}.dat", "wb") as f:
+        pickle.dump(prices, f)
+
+
+    print(f"min: {min(prices)}")
+    print(f"max: {max(prices)}")
+    print(f"mean: {np.mean(prices)}")
+    print(f"unsuccesfull iterations: {misses}")
+
+    
