@@ -50,21 +50,22 @@ class Main(object):
                 sys.exit(2)
 
             # iteration here due to configure needing iterations
-            if sys.argv[2] == "stepdown":
-                    iterations = 1
-                    print("num2")
-            else:
-                if sys.argv[3].isnumeric():
-                    iterations = int(sys.argv[3])
-                    print("num2")
-                else:
-                    print("No #iteration given, will be set to 1000")
-                    iterations = 1000
+
 
             if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "bnb"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
+
+                if sys.argv[2] in ["stepdown", "dfs", "bnb"]:
+                    iterations = None
+
+                elif len(sys.argv) > 3 and sys.argv[3].isnumeric():
+                    iterations = int(sys.argv[3])
+
+                else:
+                    print("No #iteration given, will be set to 1000")
+                    iterations = 1000
 
 
                 if ("cluster" in sys.argv) and not("configure" in sys.argv):
