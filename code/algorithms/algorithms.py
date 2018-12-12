@@ -221,8 +221,6 @@ def hill_climber(self, iterations):
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
-    return int(min(prices))
-
 def backup(self):
     """
     Probeer wijk 3 weer te laten werken maar zonder succes

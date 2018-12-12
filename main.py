@@ -32,6 +32,7 @@ class Main(object):
                 cluster_option = None
 
             algorithm = str(input("Algorithm (stepdown/greedy/hill/configure): "))
+
             if algorithm == "greedy" or algorithm == "hill":
                 iterations = input("Iterations: ")
             plot = input("Do you want intermediate plots to be made? (y/n): ")
@@ -83,7 +84,7 @@ class Main(object):
 
                 elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
                     Cluster2(neighbourhood)
-                    Weights(neighbourhood)
+                    Weights(neighbourhood, algorithm, iterations)
                     sys.exit()
 
             else:
