@@ -1,5 +1,6 @@
 import operator, random, os, sys, pickle, time, copy
 import numpy as np
+import os
 
 
 from helpers import *
@@ -209,6 +210,7 @@ def hill_climber(self, iterations):
 
         if step_cost is min(prices):
             house_batt = [self.houses, self.batteries]
+            path = os.path.join(*[cwd, 'results', f'wijk_{self.input}', 'hill'])
             with open(f"hill_climber_batt_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
                 pickle.dump(house_batt, f)
             with open(f"sequence_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
