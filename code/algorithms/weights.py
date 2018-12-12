@@ -36,11 +36,12 @@ class Weights(object):
         self.batteries = {}
         self.lowest = 99999
         self.index = 0
-        cluster_index = 1
         self.run_algorithm()
+
 
     def run_algorithm(self):
         print(f"Checking all possible configurations with {self.algorithm}...")
+
         for i in range(9):
             try:
                 self.index = i + 1
@@ -63,15 +64,13 @@ class Weights(object):
                 print("lolwat")
                 sys.exit()
 
-
         self.load()
         self.plot_houses()
 
-
     def get_configs(self):
+
         batts = [450, 900, 1800]
 
-        curr_cap = 0
         config_list = []
 
         indices_list = []
@@ -177,7 +176,6 @@ class Weights(object):
                     self.calculate_cable()
                     self.link_houses()
                     self.greedy(1000)
-                    # self.plot_houses()
             self.big_iterations = -1
             self.small_iterations = 0
             self.caps = []
@@ -185,7 +183,8 @@ class Weights(object):
         return batteries
 
     def set_attributes(self):
-        for i, battery in enumerate(sorted(self.batteries.values(), key=operator.attrgetter("weight"))):
+        for i, battery in enumerate(sorted(self.batteries.values(),
+                                    key=operator.attrgetter("weight"))):
             setattr(battery, "cap", self.caps[self.big_iterations][i])
             if self.caps[self.big_iterations][i] is 450:
                 cost = 900
@@ -197,12 +196,12 @@ class Weights(object):
 
     def plot_houses(self):
 
-        x_houses, y_houses, x_batt, y_batt  = self.get_coordinates()
+        x_houses, y_houses, x_batt, y_batt = self.get_coordinates()
 
         # make plot
         ax = plt.gca()
-        ax.axis([-2, 52, -2 , 52])
-        ax.scatter(x_houses , y_houses, marker = ".")
+        ax.axis([-2, 52, -2, 52])
+        ax.scatter(x_houses, y_houses, marker=".")
         tot_cap = 0
         for battery in self.batteries.values():
             tot_cap += int(battery.cap)
@@ -212,10 +211,10 @@ class Weights(object):
                 ax.scatter(battery.x, battery.y, marker="o", s=50, c="r")
             elif int(battery.cap) == 1800:
                 ax.scatter(battery.x, battery.y, marker="o", s=100, c="r")
-        ax.set_xticks(np.arange(0, 52, 1), minor = True)
-        ax.set_yticks(np.arange(0, 52, 1), minor = True)
-        ax.grid(b = True, which="major", linewidth=1)
-        ax.grid(b = True, which="minor", linewidth=.2)
+        ax.set_xticks(np.arange(0, 52, 1), minor=True)
+        ax.set_yticks(np.arange(0, 52, 1), minor=True)
+        ax.grid(b=True, which="major", linewidth=1)
+        ax.grid(b=True, which="minor", linewidth=.2)
         print(f"Total capacity of batteries: {tot_cap}")
         total = 0
         for house in list(self.houses.values()):
@@ -233,12 +232,12 @@ class Weights(object):
             line_colour = batt.colour
 
             # place horizontal line
-            ax.plot([x_house, x_batt], [y_house, y_house], \
-            color=f'{line_colour}',linestyle='-', linewidth=1)
+            ax.plot([x_house, x_batt], [y_house, y_house],
+                    color=f'{line_colour}', linestyle='-', linewidth=1)
 
             # place vertical line
-            ax.plot([new_x, new_x], [y_house, y_batt], \
-            color=f'{line_colour}',linestyle='-', linewidth=1)
+            ax.plot([new_x, new_x], [y_house, y_batt],
+                    color=f'{line_colour}', linestyle='-', linewidth=1)
 
             # calculate line cost
             x_diff = abs(x_batt - x_house)
@@ -257,16 +256,17 @@ class Weights(object):
         plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost}, Total: {total + batt_cost}")
         plt.suptitle(f"Best configuration found for neighbourhood {self.input}", fontsize=15)
 
-        color_list = ["r", "r", "r"]
-        text_list = ["450-900", "900-1350", "1800-1800"]
-        size_list = [5, 7.5, 10]
+        color_list = ["r", "r", "r", "r"]
+        text_list = ["price/cap:", "450/900", "900/1350", "1800/1800"]
+        size_list = [0, 5, 7.5, 10]
 
         patches = [plt.plot([], [], marker="o", ms=size_list[i], ls="",
                             color=color_list[i],
-                            label="{:s}".format(text_list[i]))[0] for i in range(len(text_list))]
+                            label="{:s}".format(text_list[i]))[0]
+                   for i in range(len(text_list))]
 
         plt.legend(handles=patches, bbox_to_anchor=(.5, -.15),
-                   loc="lower center", ncol=3, facecolor="white")
+                   loc="lower center", ncol=4, facecolor="white")
         plt.show()
         plt.savefig('plot.png')
 
@@ -407,9 +407,8 @@ class Weights(object):
             return False
 
     def disconnect(self):
-        """
-        Delete all connections
-        """
+        """ Delete all connections """
+
         for house in self.houses.values():
             house.link = None
         for battery in self.batteries.values():
@@ -443,6 +442,7 @@ class Weights(object):
 
     def load(self):
         """
+        Loads best solution found.
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
