@@ -33,7 +33,7 @@ class Main(object):
                 cluster_option = None
 
             algorithm = str(input("Algorithm (stepdown/greedy/hill/"
-                                  "configure): "))
+                                  "configure/random): "))
 
             if algorithm == "greedy" or algorithm == "hill":
                 iterations = input("Iterations: ")
@@ -52,7 +52,7 @@ class Main(object):
             # iteration here due to configure needing iterations
 
 
-            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "bnb"]:
+            if sys.argv[2] in ["stepdown", "greedy", "hill", "dfs", "random", "bnb"]:
                 algorithm = sys.argv[2]
                 cluster_option = None
                 battery_file = None
@@ -75,7 +75,7 @@ class Main(object):
                     index = 0
                     for i in cluster.options_list:
                         print(f"Checking option {i}...")
-                        smart = Smartgrid(neighbourhood, f"{algorithm}", iterations, "n", i)
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
                         if smart.cost < min_cost:
                             file = smart.pickle_file
                             min_cost = smart.cost
@@ -92,7 +92,7 @@ class Main(object):
             else:
                 print("please insert the preferred algorithm as 2nd argument")
                 print("select from: \"stepdown\", \"greedy\", \"hill\", "
-                      "\"cluster\", \"configure\", \"spec\"")
+                      "\"cluster\", \"configure\", \"spec\", \"random\"")
                 sys.exit(2)
 
             if "plot" in sys.argv:
