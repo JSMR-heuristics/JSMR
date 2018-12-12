@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 import os
 
 # option 1
@@ -24,14 +23,17 @@ class Main(object):
             battery_file = None
             neighbourhood = input("Neighbourhood (1/2/3): ")
 
-            cluster_option = input("Do you want to optimize the battery location? (y/n):")
+            cluster_option = input("Do you want to optimize the battery "
+                                   "location? (y/n):")
             if str(cluster_option) == "y":
                 Cluster(neighbourhood)
-                cluster_option  = input("Pick which of the clusters in the chart are best suitable: ")
+                cluster_option = input("Pick which of the clusters in the "
+                                       "chart are best suitable: ")
             else:
                 cluster_option = None
 
-            algorithm = str(input("Algorithm (stepdown/greedy/hill/configure): "))
+            algorithm = str(input("Algorithm (stepdown/greedy/hill/"
+                                  "configure): "))
 
             if algorithm == "greedy" or algorithm == "hill":
                 iterations = input("Iterations: ")
@@ -42,7 +44,8 @@ class Main(object):
             if sys.argv[1] in ["1", "2", "3"]:
                 neighbourhood = int(sys.argv[1])
             else:
-                print("please insert either a valid neighbourhood number or \"spec\" as 1st argument")
+                print("please insert either a valid neighbourhood number or "
+                      "\"spec\" as 1st argument")
                 print("select from: 1, 2, 3, \"spec\"")
                 sys.exit(2)
 
@@ -55,8 +58,6 @@ class Main(object):
                     iterations = int(sys.argv[3])
                     print("num2")
                 else:
-                    # print("please insert an integer as 3rd argument if you're running either greedy or hillclimber")
-                    # sys.exit(2)
                     print("No #iteration given, will be set to 1000")
                     iterations = 1000
 
@@ -88,11 +89,10 @@ class Main(object):
                     sys.exit()
 
             else:
-                print("please insert the wanted algorithm as 2nd argument")
-                print("select from: \"stepdown\", \"greedy\", \"hill\", \"cluster\", \"configure\", \"spec\"")
+                print("please insert the preferred algorithm as 2nd argument")
+                print("select from: \"stepdown\", \"greedy\", \"hill\", "
+                      "\"cluster\", \"configure\", \"spec\"")
                 sys.exit(2)
-
-
 
             if "plot" in sys.argv:
                 plot = "y"
