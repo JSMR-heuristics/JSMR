@@ -25,9 +25,13 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
 
 class Weights(object):
     def __init__(self, neighbourhood, algorithm, iterations):
+<<<<<<< HEAD
         self.neighbourhood = neighbourhood
+=======
+        self.input = neighbourhood
+>>>>>>> 2cf47476660d5d380edbdbdc4df3920fe3fb76ba
         self.algorithm = algorithm
-        self.iterations = iterations
+        self.iterations = int(iterations)
         self.configs = self.get_configs()
         self.houses = self.load_houses()
         self.big_iterations = -1
@@ -36,8 +40,18 @@ class Weights(object):
         self.batteries = {}
         self.lowest = 99999
         self.index = 0
+<<<<<<< HEAD
         print("Checking all possible configurations with greedy...")
         for i in range(999):
+=======
+        self.run_algorithm()
+
+
+    def run_algorithm(self):
+        print(f"Checking all possible configurations with {self.algorithm}...")
+
+        for i in range(9):
+>>>>>>> 2cf47476660d5d380edbdbdc4df3920fe3fb76ba
             try:
                 self.index = i + 1
                 self.batteries = self.load_batteries(self.index)
@@ -47,10 +61,17 @@ class Weights(object):
             self.link_houses()
 
             if self.algorithm == "stepdown":
-                stepdown()
+                stepdown(self)
             elif self.algorithm == "greedy":
                 greedy(self, self.iterations)
                 # self.greedy(1000)
+            elif self.algorithm == "hill":
+                hill_climber(self, self.iterations)
+            elif self.algorithm == "dfs":
+                print("dfs not in algorithms...I think?...ZEBEZ!")
+            else:
+                print("lolwat")
+                sys.exit()
 
         self.load()
         self.plot_houses()
@@ -87,7 +108,7 @@ class Weights(object):
     def load_houses(self):
 
         # open file
-        INPUT_HOUSES = f"wijk{self.neighbourhood}_huizen.csv"
+        INPUT_HOUSES = f"wijk{self.input}_huizen.csv"
         cwd = os.getcwd()
         path = os.path.join(*[cwd, "data", f"{INPUT_HOUSES}"])
         sys.path.append(path)
@@ -115,8 +136,8 @@ class Weights(object):
         return houses
 
     def load_batteries(self, index):
-        INPUT_BATTERIES = f"wijk{self.neighbourhood}_cluster2_{index}.txt"
-        INPUT_WEIGHTS = f"wijk{self.neighbourhood}_cluster2_{index}_weigth.txt"
+        INPUT_BATTERIES = f"wijk{self.input}_cluster2_{index}.txt"
+        INPUT_WEIGHTS = f"wijk{self.input}_cluster2_{index}_weigth.txt"
 
         cwd = os.getcwd()
         path = os.path.join(*[cwd, "data", f"{INPUT_WEIGHTS}"])
@@ -240,10 +261,10 @@ class Weights(object):
         print(f"Cost of batts: {batt_cost}")
         print(f"Total: {total + batt_cost}")
 
-        plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost},"
-                  f" Total: {total + batt_cost}")
-        plt.suptitle(f"Best configuration found for neighbourhood"
-                     f"{self.neighbourhood}", fontsize=15)
+        # LEGENDA TOEVOEGEN
+
+        plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost}, Total: {total + batt_cost}")
+        plt.suptitle(f"Best configuration found for neighbourhood {self.input}", fontsize=15)
 
         color_list = ["r", "r", "r", "r"]
         text_list = ["price/cap:", "450/900", "900/1350", "1800/1800"]
@@ -373,7 +394,7 @@ class Weights(object):
 
         if min(prices) < self.lowest:
             self.lowest = min(prices)
-            with open(f"weighted_clusters_WIJK{self.neighbourhood}.dat",
+            with open(f"weighted_clusters_WIJK{self.input}.dat",
                       "wb") as f:
                 pickle.dump([self.houses, self.batteries], f)
 
@@ -433,7 +454,7 @@ class Weights(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        with open(f"weighted_clusters_WIJK{self.neighbourhood}.dat", "rb") as f:
+        with open(f"weighted_clusters_WIJK{self.input}.dat", "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 
