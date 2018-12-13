@@ -126,9 +126,12 @@ class Smartgrid(object):
 
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
-        asd = 0
-        for battery in self.batteries.values():
-            asd += battery.cost
+
+        """DIT WERKT ALEEN VOOR DE CONFIGURE WIJKEN"""
+        # asd = 0
+
+        # for battery in self.batteries.values():
+        #     asd += battery.cost
         print(asd)
         plt.show()
         return total
