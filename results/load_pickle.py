@@ -23,17 +23,30 @@ import pickle
 from pathlib import Path
 
 path = str(Path.cwd())
+f"MEH: {path}"
 loc = path.find("JSMR")
-path = path[0:loc+5]
-for dirpath, dirnames, filenames in os.walk(path):
-        for filename in filenames:
-            if (filename == "battery.py" or
-               filename == "house.py" or
-               filename == "helpers.py"):
-                sys.path.append(dirpath)
-                print(dirpath)
+path_up = path[0:loc+5]
 
-from battery import Battery
+if "configure" in path:
+    for dirpath, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                if (filename == "battery2.py" or
+                   filename == "house.py" or
+                   filename == "helpers.py"):
+                    sys.path.append(dirpath)
+                    print(dirpath)
+
+    from battery import Battery
+else:
+    for dirpath, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                if (filename == "battery.py" or
+                   filename == "house.py" or
+                   filename == "helpers.py"):
+                    sys.path.append(dirpath)
+                    print(dirpath)
+    from battery import Battery
+
 from house import House
 from helpers import *
 
@@ -128,11 +141,7 @@ class Smartgrid(object):
         plt.title(f"Total cost of cable: {total}")
 
         """DIT WERKT ALEEN VOOR DE CONFIGURE WIJKEN"""
-        # asd = 0
 
-        # for battery in self.batteries.values():
-        #     asd += battery.cost
-        print(asd)
         plt.show()
         return total
 
@@ -144,7 +153,7 @@ class Smartgrid(object):
         with lowest cost possible for this algorithm
         """
         #  change the string to the filename you want to open
-        file_to_read = "hill_lowest_WIJK1_13122018.dat"
+        file_to_read = "greedy_lowest_WIJK1_13122018.dat"
         with open(file_to_read, "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
