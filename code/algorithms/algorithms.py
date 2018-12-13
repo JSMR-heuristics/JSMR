@@ -317,8 +317,8 @@ def bnb(self):
 
 
 def bnb_search(self, num):
-    lower = (150 - num) * 35 + 1507
-    prospect = (150 - num) * 70
+    cap_space = (150 - num) * 35 + 1507
+    cost_space = (150 - num) * 70 + self.best
     for battery in self.extra[num].filtered:
         if self.extra[num].link == self.batteries[battery]:
             pass
@@ -337,18 +337,18 @@ def bnb_search(self, num):
                     self.links_copy = copy.copy([self.houses, self.batteries])
                     self.results_list.append(self.links_copy)
         elif num > 115:
-            if self.batteries[battery].filled() > lower:
+            if self.batteries[battery].filled() > cap_space:
                 continue
-            elif calculate_cost(self) > self.best + prospect:
+            elif calculate_cost(self) > cost_space:
                 continue
             else:
                 bnb_search(self, num + 1)
         elif num < 15:
             bnb_search(self, num + 1)
         else:
-            if self.batteries[battery].filled() > lower:
+            if self.batteries[battery].filled() > cap_space:
                 return
-            elif calculate_cost(self) > self.best + prospect:
+            elif calculate_cost(self) > cost_space:
                 return
             else:
                 bnb_search(self, num + 1)

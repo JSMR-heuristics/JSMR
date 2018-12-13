@@ -60,7 +60,7 @@ class Main(object):
                 battery_file = None
 
                 if sys.argv[2] in ["stepdown", "dfs", "bnb"]:
-                    iterations = None
+                    iterations = 0
 
                 elif len(sys.argv) > 3 and sys.argv[3].isnumeric():
                     iterations = int(sys.argv[3])
