@@ -122,3 +122,12 @@ We considered implementing an archive into the algorithm, ensuring a randomized 
    * Entering "plot" behind the necessary command line arguments will return an number of mid-process plots.
    * *Currently the stepdown algorithm does not function with neighborhood 3. For that neighborhood, an algorithm that uses the same logic, but is less effective, can be used by entering "backup".
    * The amount of iterations entered is only taken into consideration towards algorithms that make use of it, but it should always be entered.
+   
+ ## Authors
+ * Julian Evalle
+ * ZEBEZ
+ * MARUK
+ 
+ ## Acknowledgements
+ * cluster site
+ * stack Overflow
