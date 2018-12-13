@@ -28,7 +28,7 @@ loc = path.find("JSMR")
 path_up = path[0:loc+5]
 
 if "configure" in path:
-    for dirpath, dirnames, filenames in os.walk(path):
+    for dirpath, dirnames, filenames in os.walk(path_up):
             for filename in filenames:
                 if (filename == "battery2.py" or
                    filename == "house.py" or
@@ -38,7 +38,7 @@ if "configure" in path:
 
     from battery import Battery
 else:
-    for dirpath, dirnames, filenames in os.walk(path):
+    for dirpath, dirnames, filenames in os.walk(path_up):
             for filename in filenames:
                 if (filename == "battery.py" or
                    filename == "house.py" or
