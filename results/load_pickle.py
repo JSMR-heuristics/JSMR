@@ -141,7 +141,7 @@ class Smartgrid(object):
         with lowest cost possible for this algorithm
         """
         #  change the string to the filename you want to open
-        file_to_read = "hill_climber_batt_lowest_WIJK1_12122018.dat"
+        file_to_read = "hill_lowest_WIJK1_13122018.dat"
         with open(file_to_read, "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
