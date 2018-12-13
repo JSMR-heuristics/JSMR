@@ -21,7 +21,12 @@ import statistics
 import pickle
 
 from pathlib import Path
-
+cwd = os.getcwd()
+cwd = os.path.dirname(cwd)
+cwd = os.path.dirname(cwd)
+path = os.path.join(*[cwd, 'code', 'algorithms'])
+print(path)
+sys.path.append(path)
 from helpers import *
 """
 SLAAT HUIZEN NOG NIET MET JUISTE NAAM ENZO OP
@@ -91,6 +96,7 @@ class Smartgrid(object):
             # house.link = self.batteries[list(house.diffs.keys())[0]]
             # # house.link = self.batteries[list(house.diffs.keys())[len(self.batteries.values()) - 1]]
             x_house, y_house = house.x, house.y
+            print(house.diffs)
             x_batt, y_batt = house.link.x, house.link.y
 
             # calculate the new coordinate for the vertical line
@@ -126,7 +132,7 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        with open("weighted_clusters_WIJK2.dat", "rb") as f:
+        with open("weighted_clusters_WIJK1.dat", "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 

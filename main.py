@@ -82,18 +82,25 @@ class Main(object):
                             file = smart.pickle_file
                             min_cost = smart.cost
                             index = i
+<<<<<<< HEAD
+                    print(file)
+=======
                     Smartgrid(neighbourhood, algorithm, iterations, "n", index, "cluster")
                     time_var = time.strftime("%d%m%Y")
                     file = os.path.join(*[cwd, 'results', f"wijk_{self.input}", algorithm, "cluster",
                                           f"{algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
 
+>>>>>>> bc8652d5d013e14d5073b9e2b5de213a126577ae
                     load_pickle(self, file)
-
                     sys.exit()
 
                 elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
                     Configure(neighbourhood)
-                    Weights(neighbourhood, algorithm, iterations)
+                    if algorithm == "greedy" and int(iterations) == 1000:
+                        Weights(neighbourhood, algorithm, iterations)
+                    else:
+                        Weights(neighbourhood, "test", iterations)
+                        Weights(neighbourhood, algorithm, iterations)
                     sys.exit()
 
             else:
