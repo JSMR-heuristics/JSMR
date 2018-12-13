@@ -21,8 +21,8 @@ def stepdown(self):
     #         print(f"House: {ding.output}")
 
     # While one or more batteries are over their capacity
+    try_list = []
     while check_full(self) and changes < 500:
-
         # kan korter
         # Sorts batteries based off total inputs from high to low
         total_inputs = []
@@ -33,28 +33,36 @@ def stepdown(self):
         # Prioritize battery with highest inputs
         # to disconnect a house from
         # for i in high_low:
-        battery = high_low[0][1]
+        batt_count = 0
+        for i in range(len(high_low)):
+            batt_count += 1
+            battery = high_low[i][1]
+            print(battery.capacity)
 
-        # Sort houses linked to this battery by distance
-        # to other battery from low to high
-        # distance_list = self.sort_linked_houses(battery)
-        distance_list = sort_linked_houses(self, battery)
+            # Sort houses linked to this battery by distance
+            # to other battery from low to high
+            # distance_list = self.sort_linked_houses(battery)
+            distance_list = sort_linked_houses(self, battery)
 
-        # Determine the cheapest option first, if any
-        # else transfer option with lowest output
-        try:
-            house, to_batt = find_best(self, distance_list, "strict")
-        except TypeError:
-            house, to_batt = find_best(self, distance_list, "not-strict")
+            # Determine the cheapest option first, if any
+            # else transfer option with lowest output
+            try:
+                house, to_batt = find_best(self, distance_list, "strict", try_list)
+            except TypeError:
+                    house, to_batt = find_best(self, distance_list, "not-strict", try_list)
 
-        # Switch the house from battery
-        curr_batt = house.link
-        changes += 1
-        swap_houses(self, house, curr_batt, to_batt)
-        if (changes % 5) is 0 and self.plot_option == "y":
-            self.plot_houses(changes)
-        # break
-    self.plot_houses("FINAL")
+
+            # Switch the house from battery
+            curr_batt = house.link
+            print(changes)
+            changes += 1
+            arch_elem = swap_houses(self, house, curr_batt, to_batt)
+            try_list.append(arch_elem)
+            if len(try_list) > 0:
+                try_list.pop(0)
+
+            # break
+    return calculate_cost(self)
     for i in self.batteries:
         print(self.batteries[i].filled())
         print(f"{self.batteries[i].x}/{self.batteries[i].y}")
@@ -84,6 +92,8 @@ def greedy(self, iterations):
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
         while check_linked(self) is False or check_full(self) is True:
+            if misses > 5000:
+                return None
             misses += 1
 
             # shuffle order of houses
@@ -94,8 +104,12 @@ def greedy(self, iterations):
 
             # for every house find closest battery to connect to provided
             # that this house wont over-cap the battery
+            houses_counter = 0
             for house in random_houses:
-                for i in range(5):
+                for i in range(len(self.batteries.values())):
+                    houses_counter += 1
+                    # if houses_counter > (len(self.houses.values()) * 150):
+                    #     return None
                     if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                         house.link = self.batteries[list(house.diffs)[i]]
                         self.batteries[list(house.diffs)[i]].linked_houses.append(house)
@@ -108,7 +122,6 @@ def greedy(self, iterations):
         # pickle cheapest configuration so far + sequence of houses
         # include time
         time_var = time.strftime("%d%m%Y")
-<<<<<<< HEAD
         if price is min(prices):
             house_batt = [self.houses, self.batteries]
             cwd = os.getcwd()
@@ -116,12 +129,10 @@ def greedy(self, iterations):
             sys.path.append(path)
             with open(path, "wb") as f:
                 pickle.dump(house_batt, f)
-=======
->>>>>>> bc8652d5d013e14d5073b9e2b5de213a126577ae
+
 
         if price is min(prices):
             save_dat_file(self)
-
 
         count += 1
         # print(count)
