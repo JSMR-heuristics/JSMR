@@ -140,7 +140,13 @@ class Smartgrid(object):
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
 
-        """DIT WERKT ALEEN VOOR DE CONFIGURE WIJKEN"""
+        if hasattr(list(self.batteries.values())[0], "cost"):
+            batt_cost = 0
+            for battery in self.batteries.values():
+                batt_cost += battery.cost
+            print(f"Battery cost: {batt_cost}")
+        plt.show()
+        return total
 
         plt.show()
         return total
@@ -152,9 +158,13 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
+        file_to_read = "hill_climber_batt_lowest_WIJK1_06122018.dat"
+        cwd = os.getcwd()
+        cwd = os.path.dirname(cwd)
+        path = os.path.join(*[cwd, "test_scripts", "test_area", "hill_test", "4th Time(ex-slowdown)", file_to_read])
+        sys.path.append(path)
         #  change the string to the filename you want to open
-        file_to_read = "greedy_lowest_WIJK1_13122018.dat"
-        with open(file_to_read, "rb") as f:
+        with open(path, "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 
