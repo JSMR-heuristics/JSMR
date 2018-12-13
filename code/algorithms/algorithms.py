@@ -1,5 +1,6 @@
 import operator, random, os, sys, pickle, time, copy
 import numpy as np
+import os
 
 
 from helpers import *
@@ -107,6 +108,7 @@ def greedy(self, iterations):
         # pickle cheapest configuration so far + sequence of houses
         # include time
         time_var = time.strftime("%d%m%Y")
+<<<<<<< HEAD
         if price is min(prices):
             house_batt = [self.houses, self.batteries]
             cwd = os.getcwd()
@@ -114,12 +116,11 @@ def greedy(self, iterations):
             sys.path.append(path)
             with open(path, "wb") as f:
                 pickle.dump(house_batt, f)
+=======
+>>>>>>> bc8652d5d013e14d5073b9e2b5de213a126577ae
 
-            cwd = os.getcwd()
-            path = os.path.join(*[cwd, 'data', 'pickles', f"sequence_lowest_WIJK{self.input}_{time_var}.dat"])
-            sys.path.append(path)
-            with open(path, "wb") as f:
-                pickle.dump(random_houses, f)
+        if price is min(prices):
+            save_dat_file(self)
 
 
         count += 1
@@ -208,11 +209,14 @@ def hill_climber(self, iterations):
         prices.append(step_cost)
 
         if step_cost is min(prices):
-            house_batt = [self.houses, self.batteries]
-            with open(f"hill_climber_batt_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
-                pickle.dump(house_batt, f)
-            with open(f"sequence_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
-                pickle.dump(random_houses, f)
+            save_dat_file(self)
+            # house_batt = [self.houses, self.batteries]
+            # path = os.path.join(*[cwd, 'results', f'wijk_{self.input}', 'hill'])
+            #
+            # with open(f"hill_climber_batt_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
+            #     pickle.dump(house_batt, f)
+            # with open(f"sequence_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
+            #     pickle.dump(random_houses, f)
         count += 1
         print(count)
 
@@ -323,8 +327,8 @@ def bnb(self):
         pickle.dump(self.results_list, f)
 
 def bnb_search(self, num):
-    lower = (150 - num) * 35 + 1507
-    prospect = (150 - num) * 70
+    cap_space = (150 - num) * 35 + 1507
+    cost_space = (150 - num) * 70 + self.best
     for battery in self.extra[num].filtered:
         if self.extra[num].link == self.batteries[battery]:
             pass
@@ -343,18 +347,18 @@ def bnb_search(self, num):
                     self.links_copy = copy.copy([self.houses, self.batteries])
                     self.results_list.append(self.links_copy)
         elif num > 115:
-            if self.batteries[battery].filled() > lower:
+            if self.batteries[battery].filled() > cap_space:
                 continue
-            elif calculate_cost(self) > self.best + prospect:
+            elif calculate_cost(self) > cost_space:
                 continue
             else:
                 bnb_search(self, num + 1)
         elif num < 15:
             bnb_search(self, num + 1)
         else:
-            if self.batteries[battery].filled() > lower:
+            if self.batteries[battery].filled() > cap_space:
                 return
-            elif calculate_cost(self) > self.best + prospect:
+            elif calculate_cost(self) > cost_space:
                 return
             else:
                 bnb_search(self, num + 1)

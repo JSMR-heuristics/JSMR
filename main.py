@@ -1,7 +1,8 @@
 import sys
 import os
+import time
 
-# option 1
+
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'algorithms'])
 sys.path.append(path)
@@ -42,7 +43,8 @@ class Main(object):
         else:
             # neighbourhood
             if sys.argv[1] in ["1", "2", "3"]:
-                neighbourhood = int(sys.argv[1])
+                self.input = int(sys.argv[1])
+                neighbourhood = self.input
             else:
                 print("please insert either a valid neighbourhood number or "
                       "\"spec\" as 1st argument")
@@ -58,7 +60,7 @@ class Main(object):
                 battery_file = None
 
                 if sys.argv[2] in ["stepdown", "dfs", "bnb"]:
-                    iterations = None
+                    iterations = 0
 
                 elif len(sys.argv) > 3 and sys.argv[3].isnumeric():
                     iterations = int(sys.argv[3])
@@ -75,12 +77,20 @@ class Main(object):
                     index = 0
                     for i in cluster.options_list:
                         print(f"Checking option {i}...")
-                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i, "cluster")
                         if smart.cost < min_cost:
                             file = smart.pickle_file
                             min_cost = smart.cost
                             index = i
+<<<<<<< HEAD
                     print(file)
+=======
+                    Smartgrid(neighbourhood, algorithm, iterations, "n", index, "cluster")
+                    time_var = time.strftime("%d%m%Y")
+                    file = os.path.join(*[cwd, 'results', f"wijk_{self.input}", algorithm, "cluster",
+                                          f"{algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
+
+>>>>>>> bc8652d5d013e14d5073b9e2b5de213a126577ae
                     load_pickle(self, file)
                     sys.exit()
 
@@ -104,7 +114,7 @@ class Main(object):
             else:
                 plot = "n"
 
-        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option)
+        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option, "fixed")
 
 
 if __name__ == "__main__":

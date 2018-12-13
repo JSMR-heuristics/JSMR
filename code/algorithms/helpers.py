@@ -3,7 +3,7 @@ import sys, os
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
-
+import time
 
 def calculate_distance(self):
     all_distances = []
@@ -157,7 +157,7 @@ def load_pickle(self, file):
     with lowest cost possible for this algorithm
     """
     cwd = os.getcwd()
-    print(file)
+
     path = os.path.join(*[cwd, 'data', 'pickles', file])
     # sys.path.append(path)
     with open(path, "rb") as f:
@@ -242,3 +242,15 @@ def get_coordinates(self):
         y_batt.append(battery.y)
 
     return [x_houses, y_houses, x_batt, y_batt]
+
+def save_dat_file(self):
+    house_batt = [self.houses, self.batteries]
+    time_var = time.strftime("%d%m%Y")
+
+    cwd = os.getcwd()
+    path = os.path.join(*[cwd, 'results', f"wijk_{self.input}", self.algorithm, self.set_up,
+                          f"{self.algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
+    sys.path.append(path)
+
+    with open(path, "wb") as f:
+        pickle.dump(house_batt, f)
