@@ -19,12 +19,13 @@ from battery import Battery
 from house import House
 
 class Smartgrid(object):
-    def __init__(self, neighbourhood, algorithm, iterations, plot, c_option):
+    def __init__(self, neighbourhood, algorithm, iterations, plot, c_option, set_up):
         self.input = neighbourhood
         self.algorithm = algorithm
         self.iterations = int(iterations)
         self.plot_option = plot
         self.c_option = c_option
+        self.set_up = set_up
         self.houses = self.load_houses()
         self.batteries = self.load_batteries()
         self.coordinates = self.get_coordinates()

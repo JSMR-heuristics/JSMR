@@ -52,18 +52,18 @@ class Weights(object):
             self.link_houses()
 
             if self.algorithm == "stepdown":
-                stepdown(self)
+                stepdown(self, "configure")
             elif self.algorithm == "greedy":
-                greedy(self, self.iterations)
+                greedy(self, self.iterations, "configure")
                 # self.greedy(1000)
             elif self.algorithm == "hill":
-                hill_climber(self, self.iterations)
+                hill_climber(self, self.iterations, "configure")
             elif self.algorithm == "dfs":
-                dfs(self)
+                dfs(self, "configure")
             elif self.algorithm == "random":
-                random_algorithm(self, self.iterations)
+                random_algorithm(self, self.iterations, "configure")
             elif self.algorithm == "bnb":
-                bnb(self)
+                bnb(self, "configure")
 
         self.load()
         self.plot_houses()

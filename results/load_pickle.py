@@ -1,14 +1,14 @@
 #!/usr/bin/python
 
 import sys, os
-cwd = os.getcwd()
-cwd = os.path.dirname(cwd)
-cwd = os.path.dirname(cwd)
-path = os.path.join(*[cwd, 'code', 'classes'])
-print(path)
-sys.path.append(path)
-from house import House
-from battery import Battery
+# cwd = os.getcwd()
+# cwd = os.path.dirname(cwd)
+# cwd = os.path.dirname(cwd)
+# path = os.path.join(*[cwd, 'code', 'classes'])
+# print(path)
+# sys.path.append(path)
+# from house import House
+# from battery import Battery
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,7 +22,21 @@ import pickle
 
 from pathlib import Path
 
+path = str(Path.cwd())
+loc = path.find("JSMR")
+path = path[0:loc+5]
+for dirpath, dirnames, filenames in os.walk(path):
+        for filename in filenames:
+            if (filename == "battery.py" or
+               filename == "house.py" or
+               filename == "helpers.py"):
+                sys.path.append(dirpath)
+                print(dirpath)
+
+from battery import Battery
+from house import House
 from helpers import *
+
 """
 SLAAT HUIZEN NOG NIET MET JUISTE NAAM ENZO OP
 """
@@ -127,7 +141,7 @@ class Smartgrid(object):
         with lowest cost possible for this algorithm
         """
         #  change the string to the filename you want to open
-        file_to_read = "hill_climber_batt_lowest_WIJK3_06122018.dat"
+        file_to_read = "hill_climber_batt_lowest_WIJK1_12122018.dat"
         with open(file_to_read, "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()

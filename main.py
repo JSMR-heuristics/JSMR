@@ -1,7 +1,8 @@
 import sys
 import os
+import time
 
-# option 1
+
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'algorithms'])
 sys.path.append(path)
@@ -42,7 +43,8 @@ class Main(object):
         else:
             # neighbourhood
             if sys.argv[1] in ["1", "2", "3"]:
-                neighbourhood = int(sys.argv[1])
+                self.input = int(sys.argv[1])
+                neighbourhood = self.input
             else:
                 print("please insert either a valid neighbourhood number or "
                       "\"spec\" as 1st argument")
@@ -75,14 +77,15 @@ class Main(object):
                     index = 0
                     for i in cluster.options_list:
                         print(f"Checking option {i}...")
-                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i)
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i, "cluster")
                         if smart.cost < min_cost:
                             file = smart.pickle_file
                             min_cost = smart.cost
                             index = i
-                    Smartgrid(neighbourhood, algorithm, iterations, "n", index)
+                    Smartgrid(neighbourhood, algorithm, iterations, "n", index, "cluster")
                     time_var = time.strftime("%d%m%Y")
-                    file = f"{algorithm}_batt_lowest_WIJK{self.input}_{time_var}.dat"
+                    file = os.path.join(*[cwd, 'results', f"wijk_{self.input}", algorithm, "cluster",
+                                          f"{algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
 
                     load_pickle(self, file)
 
@@ -104,7 +107,7 @@ class Main(object):
             else:
                 plot = "n"
 
-        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option)
+        Smartgrid(neighbourhood, algorithm, iterations, plot, cluster_option, "fixed")
 
 
 if __name__ == "__main__":
