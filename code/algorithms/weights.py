@@ -42,20 +42,26 @@ class Weights(object):
     def run_algorithm(self):
         print(f"Checking all possible configurations with {self.algorithm}...")
 
-        while True:
-            try:
-                self.index += 1
-                self.batteries = self.load_batteries(self.index)
-            except FileNotFoundError:
-                break
-            self.calculate_cable()
-            self.link_houses()
+        if self.algorithm == "test"  or (self.algorithm == "greedy" and self.iterations == 1000):
+            while True:
+                try:
+                    self.index += 1
+                    self.batteries = self.load_batteries(self.index)
+                except FileNotFoundError:
+                    break
+                self.calculate_cable()
+                self.link_houses()
+                greedy(self, 1000)
+                if self.algorithm == "greedy":
+                    self.load()
+                    self.plot_houses()
 
+        else:
+            self.load()
             if self.algorithm == "stepdown":
                 stepdown(self)
             elif self.algorithm == "greedy":
                 greedy(self, self.iterations)
-                # self.greedy(1000)
             elif self.algorithm == "hill":
                 hill_climber(self, self.iterations)
             elif self.algorithm == "dfs":
@@ -65,8 +71,8 @@ class Weights(object):
             elif self.algorithm == "bnb":
                 bnb(self)
 
-        self.load()
-        self.plot_houses()
+            self.load()
+            self.plot_houses()
 
     def get_configs(self):
 
