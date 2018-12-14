@@ -171,7 +171,7 @@ class Smartgrid(object):
         prices = []
         count = 0
         misses = -iterations
-        batt_index = [0, 1, 2, 3, 4]
+        batt_index = range(self.batteries.values)
 
         # Do untill we have <iterations> succesfull configurations
         while count < iterations:
