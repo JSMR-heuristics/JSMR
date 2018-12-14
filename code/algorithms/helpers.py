@@ -250,3 +250,5 @@ def save_dat_file(self):
 
     with open(path, "wb") as f:
         pickle.dump(house_batt, f)
+
+    return path
