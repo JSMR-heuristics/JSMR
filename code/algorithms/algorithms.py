@@ -325,7 +325,7 @@ def bnb(self):
     # 3 = 22185
     # 2 = 21627
     # 1 = 33687
-    self.best = 23000
+    self.best = 34000
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
