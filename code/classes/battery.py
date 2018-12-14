@@ -6,7 +6,6 @@ class Battery(object):
         self.y = int(y)
         self.colour = colour
         self.linked_houses = []
-        self.weight = weight
 
         # latere opdrachten de prijs
 

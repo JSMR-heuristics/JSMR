@@ -107,20 +107,9 @@ def greedy(self, iterations):
 
         # pickle cheapest configuration so far + sequence of houses
         # include time
-        time_var = time.strftime("%d%m%Y")
-<<<<<<< HEAD
-        if price is min(prices):
-            house_batt = [self.houses, self.batteries]
-            cwd = os.getcwd()
-            path = os.path.join(*[cwd, 'data', 'pickles', f"greedy_lowest_WIJK{self.input}_{time_var}.dat"])
-            sys.path.append(path)
-            with open(path, "wb") as f:
-                pickle.dump(house_batt, f)
-=======
->>>>>>> bc8652d5d013e14d5073b9e2b5de213a126577ae
 
         if price is min(prices):
-            save_dat_file(self)
+            file = save_dat_file(self)
 
 
         count += 1
@@ -130,7 +119,7 @@ def greedy(self, iterations):
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
-    return f"greedy_lowest_WIJK{self.input}_{time_var}.dat"
+    return file
 
 
 def hill_climber(self, iterations):
