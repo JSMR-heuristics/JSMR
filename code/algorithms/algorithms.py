@@ -85,7 +85,7 @@ def greedy(self, iterations):
     prices = []
     count = 0
     misses = -iterations
-    
+
     # Do until we have <iterations> succesfull configurations
     while count < iterations:
 
@@ -125,6 +125,8 @@ def greedy(self, iterations):
         prices.append(price)
 
         # pickle cheapest configuration so far + sequence of houses
+
+>>>>>>> be2afb5d0dad77158ac2bb90683d20cf4b461878
         if price is min(prices):
             file = save_dat_file(self)
 
@@ -151,7 +153,9 @@ def hill_climber(self, iterations):
     count = 0
     misses = -iterations
     prices = []
-
+    print(self.batteries.values)
+    batt_index = range(len(self.batteries))
+    print(f"batt_index= {batt_index}")
     # Do untill we have <iterations> succesfull configurations
     while count < iterations:
         disconnect(self)
@@ -169,13 +173,19 @@ def hill_climber(self, iterations):
 
             # for every house find closest battery to connect to provided
             # that this house wont over-cap the battery
+            # for house in random_houses:
+            #
+            #     for i in range(len(self.batteries.values())):
+            #         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
+            #             house.link = self.batteries[list(house.diffs)[i]]
+            #             self.batteries[list(house.diffs)[i]].linked_houses.append(house)
+            #             break
             for house in random_houses:
+                index = random.sample(batt_index, 1)[0]
+                house.link = self.batteries[index]
+                self.batteries[index].linked_houses.append(house)
 
-                for i in range(len(self.batteries.values())):
-                    if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
-                        house.link = self.batteries[list(house.diffs)[i]]
-                        self.batteries[list(house.diffs)[i]].linked_houses.append(house)
-                        break
+
         base_copy = copy.copy([self.houses, self.batteries])
         base_cost = calculate_cost(self)
 

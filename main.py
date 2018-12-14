@@ -78,6 +78,13 @@ class Main(object):
                             min_cost = smart.cost
                             index = i
 
+<<<<<<< HEAD
+                    Smartgrid(neighbourhood, algorithm, iterations, "n", index, "cluster")
+                    time_var = time.strftime("%d%m%Y")
+                    file = os.path.join(*[cwd, 'results', f"wijk_{self.input}", algorithm, "cluster",
+                                          f"{algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
+
+=======
 
                     # Call specified algorithm for cheapest option
                     Smartgrid(neighbourhood, algorithm, iterations, "n", index,
@@ -88,13 +95,18 @@ class Main(object):
                                           f"{algorithm}_lowest_WIJK{self.input}"
                                           f"_{time_var}.dat"])
                     # Load pickle so cheapest option can be plotted
+>>>>>>> d192ff24bab7bbddfad9ad5cd841208cc25e1ed0
                     load_pickle(self, file)
                     sys.exit()
 
                 # If not cluster, use configure and find cheapest configuration
                 # for this neighbourhood
                 elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
+<<<<<<< HEAD
+
+=======
                     # Calculate configurations
+>>>>>>> d192ff24bab7bbddfad9ad5cd841208cc25e1ed0
                     Configure(neighbourhood)
 
                     # Should user want to test with anything else than
