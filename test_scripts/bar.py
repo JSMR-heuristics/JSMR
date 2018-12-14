@@ -40,7 +40,6 @@ p3 = ax.bar(ind + 2 * width, X3, width, color="indianred")
 ax.set_title('Change of Cost for Absolute Lower and Upper bounds \n and Outcome of Greedy Algorithm')
 ax.set_xticks(ind + width)
 ax.set_xticklabels(('Lower-Bound', 'Algorithm', 'Upper-Bound'))
-# (["a", "b", "c", "d", "e", "f", "g", "h", "i"][i])
 ax.legend((p1[0], p2[0], p3[0]), ('Fixed', 'Reallocated', 'Reconfigured'))
 # for i in range(9):
 #     ax.text(x[i], (long[i] - 3000), long_text[i], horizontalalignment="center", fontsize=9, color="black")
