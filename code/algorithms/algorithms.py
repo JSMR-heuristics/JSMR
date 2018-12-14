@@ -89,14 +89,17 @@ def greedy(self, iterations):
     # Do until we have <iterations> succesfull configurations
     while count < iterations:
 
+        # Disconnect links from possible previous configurations
+        disconnect(self)
+
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
         while check_linked(self) is False or check_full(self) is True:
+            misses += 1
 
             # If algorithm finds too many misses, stop it
             if misses > (7 * iterations):
                 return None
-            misses += 1
 
 
             # shuffle order of houses
@@ -107,44 +110,41 @@ def greedy(self, iterations):
 
             # for every house find closest battery to connect to provided
             # that this house wont over-cap the battery
-            houses_counter = 0
             for house in random_houses:
                 for i in range(len(self.batteries.values())):
-                    houses_counter += 1
-                    # if houses_counter > (len(self.houses.values()) * 150):
-                    #     return None
-                    if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
-                        house.link = self.batteries[list(house.diffs)[i]]
-                        self.batteries[list(house.diffs)[i]].linked_houses.append(house)
+                    batt = self.batteries[list(house.diffs)[i]]
+                    if house.output + batt.filled() <= batt.capacity:
+                        house.link = batt
+                        batt.linked_houses.append(house)
                         break
 
-        # calculate price
+        count += 1
+
+        # calculate price and add to the list
         price = calculate_cost(self)
         prices.append(price)
 
         # pickle cheapest configuration so far + sequence of houses
-        # include time
-
         if price is min(prices):
             file = save_dat_file(self)
 
-        count += 1
-        # print(count)
+    # print results
     print(f"min: {min(prices)}")
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
+    # return filename of lowest file
     return file
 
 
-def hill_climber(self, iterations, set_up):
-    """
+def hill_climber(self, iterations):
+    """Hill climber, non deterministic.
+
     This function changes links between houses and batteries
     so no battery is over it's capacity, this will be done
-    with lowest cost possible for this algorithm
+    with lowest cost possible for this algorithm.
     """
-
     random_houses = list(self.houses.values())
     random_houses_2 = list(self.houses.values())
     iterations = int(iterations)

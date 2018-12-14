@@ -78,7 +78,6 @@ class Main(object):
                             min_cost = smart.cost
                             index = i
 
-
                     # Call specified algorithm for cheapest option
                     Smartgrid(neighbourhood, algorithm, iterations, "n", index,
                               "cluster")
@@ -94,7 +93,7 @@ class Main(object):
                 # If not cluster, use configure and find cheapest configuration
                 # for this neighbourhood
                 elif ("configure" in sys.argv) and not ("cluster" in sys.argv):
-
+                    # Calculate configurations
                     Configure(neighbourhood)
 
                     # Should user want to test with anything else than
