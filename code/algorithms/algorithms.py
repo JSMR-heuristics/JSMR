@@ -135,6 +135,7 @@ def greedy(self, iterations):
                 pickle.dump(house_batt, f)
 
 
+
         if price is min(prices):
             file = save_dat_file(self)
 
