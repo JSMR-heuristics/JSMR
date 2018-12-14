@@ -6,10 +6,6 @@ class Battery(object):
         self.y = int(y)
         self.colour = colour
         self.linked_houses = []
-<<<<<<< HEAD
-        # self.weight = weight
-=======
->>>>>>> d192ff24bab7bbddfad9ad5cd841208cc25e1ed0
 
 
     # returns a boolean corresponding to whether max capacity is reached or not

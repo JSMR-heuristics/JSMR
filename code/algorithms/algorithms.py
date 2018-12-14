@@ -125,8 +125,6 @@ def greedy(self, iterations):
         prices.append(price)
 
         # pickle cheapest configuration so far + sequence of houses
-
->>>>>>> be2afb5d0dad77158ac2bb90683d20cf4b461878
         if price is min(prices):
             file = save_dat_file(self)
 
