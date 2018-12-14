@@ -28,25 +28,19 @@ loc = path.find("JSMR")
 path_up = path[0:loc+5]
 
 if "configure" in path:
-    for dirpath, dirnames, filenames in os.walk(path_up):
-            for filename in filenames:
-                if (filename == "battery2.py" or
-                   filename == "house.py" or
-                   filename == "helpers.py"):
-                    sys.path.append(dirpath)
-                    print(dirpath)
-
-    from battery import Battery
+    batt_class == "battery2.py"
 else:
-    for dirpath, dirnames, filenames in os.walk(path_up):
-            for filename in filenames:
-                if (filename == "battery.py" or
-                   filename == "house.py" or
-                   filename == "helpers.py"):
-                    sys.path.append(dirpath)
-                    print(dirpath)
-    from battery import Battery
+    batt_class == "battery.py"
 
+for dirpath, dirnames, filenames in os.walk(path_up):
+        for filename in filenames:
+            if (filename == batt_class or
+               filename == "house.py" or
+               filename == "helpers.py"):
+                sys.path.append(dirpath)
+                print(dirpath)
+
+from battery import Battery
 from house import House
 from helpers import *
 

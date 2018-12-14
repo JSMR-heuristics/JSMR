@@ -83,11 +83,18 @@ class Main(object):
                             min_cost = smart.cost
                             index = i
 
+<<<<<<< HEAD
+                    print(file)
+=======
+>>>>>>> a9d11a61b01fb4e336ff33d08578103fdf3a549a
                     Smartgrid(neighbourhood, algorithm, iterations, "n", index, "cluster")
                     time_var = time.strftime("%d%m%Y")
                     file = os.path.join(*[cwd, 'results', f"wijk_{self.input}", algorithm, "cluster",
                                           f"{algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
+<<<<<<< HEAD
+=======
 
+>>>>>>> a9d11a61b01fb4e336ff33d08578103fdf3a549a
                     load_pickle(self, file)
                     sys.exit()
 
