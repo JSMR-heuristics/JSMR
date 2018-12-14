@@ -320,7 +320,10 @@ def dfs_search(self, num):
         print(f"Current house: {num}")
 
 def bnb(self):
-    self.best = 35000
+    # 3 = 22185
+    # 2 = 21627
+    # 1 = 33687
+    self.best = 23000
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
@@ -341,7 +344,7 @@ def bnb(self):
 
 def bnb_search(self, num):
     cap_space = (150 - num) * 45 + 1507
-    cost_space = (150 - num) * 35 + self.best
+    cost_space = (150 - num) * 45 + self.best
     for battery in self.extra[num].filtered:
         # print(self.extra[num].x, self.extra[num].y)
         # print(battery)
@@ -356,10 +359,10 @@ def bnb_search(self, num):
                 continue
             elif calculate_cost(self) > cost_space:
                 continue
-            # else:
-            bnb_search(self, num + 1)
+            else:
+                bnb_search(self, num + 1)
         elif not check_full(self):
-            print(f"{num} is not below 149 and not full")
+            print(f"{num} is not full")
             self.solutions += 1
             print(f"Amount of solutions found: {self.solutions}")
             print(new)
@@ -367,10 +370,10 @@ def bnb_search(self, num):
             self.cost_list.append(new)
             if new < self.best:
                 self.best = new
-                self.links_copy = copy.copy([self.houses, self.batteries])
-                self.results_list.append(self.links_copy)
+                save_dat_file(self)
+                self.results_list.append(new)
         else:
-            print(f"{num} is not below 149 and full")
+            print(f"{num} is full")
     if num < 10:
         self.percentage += 1
         print(f"{self.percentage}% done")
