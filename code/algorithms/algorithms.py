@@ -37,7 +37,6 @@ def stepdown(self):
         for i in range(len(high_low)):
             batt_count += 1
             battery = high_low[i][1]
-            print(battery.capacity)
 
             # Sort houses linked to this battery by distance
             # to other battery from low to high
@@ -58,7 +57,7 @@ def stepdown(self):
             changes += 1
             arch_elem = swap_houses(self, house, curr_batt, to_batt)
             try_list.append(arch_elem)
-            if len(try_list) > 0:
+            if len(try_list) > 10:
                 try_list.pop(0)
 
             # break
