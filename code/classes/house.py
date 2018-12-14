@@ -22,5 +22,5 @@ class House(object):
     def filter(self):
         for key in self.diffs:
             self.filtered.append(key)
-            if len(self.filtered) == 2:
+            if len(self.filtered) == 1:
                 return
