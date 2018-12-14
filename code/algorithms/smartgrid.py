@@ -218,6 +218,7 @@ class Smartgrid(object):
     def run_algorithm(self):
         if self.algorithm == "stepdown":
             stepdown(self)
+            self.plot_houses(0)
         elif self.algorithm == "greedy":
             self.pickle_file = greedy(self, self.iterations)
         elif self.algorithm == "hill":
