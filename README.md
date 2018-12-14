@@ -125,9 +125,9 @@ We considered implementing an archive into the algorithm, ensuring a randomized 
    
  ## Authors
  * Julian Evalle
- * ZEBEZ
- * MARUK
+ * Sebastiaan Schneider
+ * Mark van Malestein
  
  ## Acknowledgements
- * cluster site
+ * [Cluster Algorithm](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)
  * stack Overflow
