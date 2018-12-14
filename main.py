@@ -78,7 +78,6 @@ class Main(object):
                             min_cost = smart.cost
                             index = i
 
-
                     # Call specified algorithm for cheapest option
                     Smartgrid(neighbourhood, algorithm, iterations, "n", index,
                               "cluster")
@@ -86,7 +85,7 @@ class Main(object):
                     file = os.path.join(*[cwd, 'results', f"wijk_{self.input}",
                                           algorithm, "cluster",
                                           f"{algorithm}_lowest_WIJK{self.input}"
-                                          f"_{time_var}.dat"])
+                                          + f"_{time_var}.dat"])
                     # Load pickle so cheapest option can be plotted
                     load_pickle(self, file)
                     sys.exit()

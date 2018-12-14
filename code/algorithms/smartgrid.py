@@ -147,7 +147,6 @@ class Smartgrid(object):
             batteries = list(all_distances[index].keys())
             distances = list(all_distances[index].values())
 
-            house.link = self.batteries[batteries[0]]
             self.batteries[batteries[0]].linked_houses.append(house)
             diff, distance_diffs = distances[0], distances
             diffs = {}

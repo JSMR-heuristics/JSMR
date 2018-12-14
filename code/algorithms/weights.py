@@ -456,7 +456,11 @@ class Weights(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        with open(f"weighted_clusters_WIJK{self.input}.dat", "rb") as f:
+        cwd = os.getcwd()
+        path = os.path.join(*[cwd, 'data', 'weighted_clusters',f"weighted_clusters_WIJK{self.input}.dat" ])
+        sys.path.append(path)
+
+        with open(path, "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 
