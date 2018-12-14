@@ -320,16 +320,18 @@ def dfs_search(self, num):
         print(f"Current house: {num}")
 
 def bnb(self):
-    self.best = 22000
+    self.best = 35000
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
     self.cost_list = []
     self.extra = []
+    self.up = (1 / 81) * 100
+    self.percentage = self.up
     for i in self.houses:
         self.extra.append(self.houses[i])
         self.houses[i].filter()
-    print("Initialized")
+    print("Processing...")
     bnb_search(self, 0)
     for i in range(self.solutions):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
@@ -372,8 +374,9 @@ def bnb_search(self, num):
                 return
             else:
                 bnb_search(self, num + 1)
-    if num < 100:
-        print(f"Current house: {num}")
+    if num < 4:
+        self.percentage += self.up
+        print(f"{self.percentage}%")
 
 def random_algorithm(self, iterations):
     """
