@@ -1,41 +1,44 @@
-import operator, random, os, sys, pickle, time, copy
+import operator
+import random
+import os
+import sys
+import pickle
+import time
+import copy
 import numpy as np
 import os
-
 
 from helpers import *
 
 
 def stepdown(self):
-    """
-    This function changes links between houses and batteries
-    so no battery is over it's capacity, this will be done
-    with lowest cost possible for this algorithm
+    """Self named stepdown algorithm.
+
+    This function starts with every house linked to the closest battery and
+    changes links between houses and batteries so no battery is over it's
+    capacity, this will be done with lowest cost possible for this algorithm
     """
     # Initialize changes counter, this gives insight to
     # the speed of this algorithm
     changes = 0
-    # for num in self.batteries:
-    #     print(f"Battery{num}: {self.batteries[num].filled()}")
-    #     for ding in self.batteries[num].linked_houses:
-    #         print(f"House: {ding.output}")
+
+    # link every house to closet battery
+    for house in self.houses.values():
+        house.link = self.batteries[list(house.diffs.keys())[0]]
 
     # While one or more batteries are over their capacity
-    try_list = []
+    # Stops when 500 changes are made.
     while check_full(self) and changes < 500:
-        # kan korter
+
         # Sorts batteries based off total inputs from high to low
         total_inputs = []
         for battery in self.batteries.values():
             total_inputs.append([battery.filled(), battery])
-        high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
+        high_low = sorted(total_inputs, key=operator.itemgetter(0),
+                          reverse=True)
 
-        # Prioritize battery with highest inputs
-        # to disconnect a house from
-        # for i in high_low:
-        batt_count = 0
+        # Prioritize battery with highest inputs to disconnect a house from
         for i in range(len(high_low)):
-            batt_count += 1
             battery = high_low[i][1]
 
             # Sort houses linked to this battery by distance
@@ -46,54 +49,55 @@ def stepdown(self):
             # Determine the cheapest option first, if any
             # else transfer option with lowest output
             try:
-                house, to_batt = find_best(self, distance_list, "strict", try_list)
+                house, to_batt = find_best(self, distance_list, "strict")
             except TypeError:
-                    house, to_batt = find_best(self, distance_list, "not-strict", try_list)
-
+                    house, to_batt = find_best(self, distance_list,
+                                               "not-strict")
 
             # Switch the house from battery
             curr_batt = house.link
-            print(changes)
             changes += 1
-            arch_elem = swap_houses(self, house, curr_batt, to_batt)
-            try_list.append(arch_elem)
-            if len(try_list) > 10:
-                try_list.pop(0)
+            swap_houses(self, house, curr_batt, to_batt)
 
-            # break
+    # Return cost to be used for possible comparison between configurations
     return calculate_cost(self)
+
+    # Prints total input of every battery, to check whether all constraints are
+    # met
     for i in self.batteries:
         print(self.batteries[i].filled())
         print(f"{self.batteries[i].x}/{self.batteries[i].y}")
 
 
 def greedy(self, iterations):
-    """
-    This function changes links between houses and batteries
-    so no battery is over it's capacity, this will be done
-    with lowest cost possible for this algorithm
+    """Greedy algorithm, non deterministic.
 
-
-    SEQUENCES ONTHOUDEN VOOR EXTRA PUNTEN!!!!!!!!!! id's
+    This function links every house in a random sequence to the closest
+    possible battery without putting the battery over it's capacity, for a
+    specifiec number of iterations.
     """
-    # turn houses into list
+    # Turns houses objects into list
     random_houses = list(self.houses.values())
 
+    # Get number of iterations
     iterations = int(iterations)
 
     prices = []
     count = 0
     misses = -iterations
 
-    # Do untill we have <iterations> succesfull configurations
+    # Do until we have <iterations> succesfull configurations
     while count < iterations:
-        disconnect(self)
+
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
         while check_linked(self) is False or check_full(self) is True:
-            if misses > 5000:
+
+            # If algorithm finds too many misses, stop it
+            if misses > (7 * iterations):
                 return None
             misses += 1
+
 
             # shuffle order of houses
             random.shuffle(random_houses)
@@ -120,8 +124,7 @@ def greedy(self, iterations):
 
         # pickle cheapest configuration so far + sequence of houses
         # include time
-<<<<<<< HEAD
-=======
+
         time_var = time.strftime("%d%m%Y")
         if price is min(prices):
             house_batt = [self.houses, self.batteries]
@@ -131,7 +134,6 @@ def greedy(self, iterations):
             with open(path, "wb") as f:
                 pickle.dump(house_batt, f)
 
->>>>>>> a9d11a61b01fb4e336ff33d08578103fdf3a549a
 
         if price is min(prices):
             file = save_dat_file(self)

@@ -45,7 +45,7 @@ def sort_linked_houses(self, battery):
 
     return sorted(distance_list, key=operator.itemgetter(1))
 
-def find_best(self, list, status, try_list):
+def find_best(self, list, status):
     """
     Tries to find either the cheapest house to possibly switch from battery
     or the one with the lowest possible output
@@ -55,7 +55,7 @@ def find_best(self, list, status, try_list):
             a = self.batteries[option[0]].filled() + option[2].output
             b = self.batteries[option[0]].capacity
             c = b - a
-            if a <= b and [option[2].link.x, option[2].link.y, self.batteries[option[0]].x, self.batteries[option[0]].y] not in try_list:
+            if a <= b:
             # if a <= b and not 7 < c < 35:
                 return option[2], self.batteries[option[0]]
     # wordt vervangen door output gewicht
@@ -90,7 +90,6 @@ def swap_houses(self, house, current_batt, next_batt):
     house.link = next_batt
     next_batt.linked_houses.append(house)
     current_batt.linked_houses.remove(house)
-    return [next_batt.x, next_batt.y, current_batt.x, current_batt.y]
 
 def check_linked(self):
     """
