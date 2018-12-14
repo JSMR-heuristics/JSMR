@@ -327,12 +327,13 @@ def bnb(self):
     self.results_list = []
     self.cost_list = []
     self.extra = []
-    self.up = (1 / 81) * 100
-    self.percentage = self.up
+    self.up = (1 / 125) * 100
+    self.percentage = 0
     for i in self.houses:
         self.extra.append(self.houses[i])
         self.houses[i].filter()
     print("Processing...")
+    print(f"{self.percentage}% done")
     bnb_search(self, 0)
     for i in range(self.solutions):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
@@ -340,44 +341,40 @@ def bnb(self):
         pickle.dump(self.results_list, f)
 
 def bnb_search(self, num):
-    cap_space = (150 - num) * 35 + 1507
-    cost_space = (150 - num) * 70 + self.best
+    cap_space = (150 - num) * 45 + 1507
+    cost_space = (150 - num) * 35 + self.best
     for battery in self.extra[num].filtered:
+        # print(self.extra[num].x, self.extra[num].y)
+        # print(battery)
+        # print(self.batteries[battery].x, self.batteries[battery].y)
         if self.extra[num].link == self.batteries[battery]:
             pass
         else:
             swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
-        if num > 144:
-            if num < 149:
-                bnb_search(self, num + 1)
-            elif not check_full(self):
-                self.solutions += 1
-                print(f"Amount of solutions found: {self.solutions}")
-                new = calculate_cost(self)
-                self.cost_list.append(new)
-                if new < self.best:
-                    self.best = new
-                    self.links_copy = copy.copy([self.houses, self.batteries])
-                    self.results_list.append(self.links_copy)
-        elif num > 115:
+        if num < 149:
+            # print(f"{num} is below 149")
             if self.batteries[battery].filled() > cap_space:
                 continue
             elif calculate_cost(self) > cost_space:
                 continue
-            else:
-                bnb_search(self, num + 1)
-        elif num < 15:
+            # else:
             bnb_search(self, num + 1)
+        elif not check_full(self):
+            print(f"{num} is not below 149 and not full")
+            self.solutions += 1
+            print(f"Amount of solutions found: {self.solutions}")
+            print(new)
+            new = calculate_cost(self)
+            self.cost_list.append(new)
+            if new < self.best:
+                self.best = new
+                self.links_copy = copy.copy([self.houses, self.batteries])
+                self.results_list.append(self.links_copy)
         else:
-            if self.batteries[battery].filled() > cap_space:
-                return
-            elif calculate_cost(self) > cost_space:
-                return
-            else:
-                bnb_search(self, num + 1)
-    if num < 4:
-        self.percentage += self.up
-        print(f"{self.percentage}%")
+            print(f"{num} is not below 149 and full")
+    if num < 10:
+        self.percentage += 1
+        print(f"{self.percentage}% done")
 
 def random_algorithm(self, iterations):
     """
