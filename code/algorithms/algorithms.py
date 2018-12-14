@@ -21,8 +21,8 @@ def stepdown(self):
     #         print(f"House: {ding.output}")
 
     # While one or more batteries are over their capacity
+    try_list = []
     while check_full(self) and changes < 500:
-
         # kan korter
         # Sorts batteries based off total inputs from high to low
         total_inputs = []
@@ -33,28 +33,35 @@ def stepdown(self):
         # Prioritize battery with highest inputs
         # to disconnect a house from
         # for i in high_low:
-        battery = high_low[0][1]
+        batt_count = 0
+        for i in range(len(high_low)):
+            batt_count += 1
+            battery = high_low[i][1]
 
-        # Sort houses linked to this battery by distance
-        # to other battery from low to high
-        # distance_list = self.sort_linked_houses(battery)
-        distance_list = sort_linked_houses(self, battery)
+            # Sort houses linked to this battery by distance
+            # to other battery from low to high
+            # distance_list = self.sort_linked_houses(battery)
+            distance_list = sort_linked_houses(self, battery)
 
-        # Determine the cheapest option first, if any
-        # else transfer option with lowest output
-        try:
-            house, to_batt = find_best(self, distance_list, "strict")
-        except TypeError:
-            house, to_batt = find_best(self, distance_list, "not-strict")
+            # Determine the cheapest option first, if any
+            # else transfer option with lowest output
+            try:
+                house, to_batt = find_best(self, distance_list, "strict", try_list)
+            except TypeError:
+                    house, to_batt = find_best(self, distance_list, "not-strict", try_list)
 
-        # Switch the house from battery
-        curr_batt = house.link
-        changes += 1
-        swap_houses(self, house, curr_batt, to_batt)
-        if (changes % 5) is 0 and self.plot_option == "y":
-            self.plot_houses(changes)
-        # break
-    self.plot_houses("FINAL")
+
+            # Switch the house from battery
+            curr_batt = house.link
+            print(changes)
+            changes += 1
+            arch_elem = swap_houses(self, house, curr_batt, to_batt)
+            try_list.append(arch_elem)
+            if len(try_list) > 10:
+                try_list.pop(0)
+
+            # break
+    return calculate_cost(self)
     for i in self.batteries:
         print(self.batteries[i].filled())
         print(f"{self.batteries[i].x}/{self.batteries[i].y}")
@@ -84,6 +91,8 @@ def greedy(self, iterations):
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
         while check_linked(self) is False or check_full(self) is True:
+            if misses > 5000:
+                return None
             misses += 1
 
             # shuffle order of houses
@@ -94,8 +103,12 @@ def greedy(self, iterations):
 
             # for every house find closest battery to connect to provided
             # that this house wont over-cap the battery
+            houses_counter = 0
             for house in random_houses:
-                for i in range(5):
+                for i in range(len(self.batteries.values())):
+                    houses_counter += 1
+                    # if houses_counter > (len(self.houses.values()) * 150):
+                    #     return None
                     if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
                         house.link = self.batteries[list(house.diffs)[i]]
                         self.batteries[list(house.diffs)[i]].linked_houses.append(house)
@@ -107,10 +120,21 @@ def greedy(self, iterations):
 
         # pickle cheapest configuration so far + sequence of houses
         # include time
+<<<<<<< HEAD
+=======
+        time_var = time.strftime("%d%m%Y")
+        if price is min(prices):
+            house_batt = [self.houses, self.batteries]
+            cwd = os.getcwd()
+            path = os.path.join(*[cwd, 'data', 'pickles', f"greedy_lowest_WIJK{self.input}_{time_var}.dat"])
+            sys.path.append(path)
+            with open(path, "wb") as f:
+                pickle.dump(house_batt, f)
+
+>>>>>>> a9d11a61b01fb4e336ff33d08578103fdf3a549a
 
         if price is min(prices):
             file = save_dat_file(self)
-
 
         count += 1
         # print(count)
@@ -299,16 +323,19 @@ def dfs_search(self, num):
         print(f"Current house: {num}")
 
 def bnb(self):
-    self.best = 22000
+    self.best = 35000
     print(f"Score to beat: {self.best}")
     self.solutions = 0
     self.results_list = []
     self.cost_list = []
     self.extra = []
+    self.up = (1 / 125) * 100
+    self.percentage = 0
     for i in self.houses:
         self.extra.append(self.houses[i])
         self.houses[i].filter()
-    print("Initialized")
+    print("Processing...")
+    print(f"{self.percentage}% done")
     bnb_search(self, 0)
     for i in range(self.solutions):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
@@ -316,43 +343,40 @@ def bnb(self):
         pickle.dump(self.results_list, f)
 
 def bnb_search(self, num):
-    cap_space = (150 - num) * 35 + 1507
-    cost_space = (150 - num) * 70 + self.best
+    cap_space = (150 - num) * 45 + 1507
+    cost_space = (150 - num) * 35 + self.best
     for battery in self.extra[num].filtered:
+        # print(self.extra[num].x, self.extra[num].y)
+        # print(battery)
+        # print(self.batteries[battery].x, self.batteries[battery].y)
         if self.extra[num].link == self.batteries[battery]:
             pass
         else:
             swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
-        if num > 144:
-            if num < 149:
-                bnb_search(self, num + 1)
-            elif not check_full(self):
-                self.solutions += 1
-                print(f"Amount of solutions found: {self.solutions}")
-                new = calculate_cost(self)
-                self.cost_list.append(new)
-                if new < self.best:
-                    self.best = new
-                    self.links_copy = copy.copy([self.houses, self.batteries])
-                    self.results_list.append(self.links_copy)
-        elif num > 115:
+        if num < 149:
+            # print(f"{num} is below 149")
             if self.batteries[battery].filled() > cap_space:
                 continue
             elif calculate_cost(self) > cost_space:
                 continue
-            else:
-                bnb_search(self, num + 1)
-        elif num < 15:
+            # else:
             bnb_search(self, num + 1)
+        elif not check_full(self):
+            print(f"{num} is not below 149 and not full")
+            self.solutions += 1
+            print(f"Amount of solutions found: {self.solutions}")
+            print(new)
+            new = calculate_cost(self)
+            self.cost_list.append(new)
+            if new < self.best:
+                self.best = new
+                self.links_copy = copy.copy([self.houses, self.batteries])
+                self.results_list.append(self.links_copy)
         else:
-            if self.batteries[battery].filled() > cap_space:
-                return
-            elif calculate_cost(self) > cost_space:
-                return
-            else:
-                bnb_search(self, num + 1)
-    if num < 100:
-        print(f"Current house: {num}")
+            print(f"{num} is not below 149 and full")
+    if num < 10:
+        self.percentage += 1
+        print(f"{self.percentage}% done")
 
 def random_algorithm(self, iterations):
     """

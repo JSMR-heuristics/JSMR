@@ -108,9 +108,10 @@ class Smartgrid(object):
 
         total = 0
         for house in list(self.houses.values()):
-            # print(list(house.diffs.keys())[0])
+            # # lower
             # house.link = self.batteries[list(house.diffs.keys())[0]]
-            # # house.link = self.batteries[list(house.diffs.keys())[len(self.batteries.values()) - 1]]
+            # # upper
+            # house.link = self.batteries[list(house.diffs.keys())[len(self.batteries.values()) - 1]]
             x_house, y_house = house.x, house.y
             x_batt, y_batt = house.link.x, house.link.y
 

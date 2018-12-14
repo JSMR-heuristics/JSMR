@@ -24,9 +24,10 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
 
 
 class Weights(object):
-    def __init__(self, neighbourhood, algorithm, iterations):
+    def __init__(self, neighbourhood, algorithm, iterations,set_up):
         self.input = neighbourhood
         self.algorithm = algorithm
+        self.set_up = set_up
         self.iterations = int(iterations)
         self.configs = self.get_configs()
         self.houses = self.load_houses()
@@ -47,6 +48,7 @@ class Weights(object):
                 try:
                     self.index += 1
                     self.batteries = self.load_batteries(self.index)
+                    print("run")
                 except FileNotFoundError:
                     break
                 self.calculate_cable()
@@ -183,7 +185,7 @@ class Weights(object):
                     self.set_attributes()
                     self.calculate_cable()
                     self.link_houses()
-                    self.greedy(1000)
+                    greedy(self, 1000)
             self.big_iterations = -1
             self.small_iterations = 0
             self.caps = []
@@ -202,6 +204,7 @@ class Weights(object):
             else:
                 cost = 1800
             setattr(battery, "cost", cost)
+            battery.capacity = self.caps[self.big_iterations][i]
 
     def plot_houses(self):
 
