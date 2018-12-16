@@ -153,7 +153,6 @@ def hill_climber(self, iterations):
     iterations = int(iterations)
     count = 0
     misses = -iterations
-    prices = []
 
     # Randomize battery indexation
     batt_index = range(len(self.batteries))
@@ -189,10 +188,11 @@ def hill_climber(self, iterations):
         step_back_cost = base_cost
         step_back = base_copy
 
+        #  note the user that the hillclimb portion of the
+        #  iteration has been initiated
         print("Start Hillclimb")
 
         # Initializing
-        climbs = 0
         hillcount = 0
         alt_directions = 150 * 150
 
@@ -210,31 +210,42 @@ def hill_climber(self, iterations):
                     # Take a step if not the same batteries
                     if not (house_1.link == house_2.link):
                         switch_houses(self, house_1, house_2)
+                        #  calculate the new cost
                         step_cost = calculate_cost(self)
+                        #  check if the new step costs less and fits within
+                        #  the contraintst
                         if (step_cost < step_back_cost) and (check_full(self) is
                                                              False):
-                            climbs += 1
+                            #  make the current step the curently best found
+                            #  configuration
                             step_back = copy.copy([self.houses, self.batteries])
                             step_back_cost = step_cost
+                            #  reset the counter for checking directions
                             hillcount = 0
                         else:
+                            # switch back the houses
                             switch_houses(self, house_1, house_2)
+                    #  increment the tried directions
                     hillcount += 1
-
+        # keep track for the user the stating cost and
+        # the end cost of the iteration
         print(f"bc={base_cost}, hilltop = {step_cost}")
         time_var = time.strftime("%d%m%Y")
         prices.append(step_cost)
 
-        # Save setup if this is the cheapest found
+        # Save setup if this is the cheapest found of all the iterations up to
+        # this point
         if step_cost is min(prices):
+            # saves the current configuration to its respective folder in the
+            # results folder as a .dat file and overwrites the previously made
+            # .dat file
             save_dat_file(self)
-
+        #  keeps track of the succesfull iterations
         count += 1
         print(count)
 
-    with open(f"prices_list_WIJK{self.input}_hill.dat", "wb") as f:
-        pickle.dump(prices, f)
-
+    #  gives the user the most relevant details when all the iterations
+    #  are completed
     print(f"min: {min(prices)}")
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
