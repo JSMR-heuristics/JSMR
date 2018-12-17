@@ -1,13 +1,10 @@
 import operator
 import random
-import os
-import sys
 import pickle
 import time
 import copy
 import datetime
 import numpy as np
-import os
 
 from helpers import *
 
@@ -71,7 +68,7 @@ def stepdown(self):
 
 
 def greedy(self, iterations):
-    """Greedy algorithm, non deterministic.
+    """Greedy algorithm, non deterministic,, saves best solution in pickle.
 
     This function links every house in a random sequence to the closest
     possible battery without putting the battery over it's capacity, for a
@@ -114,6 +111,8 @@ def greedy(self, iterations):
             for house in random_houses:
                 for i in range(len(self.batteries.values())):
                     batt = self.batteries[list(house.diffs)[i]]
+
+                    # Check if operation is within constraints
                     if house.output + batt.filled() <= batt.capacity:
                         house.link = batt
                         batt.linked_houses.append(house)
@@ -140,169 +139,147 @@ def greedy(self, iterations):
 
 
 def hill_climber(self, iterations):
-    """Hill climber, non deterministic.
+    """Hill climber, non deterministic, saves best solution in pickle.
 
     This function changes links between houses and batteries
     so no battery is over it's capacity, this will be done
     with lowest cost possible for this algorithm.
+    For each iteration the sequence houses will be randomized.
     """
+    # Randomize house sequences
     random_houses = list(self.houses.values())
     random_houses_2 = list(self.houses.values())
+
+    # Initializing
     iterations = int(iterations)
     count = 0
     misses = -iterations
-    prices = []
-    print(self.batteries.values)
+
+    # Randomize battery indexation
     batt_index = range(len(self.batteries))
-    print(f"batt_index= {batt_index}")
-    # Do untill we have <iterations> succesfull configurations
+
+    # Do until we have <iterations> succesfull configurations
     while count < iterations:
+
+        # Disconnect possible connections from previous iteration
         disconnect(self)
-        # connect random houses to the closest option  within the constraints
+
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
         while check_linked(self) is False or check_full(self) is True:
-            # print(misses)
             misses += 1
 
             # shuffle order of houses
             random.shuffle(random_houses)
+
             # remove connections, if any
             disconnect(self)
 
             # for every house find closest battery to connect to provided
             # that this house wont over-cap the battery
             # for house in random_houses:
-            #
-            #     for i in range(len(self.batteries.values())):
-            #         if house.output + self.batteries[list(house.diffs)[i]].filled() <= self.batteries[list(house.diffs)[i]].capacity:
-            #             house.link = self.batteries[list(house.diffs)[i]]
-            #             self.batteries[list(house.diffs)[i]].linked_houses.append(house)
-            #             break
             for house in random_houses:
                 index = random.sample(batt_index, 1)[0]
                 house.link = self.batteries[index]
                 self.batteries[index].linked_houses.append(house)
 
-
+        # Save starting configuration and cost
         base_copy = copy.copy([self.houses, self.batteries])
         base_cost = calculate_cost(self)
-
-        print("Start Hillclimb")
         step_back_cost = base_cost
         step_back = base_copy
 
-        climbs = 0
+        #  note the user that the hillclimb portion of the
+        #  iteration has been initiated
+        print("Start Hillclimb")
+
+        # Initializing
         hillcount = 0
         alt_directions = 150 * 150
 
+        # Randomize house sequences
         random.shuffle(random_houses)
         random.shuffle(random_houses_2)
 
-        # shorten time by checking calbe diff instead of whole gridcost
+        # Shorten time by checking calbe diff instead of whole gridcost
         while hillcount < alt_directions:
+
             # loop while the new step is inefficient
             for house_1 in random_houses:
                 for house_2 in random_houses_2:
-                    # take a step if not the same batteries
+
+                    # Take a step if not the same batteries
                     if not (house_1.link == house_2.link):
                         switch_houses(self, house_1, house_2)
+                        #  calculate the new cost
                         step_cost = calculate_cost(self)
-                        if (step_cost < step_back_cost) and (check_full(self) is False):
-                            climbs += 1
+                        #  check if the new step costs less and fits within
+                        #  the contraintst
+                        if (step_cost < step_back_cost) and (check_full(self) is
+                                                             False):
+                            #  make the current step the curently best found
+                            #  configuration
                             step_back = copy.copy([self.houses, self.batteries])
                             step_back_cost = step_cost
+                            #  reset the counter for checking directions
                             hillcount = 0
                         else:
+                            # switch back the houses
                             switch_houses(self, house_1, house_2)
-                            #self.houses, self.batteries = step_back[0], step_back[1]
+                    #  increment the tried directions
                     hillcount += 1
-
+        # keep track for the user the stating cost and
+        # the end cost of the iteration
         print(f"bc={base_cost}, hilltop = {step_cost}")
         time_var = time.strftime("%d%m%Y")
         prices.append(step_cost)
 
+        # Save setup if this is the cheapest found of all the iterations up to
+        # this point
         if step_cost is min(prices):
+            # saves the current configuration to its respective folder in the
+            # results folder as a .dat file and overwrites the previously made
+            # .dat file
             save_dat_file(self)
-            # house_batt = [self.houses, self.batteries]
-            # path = os.path.join(*[cwd, 'results', f'wijk_{self.input}', 'hill'])
-            #
-            # with open(f"hill_climber_batt_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
-            #     pickle.dump(house_batt, f)
-            # with open(f"sequence_lowest_WIJK{self.input}_{time_var}.dat", "wb") as f:
-            #     pickle.dump(random_houses, f)
+        #  keeps track of the succesfull iterations
         count += 1
         print(count)
 
-    with open(f"prices_list_WIJK{self.input}_hill.dat", "wb") as f:
-        pickle.dump(prices, f)
-
+    #  gives the user the most relevant details when all the iterations
+    #  are completed
     print(f"min: {min(prices)}")
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
-def backup(self):
-    """
-    Probeer wijk 3 weer te laten werken maar zonder succes
-    """
-    # Initialize changes counter, this gives insight to
-    # the speed of this algorithm
-    changes = 0
-
-    # While one or more batteries are over their capacity
-    while check_full(self):
-
-        # Sorts batteries based off total inputs from high to low
-        total_inputs = []
-        for battery in self.batteries.values():
-            total_inputs.append([battery.filled(), battery])
-        high_low = sorted(total_inputs, key=operator.itemgetter(0), reverse = True)
-
-        # Prioritize battery with highest inputs
-        # to disconnect a battery from
-        for i in high_low:
-            battery = i[1]
-            distance_list = []
-
-            # Sort houses linked to this battery by distance
-            # to other battery from low to high
-            for house in battery.linked_houses:
-                element = []
-                batts = list(house.diffs.keys())
-                distance = list(house.diffs.values())
-                houses = [house] * len(distance)
-                outputs = [house.output] * len(distance)
-                element = list(map(list, zip(batts, distance, houses, outputs)))
-                distance_list += element
-            distance_list = sorted(distance_list, key=operator.itemgetter(1))
-
-            # Determine the cheapest option first, if any
-            # else transfer option with lowest output
-            try:
-                print(distance_list)
-                house, to_batt = find_best_backup(self, distance_list, "strict")
-            except TypeError:
-                print("type-error")
-                house, to_batt = find_best_backup(self, distance_list, "not-strict")
-
-            # Switch the house from battery
-            curr_batt = house.link
-            changes += 1
-            swap_houses(self, house, curr_batt, to_batt, changes)
-
 
 def dfs(self):
+<<<<<<< HEAD
     if self.input == 1:
         self.best = 34000
     elif self.input == 2:
         self.best = 22000
     else:
         self.best = 22500
+=======
+    """Depth First parent.
+
+    This method calls the actual depth first search and saves the best
+    result found.
+    """
+    # Find best configuration using greedy algorithm
+    self.best = greedy(self, 500)
+>>>>>>> e9bdc9fc85b879e030f8883f963733f562f22af0
     self.extra = []
+
+    # Put house objects in list
     for i in self.houses:
         self.extra.append(self.houses[i])
+
+    # Call actual depth first search
     dfs_search(self, 0)
+
+    # Print and save results
     for i in range(self.solutions):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
     with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
@@ -310,13 +287,28 @@ def dfs(self):
 
 
 def dfs_search(self, num):
+    """Depth first search algorithm.
+
+    This algorithm finds all possible solutions by recursively searching for
+    all possible setups for each battery. Also saves the best solution found
+    yet and all prices found.
+    """
+    # Finds all possible links for each battery
     for battery in self.batteries:
+
+        # Swap links if a new connection possibility is found
         if self.extra[num].link == self.batteries[battery]:
             pass
         else:
-            swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
+            swap_houses(self, self.extra[num], self.extra[num].link,
+                        self.batteries[battery])
+
+        # Keep running until every house is checked
         if num < 149:
             dfs_search(self, num + 1)
+
+        # Saves results if constraints are met and the current option is
+        # better than anything found yet
         elif not check_full(self):
             self.solutions += 1
             print(f"Number of solutions found: {self.solutions}")
@@ -331,6 +323,7 @@ def dfs_search(self, num):
 
 
 def bnb(self):
+<<<<<<< HEAD
 
     if self.input == 1:
         self.best = 34000
@@ -339,6 +332,17 @@ def bnb(self):
     else:
         self.best = 22500
 
+=======
+    """Branch and Bound parent.
+
+    This method calls the actual depth first search and saves the best
+    result found.
+    """
+    # 3 = 22185
+    # 2 = 21627
+    # 1 = 33687
+    self.best = 34000
+>>>>>>> e9bdc9fc85b879e030f8883f963733f562f22af0
     print(f"Score to beat: {self.best}")
 
     self.solutions = 0
@@ -424,36 +428,43 @@ def mini_cost(self, num):
     return cost
 
 
+
 def random_algorithm(self, iterations):
-    """
-    This function changes links between houses and batteries
+    """Random algorithm, , saves best solution in pickle.
+
+    This algorithm links houses and batteries
     so no battery is over it's capacity, this will be done
-    with lowest cost possible for this algorithm
+    with in random sequence.
     """
-    # turn houses into list
+    # Put house objects in list
     random_houses = list(self.houses.values())
 
+    # Initialize
     prices = []
     count = 0
     misses = -iterations
-    batt_index = [0, 1, 2, 3, 4]
 
-    # Do untill we have <iterations> succesfull configurations
+    # Get all battery indices
+    batt_index = range(len(self.batteries))
+
+    # Do until we have <iterations> succesfull configurations
     while count < iterations:
+
+        # Disconnect possible connections from previous iteration
         disconnect(self)
+
         # While one or more batteries are over their capacity or not every
         # house is linked to a battery
-
         while check_linked(self) is False or check_full(self) is True:
             misses += 1
 
-            # shuffle order of houses
+            # Randomize order of houses
             random.shuffle(random_houses)
 
-            # remove connections, if any
+            # Remove connections, if any
             disconnect(self)
 
-            # for every house find closest battery to connect to provided
+            # For every house find closest battery to connect to provided
             # that this house wont over-cap the battery
             for house in random_houses:
                 for i in range(len(self.batteries.values())):
@@ -462,34 +473,41 @@ def random_algorithm(self, iterations):
                     curr = self.batteries[index[i]].filled()
                     batt = self.batteries[index[i]]
 
+                    # Check if operation is within constraints
                     if output + curr <= batt.capacity:
                         house.link = batt
                         batt.linked_houses.append(house)
                         break
 
-        # calculate price
+        # Calculate price
         price = calculate_cost(self)
         prices.append(price)
 
-        # pickle cheapest configuration so far + sequence of houses
+        # Pickle cheapest configuration so far + sequence of houses
         if price is min(prices):
             house_batt = [self.houses, self.batteries]
-            with open(f"random_greedy_lowest_WIJK{self.input}_{iterations}.dat", "wb") as f:
+            with open(f"random_greedy_lowest_WIJK{self.input}_{iterations}.dat",
+                      "wb") as f:
                 pickle.dump(house_batt, f)
-            with open(f"sequence_lowest_WIJK{self.input}_{iterations}.dat", "wb") as f:
+            with open(f"sequence_lowest_WIJK{self.input}_{iterations}.dat",
+                      "wb") as f:
                 pickle.dump(random_houses, f)
 
         count += 1
+
+    # Save all costs found for histogram
     with open(f"prices{self.input}_{iterations}.dat", "wb") as f:
         pickle.dump(prices, f)
 
-
+    # Print results
     print(f"min: {min(prices)}")
     print(f"max: {max(prices)}")
     print(f"mean: {np.mean(prices)}")
     print(f"unsuccesfull iterations: {misses}")
 
-    with open(f"random_greedy_lowest_WIJK{self.input}_{iterations}.dat", "rb") as f:
+    # Load cheapest solution, so it can be plotted
+    with open(f"random_greedy_lowest_WIJK{self.input}_{iterations}.dat",
+              "rb") as f:
         unpickler = pickle.Unpickler(f)
         house_batt = unpickler.load()
         self.houses, self.batteries = house_batt[0], house_batt[1]

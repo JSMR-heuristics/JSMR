@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import sys
 import csv
 import matplotlib.pyplot as plt
@@ -7,18 +5,24 @@ import numpy as np
 import re
 import os
 
-from pathlib import Path
 from helpers import *
 from algorithms import *
 
+# Change path so object classes can be imported
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
-
 from battery import Battery
 from house import House
 
+
 class Smartgrid(object):
+    """Smartgrid class, calls algorithms and methods.
+
+    This class is called in Main and subsequently loads the correct datafiles
+    and calls the corresponding algorithms and methods.
+    """
+
     def __init__(self, neighbourhood, algorithm, iterations, plot, c_option, set_up):
         self.input = neighbourhood
         self.algorithm = algorithm
