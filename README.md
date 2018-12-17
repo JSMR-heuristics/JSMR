@@ -116,12 +116,11 @@ We considered implementing an archive into the algorithm, ensuring a randomized 
 
  * Open a command window in the main folder, "JSMR".
  * In the command line, type:
- * Python main.py [the neighborhood: 1/2/3] [the algorithm: stepdown/greedy/hill/dfs/configure/cluster] [the amount of iterations: any interger of 0 or higher]
+ * python main.py [the neighborhood: 1/2/3] [the algorithm: stepdown/greedy/hill/dfs/random/bnb] [the amount of iterations: any interger of 0 or higher][optional: cluster/configure/plot]
    * Entering "cluster" will return a result in accordance with this case's subgoal C, while "configure" will return a result in accordance with subgoal D.
-   * Entering "spec" will allow you to insert the details through prompts.
-   * Entering "plot" behind the necessary command line arguments will return an number of mid-process plots.
+   * Entering "plot" behind the necessary command line arguments will return a number of mid-process plots.
    * *Currently the stepdown algorithm does not function with neighborhood 3. For that neighborhood, an algorithm that uses the same logic, but is less effective, can be used by entering "backup".
-   * The amount of iterations entered is only taken into consideration towards algorithms that make use of it, but it should always be entered.
+   * The amount of iterations entered is only taken into consideration towards algorithms that make use of it, if its not entered for those algorithms it will automatically set it to 1000
    
  ## Authors
  * Julian Evalle
@@ -130,4 +129,4 @@ We considered implementing an archive into the algorithm, ensuring a randomized 
  
  ## Acknowledgements
  * [Cluster Algorithm](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)
- * stack Overflow
+ * Stack Overflow
