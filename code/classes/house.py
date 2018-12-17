@@ -1,4 +1,7 @@
 class House(object):
+
+    """This represents every house that is created in the program"""
+
     def __init__(self, x, y, output):
         # Coordinates of the house instance
         self.x = int(x)
@@ -19,7 +22,14 @@ class House(object):
 
         self.filtered = []
 
+
+
     def filter(self):
+        """A simple method that turns self.diffs, a dictionary countaining the
+        available batteries as keys, and their respective distances to the
+        house as values, in order of that distance (small to large)
+        an iterable list"""
+        
         for key in self.diffs:
             self.filtered.append(key)
             if len(self.filtered) == 4:

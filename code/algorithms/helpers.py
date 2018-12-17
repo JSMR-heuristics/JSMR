@@ -1,10 +1,11 @@
-import operator
-import sys, os
-import pickle
 import matplotlib.pyplot as plt
 import numpy as np
+import operator
+import pickle
+import sys, os
 import time
 
+comment
 def calculate_distance(self):
     all_distances = []
     for house in self.houses.values():
@@ -21,6 +22,7 @@ def calculate_distance(self):
         all_distances.append(house_diff)
         house.dists = house_diff
     return all_distances
+
 
 def sort_linked_houses(self, battery):
     """
@@ -45,6 +47,7 @@ def sort_linked_houses(self, battery):
 
     return sorted(distance_list, key=operator.itemgetter(1))
 
+
 def find_best(self, list, status):
     """
     Tries to find either the cheapest house to possibly switch from battery
@@ -62,6 +65,7 @@ def find_best(self, list, status):
     else:
         option = list[0]
         return option[2], self.batteries[option[0]]
+
 
 def find_best_backup(self, list, status):
     """
@@ -82,6 +86,7 @@ def find_best_backup(self, list, status):
 # conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
 # conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
 
+
 def swap_houses(self, house, current_batt, next_batt):
     """
     Switches house from battery it's currently linked to, to the next
@@ -90,6 +95,7 @@ def swap_houses(self, house, current_batt, next_batt):
     house.link = next_batt
     next_batt.linked_houses.append(house)
     current_batt.linked_houses.remove(house)
+
 
 def check_linked(self):
     """
@@ -104,6 +110,7 @@ def check_linked(self):
     else:
         return False
 
+
 def check_full(self):
     """
     Returns True if one or more of the batteries is over it's
@@ -114,6 +121,7 @@ def check_full(self):
             return True
     return False
 
+
 def disconnect(self):
     """
     Delete all connections
@@ -123,6 +131,7 @@ def disconnect(self):
     for battery in self.batteries.values():
         battery.linked_houses = []
 
+comment
 def calculate_cost(self):
     cost = 0
     for house in list(self.houses.values()):
@@ -140,10 +149,12 @@ def calculate_cost(self):
         cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
     return cost
 
+comment
 def switch_houses(self, house1, house2):
     # print(f"house1 x{house1.x}/y{house1.y} battery at x{house1.link.x}/y{house1.link.y} --> at x{house2.link.x}/y{house2.link.y}")
     # print(f"house2 x{house2.x}/y{house2.y} battery at x{house2.link.x}/y{house2.link.y} --> at x{house1.link.x}/y{house1.link.y}")
     house2.link, house1.link = house1.link, house2.link
+
 
 def load_pickle(self, file):
     """
@@ -161,6 +172,7 @@ def load_pickle(self, file):
 
     self.houses, self.batteries = house_batt[0], house_batt[1]
     plot_houses(self)
+
 
 def plot_houses(self,):
     """
@@ -218,7 +230,7 @@ def plot_houses(self,):
     # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
     # path = str(Path.cwd()).replace("scripts", subpath)
 
-    # kan weggewerkt worden
+comment
 def get_coordinates(self):
     x_houses, y_houses, x_batt, y_batt = [], [], [], []
 
@@ -238,6 +250,7 @@ def get_coordinates(self):
 
     return [x_houses, y_houses, x_batt, y_batt]
 
+comment
 def save_dat_file(self):
     house_batt = [self.houses, self.batteries]
     time_var = time.strftime("%d%m%Y")

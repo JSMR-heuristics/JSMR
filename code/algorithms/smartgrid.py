@@ -1,19 +1,19 @@
-import sys
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-import re
 import os
+import re
+import sys
 
-from helpers import *
 from algorithms import *
+from battery import Battery
+from helpers import *
+from house import House
 
 # Change path so object classes can be imported
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
-from battery import Battery
-from house import House
 
 
 class Smartgrid(object):
@@ -22,6 +22,7 @@ class Smartgrid(object):
     This class is called in Main and subsequently loads the correct datafiles
     and calls the corresponding algorithms and methods.
     """
+
 
     def __init__(self, neighbourhood, algorithm, iterations, plot, c_option, set_up):
         self.input = neighbourhood
@@ -72,6 +73,7 @@ class Smartgrid(object):
         # returns dict, goes to init (self.houses)
         return houses
 
+
     def load_batteries(self):
         """
         Parses through text file and saves batteries as battery.Battery
@@ -115,6 +117,7 @@ class Smartgrid(object):
         # return dict to INIT
         return batteries
 
+
     # kan weggewerkt worden
     def get_coordinates(self):
         x_houses, y_houses, x_batt, y_batt = [], [], [], []
@@ -157,6 +160,7 @@ class Smartgrid(object):
             for index in range(len(distance_diffs)):
                 diffs[batteries[index]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
+
 
     def plot_houses(self, changes):
         """
@@ -215,7 +219,6 @@ class Smartgrid(object):
 
 
         plt.savefig(path)
-
 
 
     def run_algorithm(self):

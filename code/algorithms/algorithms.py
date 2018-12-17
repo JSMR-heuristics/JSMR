@@ -1,10 +1,10 @@
-import operator
-import random
-import pickle
-import time
 import copy
 import datetime
 import numpy as np
+import operator
+import pickle
+import random
+import time
 
 from helpers import *
 
@@ -253,31 +253,38 @@ def hill_climber(self, iterations):
     print(f"unsuccesfull iterations: {misses}")
 
 
+#
 def dfs(self):
+    """This sets up the conditions for the depth-first algorithm below"""
+
+    # These numbers refer to a simple cost that should at the very least be
+    # improved for a score to be saved. Every time that happens, the variable
+    # self.best is replaced with the new score.
     if self.input == 1:
         self.best = 34000
     elif self.input == 2:
         self.best = 22000
     else:
         self.best = 22500
+
+    # Creates a new list of houses, which is iterable by number
     self.extra = []
 
     # Put house objects in list
     for i in self.houses:
         self.extra.append(self.houses[i])
 
-    # Call actual depth first search
+    # Call actual depth first search, starting from the first house at 0
     dfs_search(self, 0)
 
-    # Print and save results
-    for i in range(self.solutions):
-        print(f"The costs for solution{i}: {self.cost_list[i]}")
+    # Saves a list of results that got the lowest score at the time
     with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
         pickle.dump(self.results_list, f)
 
 
 def dfs_search(self, num):
-    """Depth first search algorithm.
+    """
+    Depth-first search algorithm.
 
     This algorithm finds all possible solutions by recursively searching for
     all possible setups for each battery. Also saves the best solution found
@@ -302,7 +309,7 @@ def dfs_search(self, num):
         elif not check_full(self):
             self.solutions += 1
             print(f"Number of solutions found: {self.solutions}")
-            new = calculate_cost(self)
+            new = mini_cost(self)
             self.cost_list.append(new)
             if new < self.best:
                 self.best = new
@@ -313,7 +320,11 @@ def dfs_search(self, num):
 
 
 def bnb(self):
+    """This sets up the conditions for the branch-and-bound algorithm below"""
 
+    # These numbers refer to a simple cost that should at the very least be
+    # improved upon for a score to be saved. Every time that happens,
+    # the variable self.best is replaced with the new score
     if self.input == 1:
         self.best = 34000
     elif self.input == 2:
@@ -323,41 +334,71 @@ def bnb(self):
 
     print(f"Score to beat: {self.best}")
 
+    # Several variables that are used in the search
     self.solutions = 0
     self.results_list = []
     self.cost_list = []
     self.extra = []
 
+    # This serves to clear all batteries of any possible connections that may
+    # corrupt the search
     for battery in self.batteries:
         self.batteries[battery].linked_houses = []
 
+    # Likewise, the houses are all cleared of any connections, plus the
+    # iterable list of houses self.extra is appended. In addition, for every
+    # house, filter() is run, which creates a list of batteries in order of
+    # distance to that specific house
     for i in self.houses:
         self.houses[i].link = None
         self.extra.append(self.houses[i])
         self.houses[i].filter()
 
-    # random.shuffle(self.extra)
-
+    # An initial print statement letting the user know the algorithm has
+    # launched is printed, and the search loop is entered with the first house
+    # in the list.
     print("Processing...")
-
     bnb_search(self, 0)
 
-    print(f"Best solution found: {self.best}")
-
+    # The list of results found is saved to a pickle file
     with open(f"bnb_result_for_WIJK{self.input}.dat", "wb") as f:
         pickle.dump(self.results_list, f)
 
 
 def bnb_search(self, num):
+    """
+    Branch-and-bound algorithm.
 
+    This algorithm explores the state space in a similar fashion as the
+    depth-first algorithm, but has added checks that will cut off certain
+    branches that are deemed to have no chance at returning a useful result.
+    """
+
+    # Saves the output for the current house in a variable
     output = self.extra[num].output
+
+    # Calculates an approximated minimal amount of cost that the following
+    # houses will have, to be used in pruning checks. The current best cost is
+    # reduced buy the amount of houses still left to be connected times 45.
+    # The number 45 is made by multiplying 5 (the approximated average minimal
+    # distance between a house and battery) with 9 (the cable cost per segment)
     cost_margin = self.best - (149 - num) * 45
 
+    # Here the loop starts, by checking the current house (represented by num)
+    # with the battery options in order of distance (closest to farthest),
+    # which is saved in every house's "filtered" attribute
     for battery in self.extra[num].filtered:
 
+        # This loop is specific for the houses earlier in the list, which are
+        # checked for their potential cost.
         if num < 120:
+            # If connecting the current house to the current battery puts that
+            # battery over capacity, the branch is skipped
             if self.batteries[battery].filled() + output > 1507:
                 pass
+            # The connection is then made and checked for the resulting cost.
+            # If that new cost is still profitable, the branch is explored
+            # further
             else:
                 self.extra[num].link = self.batteries[battery]
                 self.batteries[battery].linked_houses.append(self.extra[num])
@@ -365,8 +406,12 @@ def bnb_search(self, num):
                     pass
                 else:
                     bnb_search(self, num + 1)
+                # Once the branch has been explored below, the connection is
+                # undone
                 self.batteries[battery].linked_houses.remove(self.extra[num])
 
+        # This loop is specific for the houses later in the list, which are not
+        # checked for their potential cost.
         elif num < 149:
             if self.batteries[battery].filled() + output > 1507:
                 pass
@@ -376,35 +421,49 @@ def bnb_search(self, num):
                 bnb_search(self, num + 1)
                 self.batteries[battery].linked_houses.remove(self.extra[num])
 
+        # If this part is entered, the last house is the list has been
+        # succesfully reached, and a check for a solution will be made
         else:
             if self.batteries[battery].filled() + output > 1507:
                 pass
             else:
                 self.extra[num].link = self.batteries[battery]
                 self.batteries[battery].linked_houses.append(self.extra[num])
+
+                # To ensure nothing has gone wrong, another check of all of the
+                # batteries is made.
                 if not check_full(self):
+
+                    # As the current setup is approved, the cost is calculated
                     self.solutions += 1
                     new = mini_cost(self, num + 1)
                     self.cost_list.append(new)
+
+                    # Every 1000 solutions, a the amount of solutions is
+                    # printed, to give the user an idea of the progress
                     if self.solutions % 1000 == 0:
-                        print(f"{self.solutions} solutions found at {datetime.datetime.now()}")
+                        print(f"{self.solutions} solutions found at
+                                {datetime.datetime.now()}")
+
+                    # The new result is checked to see if it's better than any
+                    # previous one and, if so, it is saved
                     if new < self.best:
-                        print(f"New best found: {new}. Solutions found: {self.solutions}")
+                        print(f"New best found: {new}
+                                Solutions found: {self.solutions}")
                         self.best = new
                         save_dat_file(self)
                         self.results_list.append(new)
                 self.batteries[battery].linked_houses.remove(self.extra[num])
 
-    if num < 50:
-        print(f"Now at {num} at {datetime.datetime.now()}")
-
 
 def mini_cost(self, num):
+    """A slightly more inefficient version of calculate_cost, specifically
+    made to be used by the above branch-and-bound algorithm"""
+
     cost = 0
     for i in range(num):
         cost += (abs(self.extra[i].link.x - self.extra[i].x) + abs(self.extra[i].link.y - self.extra[i].y)) * 9
     return cost
-
 
 
 def random_algorithm(self, iterations):

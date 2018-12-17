@@ -1,5 +1,7 @@
 class Battery(object):
 
+    """This represents every battery that is created in the program"""
+
     def __init__(self, capacity, x, y, colour):
         self.capacity = float(capacity)
         self.x = int(x)
