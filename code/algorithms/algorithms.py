@@ -254,22 +254,12 @@ def hill_climber(self, iterations):
 
 
 def dfs(self):
-<<<<<<< HEAD
     if self.input == 1:
         self.best = 34000
     elif self.input == 2:
         self.best = 22000
     else:
         self.best = 22500
-=======
-    """Depth First parent.
-
-    This method calls the actual depth first search and saves the best
-    result found.
-    """
-    # Find best configuration using greedy algorithm
-    self.best = greedy(self, 500)
->>>>>>> e9bdc9fc85b879e030f8883f963733f562f22af0
     self.extra = []
 
     # Put house objects in list
@@ -323,7 +313,6 @@ def dfs_search(self, num):
 
 
 def bnb(self):
-<<<<<<< HEAD
 
     if self.input == 1:
         self.best = 34000
@@ -332,17 +321,6 @@ def bnb(self):
     else:
         self.best = 22500
 
-=======
-    """Branch and Bound parent.
-
-    This method calls the actual depth first search and saves the best
-    result found.
-    """
-    # 3 = 22185
-    # 2 = 21627
-    # 1 = 33687
-    self.best = 34000
->>>>>>> e9bdc9fc85b879e030f8883f963733f562f22af0
     print(f"Score to beat: {self.best}")
 
     self.solutions = 0
@@ -365,7 +343,7 @@ def bnb(self):
     bnb_search(self, 0)
 
     print(f"Best solution found: {self.best}")
-    
+
     with open(f"bnb_result_for_WIJK{self.input}.dat", "wb") as f:
         pickle.dump(self.results_list, f)
 
