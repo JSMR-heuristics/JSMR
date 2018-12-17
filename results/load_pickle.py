@@ -153,7 +153,7 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        file_to_read = "hill_lowest_WIJK2_14122018.dat"
+        file_to_read = "hill_lowest_WIJK1_13122018.dat"
 
         #  change the string to the filename you want to open
         with open(file_to_read, "rb") as f:
