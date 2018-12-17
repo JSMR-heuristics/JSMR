@@ -31,22 +31,22 @@ To quantify the results per algorithm per neighbourhood we take the 'within-cont
 
 #### State Space
 The State Space encompassing every possible combination can be calculated with:
-* possible house-battery connections: #houses ^ #batteries
+* possible house-battery connections: #batteries ^ #houses
 
-Which is 150^5 in the first part of the Case.
+Which is 5^150 in the first part of the Case.
 
 In the 2nd part the formula makes use of:
-* possible batterylocations: gridsize^#batteries = 2500^5
-* possible house-battery connections: #houses ^ #batteries = 150^5
+* possible batterylocations: #batteries^ gridsize = 5^2500
+* possible house-battery connections: #batteries ^ #houses = 5^150
   * is added up in the formula due to being independent variables
-* #houses ^ #batteries + gridsize^#batteries
+* #batteries ^ #houses + #batteries^ #houses
 
 which results in:
 total state space with 5 batteries:
-* 2500^5 + 150^5
+* 5^2500 + 5^150
 
 From the possible batttery sets that we've created, we can see that the highest amount of batteries that theoretically will be included equals 17. Thus having a state space not exceeding:
-* 2500^17 + 150^17
+* 17^2500 + 17^150
 
 
 ## Progress:
@@ -116,12 +116,11 @@ We considered implementing an archive into the algorithm, ensuring a randomized 
 
  * Open a command window in the main folder, "JSMR".
  * In the command line, type:
- * Python main.py [the neighborhood: 1/2/3] [the algorithm: stepdown/greedy/hill/dfs/configure/cluster] [the amount of iterations: any interger of 0 or higher]
+ * python main.py [the neighborhood: 1/2/3] [the algorithm: stepdown/greedy/hill/dfs/random/bnb] [the amount of iterations: any interger of 0 or higher][optional: cluster/configure/plot]
    * Entering "cluster" will return a result in accordance with this case's subgoal C, while "configure" will return a result in accordance with subgoal D.
-   * Entering "spec" will allow you to insert the details through prompts.
-   * Entering "plot" behind the necessary command line arguments will return an number of mid-process plots.
+   * Entering "plot" behind the necessary command line arguments will return a number of mid-process plots.
    * *Currently the stepdown algorithm does not function with neighborhood 3. For that neighborhood, an algorithm that uses the same logic, but is less effective, can be used by entering "backup".
-   * The amount of iterations entered is only taken into consideration towards algorithms that make use of it, but it should always be entered.
+   * The amount of iterations entered is only taken into consideration towards algorithms that make use of it, if its not entered for those algorithms it will automatically set it to 1000
    
  ## Authors
  * Julian Evalle
@@ -130,4 +129,4 @@ We considered implementing an archive into the algorithm, ensuring a randomized 
  
  ## Acknowledgements
  * [Cluster Algorithm](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)
- * stack Overflow
+ * Stack Overflow

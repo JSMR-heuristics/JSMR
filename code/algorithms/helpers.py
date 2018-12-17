@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import operator
 import pickle
-import sys, os
+import sys
 import time
 
-comment
+
 def calculate_distance(self):
     all_distances = []
     for house in self.houses.values():
@@ -67,26 +68,6 @@ def find_best(self, list, status):
         return option[2], self.batteries[option[0]]
 
 
-def find_best_backup(self, list, status):
-    """
-    Tries to find either the cheapest house to possibly switch from battery
-    or the one with the lowest possible output
-    """
-    print(len(list))
-    if status is "strict":
-        for option in list:
-            if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity and not (option[2].link == self.batteries[option[0]]):
-                return option[2], self.batteries[option[0]]
-    else:
-        list = sorted(list, key=operator.itemgetter(3))
-        # print(list)
-        for option in list:
-            if self.batteries[option[0]].filled() + option[2].output <= self.batteries[option[0]].capacity and not (option[2].link == self.batteries[option[0]]):
-                return option[2], self.batteries[option[0]]
-# conditie toevoegen om te zorgen dat huizen niet op een batterij komen die verder dan een max afstand ligt
-# conditie toevoegen om te zorgen dat een huis niet wordt verplaatst als dat de batterij nét niet onder full brengt
-
-
 def swap_houses(self, house, current_batt, next_batt):
     """
     Switches house from battery it's currently linked to, to the next
@@ -131,7 +112,7 @@ def disconnect(self):
     for battery in self.batteries.values():
         battery.linked_houses = []
 
-comment
+
 def calculate_cost(self):
     cost = 0
     for house in list(self.houses.values()):
@@ -149,7 +130,7 @@ def calculate_cost(self):
         cost += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
     return cost
 
-comment
+
 def switch_houses(self, house1, house2):
     # print(f"house1 x{house1.x}/y{house1.y} battery at x{house1.link.x}/y{house1.link.y} --> at x{house2.link.x}/y{house2.link.y}")
     # print(f"house2 x{house2.x}/y{house2.y} battery at x{house2.link.x}/y{house2.link.y} --> at x{house1.link.x}/y{house1.link.y}")
@@ -174,25 +155,28 @@ def load_pickle(self, file):
     plot_houses(self)
 
 
-def plot_houses(self,):
-    """
-    Plots houses, batteries and cables. Also calculates the total
-    cost of the cable
-    """
-
-    x_houses, y_houses, x_batt, y_batt  = get_coordinates(self)
+def plot_houses(self):
+    """Plot batteries, houses and cables."""
+    # Get house and battery coordinates
+    x_houses, y_houses, x_batt, y_batt = get_coordinates(self)
 
     # make plot
     ax = plt.gca()
-    ax.axis([-2, 52, -2 , 52])
-    ax.scatter(x_houses , y_houses, marker = ".")
-    ax.scatter(x_batt, y_batt, marker = "o", s = 40, c = "r" )
-    ax.set_xticks(np.arange(0, 52, 1), minor = True)
-    ax.set_yticks(np.arange(0, 52, 1), minor = True)
-    ax.grid(b = True, which="major", linewidth=1)
-    ax.grid(b = True, which="minor", linewidth=.2)
+    ax.axis([-2, 52, -2, 52])
+
+    # Plot houses and batteries
+    ax.scatter(x_houses, y_houses, marker=".")
+    ax.scatter(x_batt, y_batt, marker="o", s=40, c="r")
+
+    # Get gridlines
+    ax.set_xticks(np.arange(0, 52, 1), minor=True)
+    ax.set_yticks(np.arange(0, 52, 1), minor=True)
+    ax.grid(b=True, which="major", linewidth=1)
+    ax.grid(b=True, which="minor", linewidth=.2)
 
     total = 0
+
+    # For each house, plot cable
     for house in list(self.houses.values()):
 
         x_house, y_house = house.x, house.y
@@ -205,33 +189,25 @@ def plot_houses(self,):
         line_colour = house.link.colour
 
         # place horizontal line
-        ax.plot([x_house, x_batt], [y_house, y_house], \
-        color=f'{line_colour}',linestyle='-', linewidth=1)
+        ax.plot([x_house, x_batt], [y_house, y_house],
+                color=f'{line_colour}', linestyle='-', linewidth=1)
 
         # place vertical line
-        ax.plot([new_x, new_x], [y_house, y_batt], \
-        color=f'{line_colour}',linestyle='-', linewidth=1)
+        ax.plot([new_x, new_x], [y_house, y_batt],
+                color=f'{line_colour}', linestyle='-', linewidth=1)
 
         # calculate line cost
         total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
 
+    # Print costs
     print(f"Total cost of cable: {total}")
     plt.title(f"Total cost of cable: {total}")
 
-    ## adds the id to the batteries on the plot
-    ## alter in the sub3,4 to type of battery
-    # count = 0
-    # for battery in list(self.batteries.values()):
-    #     x = battery.x
-    #     y = battery.y
-    #     plt.text(x, y, f"{count}")
-    #     count += 1
     plt.show()
-    # subpath = f"results/Wijk_{INPUT}/{ALGORITHM}/plot{changes}_{ALGORITHM}.png"
-    # path = str(Path.cwd()).replace("scripts", subpath)
 
-comment
+
 def get_coordinates(self):
+    """Load house and battery coordinates to list of lists."""
     x_houses, y_houses, x_batt, y_batt = [], [], [], []
 
     # turn dict to list so we can iterate through
@@ -250,13 +226,19 @@ def get_coordinates(self):
 
     return [x_houses, y_houses, x_batt, y_batt]
 
-comment
+
 def save_dat_file(self):
+    """Save battery and house objects using pickle."""
+    # Put house and battery dict into list
     house_batt = [self.houses, self.batteries]
+
+    # Get time
     time_var = time.strftime("%d%m%Y")
 
+    # Save in folder correspoding to neighbourhood and algorithm
     cwd = os.getcwd()
-    path = os.path.join(*[cwd, 'results', f"wijk_{self.input}", self.algorithm, self.set_up,
+    path = os.path.join(*[cwd, 'results', f"wijk_{self.input}", self.algorithm,
+                          self.set_up,
                           f"{self.algorithm}_lowest_WIJK{self.input}_{time_var}.dat"])
     sys.path.append(path)
 
@@ -264,3 +246,4 @@ def save_dat_file(self):
         pickle.dump(house_batt, f)
 
     return path
+    

@@ -28,9 +28,9 @@ loc = path.find("JSMR")
 path_up = path[0:loc+5]
 
 if "configure" in path:
-    batt_class == "battery2.py"
+    batt_class = "battery2.py"
 else:
-    batt_class == "battery.py"
+    batt_class = "battery.py"
 
 for dirpath, dirnames, filenames in os.walk(path_up):
         for filename in filenames:
@@ -153,17 +153,17 @@ class Smartgrid(object):
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
-        file_to_read = "hill_climber_batt_lowest_WIJK1_06122018.dat"
-        cwd = os.getcwd()
-        cwd = os.path.dirname(cwd)
-        path = os.path.join(*[cwd, "test_scripts", "test_area", "hill_test", "4th Time(ex-slowdown)", file_to_read])
-        sys.path.append(path)
+        file_to_read = "hill_lowest_WIJK2_14122018.dat"
+
         #  change the string to the filename you want to open
-        with open(path, "rb") as f:
+        with open(file_to_read, "rb") as f:
             unpickler = pickle.Unpickler(f)
             house_batt = unpickler.load()
 
+
         self.houses, self.batteries = house_batt[0], house_batt[1]
+        calculate_cost(self)
+
 
 if __name__ == "__main__":
     Smartgrid()

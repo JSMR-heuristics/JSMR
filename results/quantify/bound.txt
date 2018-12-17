@@ -1,0 +1,89 @@
+1 step-down
+closest: 53188.0
+furthest: 103030.0
+our: 56401
+
+1 greedy
+closest: 53188.0
+furthest: 103030.0
+our: 58417
+
+1 hill
+closest: 53188.0
+furthest: 103030.0
+our: 55753
+
+1 hill_update
+closest: 53188.0
+furthest: 103030.0
+our: 55843
+
+1 random_1000
+closest: 53188.0
+furthest: 103030.0
+our: 71341
+
+1 cluster_EX
+.: 13860
+.: 76518
+.: 15174
+
+2 step-down
+closest: 45268.0
+furthest: 96253.0
+our: 46474
+
+2 greedy
+closest: 45268.0
+furthest: 96253.0
+our: 46636
+
+2 random_1000
+closest: 45268.0
+furthest: 96253.0
+our: 65131
+
+2 hill
+closest: 45268.0
+furthest: 96253.0
+our: 45520
+
+2 hill_update
+closest: 45268.0
+furthest: 96253.0
+our: 45574
+
+2 hill_cluster
+x 1
+x 1
+our: 41632
+
+3 step-down
+closest: 42757.0
+furthest: 101491.0
+our: 44674.0
+
+3 greedy
+closest: 42757.0
+furthest: 101491.0
+our: 46537
+
+3 random_1000
+closest: 42757.0
+furthest: 101491.0
+our: 66535
+
+3 hill
+closest: 42757.0
+furthest: 101491.0
+our: 43765
+
+3 hill 2
+closest: 42757.0
+furthest: 101491.0
+our: 43819
+
+3 hill_update
+closest: 42757.0
+furthest: 101491.0
+our: 43801
