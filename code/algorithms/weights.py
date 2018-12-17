@@ -45,9 +45,7 @@ class Weights(object):
         self.batteries = {}
         self.lowest = 99999
         self.index = 0
-        print("ja")
         self.run_algorithm()
-        print("JAAA")
 
     def run_algorithm(self):
         """Run the algorithm the user specified.

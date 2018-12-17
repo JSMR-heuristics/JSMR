@@ -96,15 +96,13 @@ class Main(object):
                     # Calculate configurations
                     Configure(neighbourhood)
 
-                    # Should user want to test with anything else than
-                    # greedy-1000 iterations specifically, do this
-                    if algorithm != "greedy":
-                        Weights(neighbourhood, "test", iterations, "configure")
-                        Weights(neighbourhood, algorithm, iterations,
-                                "configure")
-                    else:
-                        Weights(neighbourhood, algorithm, iterations,
-                                "configure")
+                    # First test so lowest configuration is saved
+                    Weights(neighbourhood, "test", iterations, "configure")
+
+                    # Run algorithm on lowest solution
+                    Weights(neighbourhood, algorithm, iterations,
+                            "configure")
+
                     sys.exit()
             # Else, algorithm argument was incorrect
             else:
