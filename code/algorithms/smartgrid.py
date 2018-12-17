@@ -42,6 +42,7 @@ class Smartgrid(object):
         if self.plot_option is "y":
             self.plot_houses(50)
 
+
     def load_houses(self):
         """Load houses from csv to dict objects.
 
@@ -121,6 +122,7 @@ class Smartgrid(object):
         # return dict to INIT
         return batteries
 
+
     def get_coordinates(self):
         """Load house and battery coordinates to list of lists."""
         x_houses, y_houses, x_batt, y_batt = [], [], [], []
@@ -140,6 +142,7 @@ class Smartgrid(object):
             y_batt.append(battery.y)
 
         return [x_houses, y_houses, x_batt, y_batt]
+
 
     def link_houses(self):
         """ Link houses to batteries regardless of capacity, choses the
@@ -220,6 +223,7 @@ class Smartgrid(object):
         sys.path.append(path)
 
         plt.savefig(path)
+
 
     def run_algorithm(self):
         """Run the correct algorithm."""

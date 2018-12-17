@@ -1,21 +1,23 @@
+import ast
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-import re
 import operator
-from operator import itemgetter
 import os
-import sys
-import ast
-import random
 import pickle
+import random
+import re
+import sys
+
 from algorithms import *
+from operator import itemgetter
+
+from battery2 import Battery
+from house import House
 
 cwd = os.getcwd()
 path = os.path.join(*[cwd, "code", "classes"])
 sys.path.append(path)
-from house import House
-from battery2 import Battery
 
 
 COLOUR_LIST = ["m", "g", "c", "y", "b",
@@ -46,6 +48,7 @@ class Weights(object):
         self.lowest = 99999
         self.index = 0
         self.run_algorithm()
+
 
     def run_algorithm(self):
         """Run the algorithm the user specified.
@@ -96,6 +99,7 @@ class Weights(object):
             self.load()
             self.plot_houses()
 
+
     def get_configs(self):
         """Returns possible battery combinations, based off capacities."""
         batts = [450, 900, 1800]
@@ -131,6 +135,7 @@ class Weights(object):
         # Return list of battery capacities
         return [list(item) for item in set(tuple(row) for row in sorted_list)]
 
+
     def load_houses(self):
         """Load houses from csv to dict objects.
 
@@ -164,6 +169,7 @@ class Weights(object):
 
         # returns dict, goes to init (self.houses)
         return houses
+
 
     def load_batteries(self, index):
         """Load batteries from txt file to dict objects.
@@ -228,6 +234,7 @@ class Weights(object):
 
         return batteries
 
+
     def set_attributes(self):
         """ Sets cost and capacity for the batteries. """
         for i, battery in enumerate(sorted(self.batteries.values(),
@@ -241,6 +248,7 @@ class Weights(object):
                 cost = 1800
             setattr(battery, "cost", cost)
             battery.capacity = self.caps[self.big_iterations][i]
+
 
     def plot_houses(self):
         """Plot houses batteries and cables."""
@@ -326,6 +334,7 @@ class Weights(object):
         plt.show()
         plt.savefig('plot.png')
 
+
     def link_houses(self):
         """ Link houses to batteries regardless of capacity, choses the
         closest option
@@ -342,6 +351,7 @@ class Weights(object):
                 diffs[ord_dist[index][0]] = int(ord_dist[index][1])
             house.diffs = diffs
             house.ord_dist = dict(ord_dist)
+
 
     def calculate_cable(self):
         """ Calculates length of cable between each house and battery. """
@@ -387,6 +397,7 @@ class Weights(object):
             y_batt.append(battery.y)
 
         return x_houses, y_houses, x_batt, y_batt
+
 
     def greedy(self, iterations):
         """
@@ -448,6 +459,7 @@ class Weights(object):
         # self.plot_houses()
         return min(prices)
 
+
     def check_linked(self):
         """ Checks whether every house is linked to a battery. """
 
@@ -460,6 +472,7 @@ class Weights(object):
         else:
             return False
 
+
     def disconnect(self):
         """ Delete all connections. """
 
@@ -467,6 +480,7 @@ class Weights(object):
             house.link = None
         for battery in self.batteries.values():
             battery.linked_houses = []
+
 
     def check_full(self):
         """
@@ -479,6 +493,7 @@ class Weights(object):
                 switch = True
 
         return switch
+
 
     def calculate_cost(self):
         cost = 0
@@ -493,6 +508,7 @@ class Weights(object):
         for battery in self.batteries.values():
             cost += battery.cost
         return cost
+
 
     def load(self):
         """Load best solution found.

@@ -1,16 +1,18 @@
-import sys
 import csv
 import numpy as np
 import os
+import sys
+
 from sklearn.cluster import DBSCAN
 from statistics import mean
+
+from house import House
 
 cwd = os.getcwd()
 cwd = os.path.dirname(cwd)
 cwd = os.path.dirname(cwd)
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
-from house import House
 
 
 class Configure(object):
@@ -26,6 +28,7 @@ class Configure(object):
         print("Finding battery configurations...")
         self.input = neighbourhood
         self.houses = self.load_houses()
+
 
     def load_houses(self):
         """Load houses from csv to dict objects.
@@ -106,6 +109,7 @@ class Configure(object):
 
         self.save_coordinates(subplot_data)
 
+
     def cluster_scan(self, X, settings_list, counter):
         """Calculate clusters and return result to find_cluster."""
         # Credit:
@@ -124,6 +128,7 @@ class Configure(object):
         noise_points = list(labels).count(-1)
 
         return [n_clusters, noise_points, X, labels, mask_samples]
+
 
     def save_coordinates(self, data):
         """Save coordinates of cluster-centers."""

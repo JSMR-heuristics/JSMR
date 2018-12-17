@@ -21,7 +21,6 @@ class House(object):
         self.filtered = []
 
 
-
     def filter(self):
         """A simple method that turns self.diffs, a dictionary countaining the
         available batteries as keys, and their respective distances to the

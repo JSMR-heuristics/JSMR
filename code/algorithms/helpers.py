@@ -246,4 +246,3 @@ def save_dat_file(self):
         pickle.dump(house_batt, f)
 
     return path
-    

@@ -19,6 +19,7 @@ class Battery(object):
         self.colour = colour
         self.linked_houses = []
 
+
     def full(self):
         """Return true if 1 or more batteries are over capacity."""
         sum = 0.00
@@ -28,6 +29,7 @@ class Battery(object):
             return True
         else:
             return False
+
 
     def filled(self):
         """Return total input of battery."""

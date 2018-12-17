@@ -254,7 +254,6 @@ def hill_climber(self, iterations):
     print(f"unsuccesfull iterations: {misses}")
 
 
-#
 def dfs(self):
     """This sets up the conditions for the depth-first algorithm below"""
 
