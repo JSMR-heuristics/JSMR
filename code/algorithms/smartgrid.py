@@ -23,7 +23,9 @@ class Smartgrid(object):
     and calls the corresponding algorithms and methods.
     """
 
-    def __init__(self, neighbourhood, algorithm, iterations, plot, c_option, set_up):
+    def __init__(self, neighbourhood, algorithm, iterations, plot, c_option,
+                 set_up):
+        """Initialize Smartgrid class with settings to run algorithms."""
         self.input = neighbourhood
         self.algorithm = algorithm
         self.iterations = int(iterations)
@@ -36,19 +38,20 @@ class Smartgrid(object):
         self.link_houses()
         self.pickle_file = ""
         self.run_algorithm()
-        # self.plot_houses(1)
         self.cost = calculate_cost(self)
         if self.plot_option is "y":
             self.plot_houses(50)
 
     def load_houses(self):
-        """
+        """Load houses from csv to dict objects.
+
         Parses through csv file and saves houses as house.House
         objects. Returns instances in dict to __init__
         """
         # find specific directory with the data
         cwd = os.getcwd()
         path = os.path.join(*[cwd, 'data', f'wijk{self.input}_huizen.csv'])
+
         # open file
         with open(path) as houses_csv:
 
@@ -73,7 +76,8 @@ class Smartgrid(object):
         return houses
 
     def load_batteries(self):
-        """
+        """Load batteries from txt file to dict objects.
+
         Parses through text file and saves batteries as battery.Battery
         objects. Returns instances in dict to __init__
         """
@@ -88,6 +92,7 @@ class Smartgrid(object):
             path = os.path.join(*[cwd, 'data',
                                 f'wijk{self.input}_cluster_{self.c_option}.txt'])
 
+        # Open battery file
         with open(path) as batteries_text:
 
             # read text file per line
@@ -115,8 +120,8 @@ class Smartgrid(object):
         # return dict to INIT
         return batteries
 
-    # kan weggewerkt worden
     def get_coordinates(self):
+        """Load house and battery coordinates to list of lists."""
         x_houses, y_houses, x_batt, y_batt = [], [], [], []
 
         # turn dict to list so we can iterate through
@@ -136,22 +141,20 @@ class Smartgrid(object):
         return [x_houses, y_houses, x_batt, y_batt]
 
     def link_houses(self):
-        """
-        Links houses to batteries regardless of capacity, choses the
+        """ Link houses to batteries regardless of capacity, choses the
         closest option
 
-        LINK_HOUSES CALCULATE_CABLE EN GET_COORDINATES MOGEN LATER DENK
-        IK WEL IN 1 METHOD GESCHREVEN
+        KLOPT NIET MEER
         """
         # order the batteries for each house
         all_distances = calculate_distance(self)
         for index, house in enumerate(list(self.houses.values())):
-            # for right now, the link is the shortest
-            # regardless of battery capacity
+
+            # Separate keus and values into lists
             batteries = list(all_distances[index].keys())
             distances = list(all_distances[index].values())
 
-            self.batteries[batteries[0]].linked_houses.append(house)
+            # Calculate differences in distance and set ass attribute
             diff, distance_diffs = distances[0], distances
             diffs = {}
             for index in range(len(distance_diffs)):
@@ -159,27 +162,29 @@ class Smartgrid(object):
             house.diffs = diffs
 
     def plot_houses(self, changes):
-        """
-        Plots houses, batteries and cables. Also calculates the total
-        cost of the cable
-        """
-
+        """Plot houses batteries and cables."""
+        # Get coordinates of houses and batteries
         x_houses, y_houses, x_batt, y_batt = (self.coordinates[0],
                                               self.coordinates[1],
                                               self.coordinates[2],
                                               self.coordinates[3])
 
-        # make plot
         ax = plt.gca()
         ax.axis([-2, 52, -2, 52])
+
+        # plot houses and batteries
         ax.scatter(x_houses, y_houses, marker=".")
         ax.scatter(x_batt, y_batt, marker="o", s=40, c="r")
+
+        # set gridlines with different widths
         ax.set_xticks(np.arange(0, 52, 1), minor=True)
         ax.set_yticks(np.arange(0, 52, 1), minor=True)
         ax.grid(b=True, which="major", linewidth=1)
         ax.grid(b=True, which="minor", linewidth=.2)
 
         total = 0
+
+        # For each house, plot the cables
         for house in list(self.houses.values()):
 
             x_house, y_house = house.x, house.y
@@ -202,6 +207,7 @@ class Smartgrid(object):
             # calculate line cost
             total += (abs(x_batt - x_house) + abs(y_batt - y_house)) * 9
 
+        # Print costs
         print(f"Total cost of cable: {total}")
         plt.title(f"Total cost of cable: {total}")
         plt.show()
@@ -213,12 +219,10 @@ class Smartgrid(object):
                             (f"/plot{changes}_{self.algorithm}.png")])
         sys.path.append(path)
 
-
         plt.savefig(path)
 
-
-
     def run_algorithm(self):
+        """Run the correct algorithm."""
         if self.algorithm == "stepdown":
             stepdown(self)
             self.plot_houses(0)
