@@ -10,6 +10,8 @@ class Battery(object):
     Methods full and filled are described in method docstrings.
     """
 
+    """This represents every battery that is created in the program"""
+
     def __init__(self, capacity, x, y, colour):
         self.capacity = float(capacity)
         self.x = int(x)

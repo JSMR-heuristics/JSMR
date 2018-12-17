@@ -10,7 +10,7 @@ class House(object):
 
     Method filtered is described in method docstring.
     """
-    
+
     def __init__(self, x, y, output):
         self.x = int(x)
         self.y = int(y)
@@ -20,7 +20,14 @@ class House(object):
         self.dists = {}
         self.filtered = []
 
+
+
     def filter(self):
+        """A simple method that turns self.diffs, a dictionary countaining the
+        available batteries as keys, and their respective distances to the
+        house as values, in order of that distance (small to large)
+        an iterable list"""
+
         for key in self.diffs:
             self.filtered.append(key)
             if len(self.filtered) == 4:

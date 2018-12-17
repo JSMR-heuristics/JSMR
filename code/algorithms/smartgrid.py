@@ -1,19 +1,19 @@
-import sys
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-import re
 import os
+import re
+import sys
 
-from helpers import *
 from algorithms import *
+from battery import Battery
+from helpers import *
+from house import House
 
 # Change path so object classes can be imported
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
-from battery import Battery
-from house import House
 
 
 class Smartgrid(object):
@@ -74,6 +74,7 @@ class Smartgrid(object):
 
         # returns dict, goes to init (self.houses)
         return houses
+
 
     def load_batteries(self):
         """Load batteries from txt file to dict objects.
@@ -158,6 +159,7 @@ class Smartgrid(object):
             for index in range(len(distance_diffs)):
                 diffs[batteries[index]] = int(distance_diffs[index]) - diff
             house.diffs = diffs
+
 
     def plot_houses(self, changes):
         """Plot houses batteries and cables."""
