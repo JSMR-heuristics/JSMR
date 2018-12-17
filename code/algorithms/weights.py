@@ -24,7 +24,15 @@ COLOUR_LIST = ["m", "g", "c", "y", "b",
 
 
 class Weights(object):
-    def __init__(self, neighbourhood, algorithm, iterations,set_up):
+    """Weights class, loads house and battery objects, calls algorithms.
+
+    This class is called in Main.py and subsequently loads the correct datafiles
+    and calls the corresponding algorithms and methods.
+    This script is only used when the "configure" option is called.
+    """
+
+    def __init__(self, neighbourhood, algorithm, iterations, set_up):
+        """Initialize Weights class with settings to run the algorithms."""
         self.input = neighbourhood
         self.algorithm = algorithm
         self.set_up = set_up
@@ -37,27 +45,41 @@ class Weights(object):
         self.batteries = {}
         self.lowest = 99999
         self.index = 0
+        print("ja")
         self.run_algorithm()
-
+        print("JAAA")
 
     def run_algorithm(self):
+        """Run the algorithm the user specified.
+
+        Firstly, greedy is calles to test every configuration configure.py has
+        found. Secondly, the correct algorithm with the correct number of
+        iterations (if any) is called.
+        """
         print(f"Checking all possible configurations with {self.algorithm}...")
 
-        if self.algorithm == "test"  or (self.algorithm == "greedy" and self.iterations == 1000):
+        if self.algorithm == "test" or (self.algorithm == "greedy" and
+                                        self.iterations == 1000):
+
+            # Test each configuration found with greedy (1000 iterations)
             while True:
                 try:
                     self.index += 1
                     self.batteries = self.load_batteries(self.index)
-                    print("run")
+
+                # Break if all configurations are checked
                 except FileNotFoundError:
                     break
                 self.calculate_cable()
                 self.link_houses()
                 greedy(self, 1000)
+
+                # Load best solution if user wanted to run greedy
                 if self.algorithm == "greedy":
                     self.load()
                     self.plot_houses()
 
+        # Call correct algorithm
         else:
             self.load()
             if self.algorithm == "stepdown":
@@ -77,17 +99,21 @@ class Weights(object):
             self.plot_houses()
 
     def get_configs(self):
-
+        """Returns possible battery combinations, based off capacities."""
         batts = [450, 900, 1800]
 
         config_list = []
 
         indices_list = []
+
+        # Get lists of index combinations
         for i in range(3):
             for j in range(3):
                 for k in range(3):
                     indices_list.append([i, j, k])
 
+        # Make configuration of batteries until minimal of total capacity
+        # needed is exceeded
         for index in indices_list:
             total_cap = 7500
             mini_list = []
@@ -99,14 +125,20 @@ class Weights(object):
                     mini_list.append(batts[i])
             config_list.append(mini_list)
 
+        # Sort list, so sorted weights correspond to the battery types
         sorted_list = []
         for i in config_list:
             sorted_list.append(sorted(i))
 
+        # Return list of battery capacities
         return [list(item) for item in set(tuple(row) for row in sorted_list)]
 
     def load_houses(self):
+        """Load houses from csv to dict objects.
 
+        Parses through csv file and saves houses as house.House
+        objects. Returns instances in dict to __init__
+        """
         # open file
         INPUT_HOUSES = f"wijk{self.input}_huizen.csv"
         cwd = os.getcwd()
@@ -136,9 +168,15 @@ class Weights(object):
         return houses
 
     def load_batteries(self, index):
+        """Load batteries from txt file to dict objects.
+
+        Parses through text file and saves batteries as battery.Battery
+        objects. Returns instances in dict to __init__
+        """
         INPUT_BATTERIES = f"wijk{self.input}_cluster2_{index}.txt"
         INPUT_WEIGHTS = f"wijk{self.input}_cluster2_{index}_weigth.txt"
 
+        # Load battery and weight text files
         cwd = os.getcwd()
         path = os.path.join(*[cwd, "data", f"{INPUT_WEIGHTS}"])
         sys.path.append(path)
@@ -169,10 +207,11 @@ class Weights(object):
                 y = coordinates.split(",", 1)[1]
                 x = re.sub("\D", "", x)
                 y = re.sub("\D", "", y)
-                # colour = self.colour_list[id]
                 colour = COLOUR_LIST[((int(id) % 11))]
                 batteries[id] = Battery(cap, x, y, colour, weight)
 
+            # For every configurations found which fits this number of batteries
+            # Test with greedy (1000 iterations)
             for i, config in enumerate(self.configs):
                 if i <= self.small_iterations:
                     continue
@@ -206,14 +245,18 @@ class Weights(object):
             battery.capacity = self.caps[self.big_iterations][i]
 
     def plot_houses(self):
-
+        """Plot houses batteries and cables."""
+        # Get coordinates of houses and batteries
         x_houses, y_houses, x_batt, y_batt = self.get_coordinates()
 
-        # make plot
         ax = plt.gca()
         ax.axis([-2, 52, -2, 52])
+
+        # Plot houses
         ax.scatter(x_houses, y_houses, marker=".")
         tot_cap = 0
+
+        # Plot batteries in sizes corresponding to capacity
         for battery in self.batteries.values():
             tot_cap += int(battery.cap)
             if int(battery.cap) == 450:
@@ -222,12 +265,16 @@ class Weights(object):
                 ax.scatter(battery.x, battery.y, marker="o", s=50, c="r")
             elif int(battery.cap) == 1800:
                 ax.scatter(battery.x, battery.y, marker="o", s=100, c="r")
+
+        # Set gridlines
         ax.set_xticks(np.arange(0, 52, 1), minor=True)
         ax.set_yticks(np.arange(0, 52, 1), minor=True)
         ax.grid(b=True, which="major", linewidth=1)
         ax.grid(b=True, which="minor", linewidth=.2)
         print(f"Total capacity of batteries: {tot_cap}")
         total = 0
+
+        # Plot cables
         for house in list(self.houses.values()):
 
             x_house = house.x
@@ -262,11 +309,11 @@ class Weights(object):
         print(f"Cost of batts: {batt_cost}")
         print(f"Total: {total + batt_cost}")
 
-        # LEGENDA TOEVOEGEN
 
         plt.title(f"Cable-cost: {total}, Battery-cost: {batt_cost}, Total: {total + batt_cost}")
         plt.suptitle(f"Best configuration found for neighbourhood {self.input}", fontsize=15)
 
+        # Add legend
         color_list = ["r", "r", "r", "r"]
         text_list = ["price/cap:", "450/900", "900/1350", "1800/1800"]
         size_list = [0, 5, 7.5, 10]
@@ -282,14 +329,15 @@ class Weights(object):
         plt.savefig('plot.png')
 
     def link_houses(self):
-        """NOG SAMENVOEGEN MET CALC CABLE"""
+        """ Link houses to batteries regardless of capacity, choses the
+        closest option
+        """
         # order the batteries for each house
         for house in list(self.houses.values()):
             dist = house.dist
             ord_dist = sorted(dist.items(), key=itemgetter(1))
 
-            # for right now, the link is the shortest
-            # regardless of battery capacity
+            # Set distances as attributes to houses
             self.batteries[ord_dist[0][0]].linked_houses.append(house)
             diffs = {}
             for index in range(len(ord_dist)):
@@ -449,14 +497,15 @@ class Weights(object):
         return cost
 
     def load(self):
-        """
-        Loads best solution found.
+        """Load best solution found.
+
         This function changes links between houses and batteries
         so no battery is over it's capacity, this will be done
         with lowest cost possible for this algorithm
         """
         cwd = os.getcwd()
-        path = os.path.join(*[cwd, 'data', 'weighted_clusters',f"weighted_clusters_WIJK{self.input}.dat" ])
+        path = os.path.join(*[cwd, 'data', 'weighted_clusters',
+                              f"weighted_clusters_WIJK{self.input}.dat"])
         sys.path.append(path)
 
         with open(path, "rb") as f:

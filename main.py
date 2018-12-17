@@ -63,7 +63,7 @@ class Main(object):
                     iterations = 1000
 
                 # Call cluster algorithm
-                if ("cluster" in sys.argv) and not("configure" in sys.argv):
+                if ("cluster" in sys.argv) and not ("configure" in sys.argv):
                     cluster = Cluster(neighbourhood)
                     min_cost = 999999
                     index = 0
@@ -71,7 +71,7 @@ class Main(object):
                     # Find cheapest positions for battery
                     for i in cluster.options_list:
                         print(f"Checking option {i}...")
-                        smart = Smartgrid(neighbourhood, "stepdown", 0, "n", i,
+                        smart = Smartgrid(neighbourhood, "greedy", 1000, "n", i,
                                           "cluster")
                         if smart.cost < min_cost:
                             file = smart.pickle_file
@@ -98,7 +98,7 @@ class Main(object):
 
                     # Should user want to test with anything else than
                     # greedy-1000 iterations specifically, do this
-                    if algorithm != "greedy" and int(iterations) != 1000:
+                    if algorithm != "greedy":
                         Weights(neighbourhood, "test", iterations, "configure")
                         Weights(neighbourhood, algorithm, iterations,
                                 "configure")
