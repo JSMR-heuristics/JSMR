@@ -443,14 +443,14 @@ def bnb_search(self, num):
                     # Every 1000 solutions, a the amount of solutions is
                     # printed, to give the user an idea of the progress
                     if self.solutions % 1000 == 0:
-                        print(f"{self.solutions} solutions found at
-                                {datetime.datetime.now()}")
+                        print(f"{self.solutions} solutions found at"
+                              + f"{datetime.datetime.now()}")
 
                     # The new result is checked to see if it's better than any
                     # previous one and, if so, it is saved
                     if new < self.best:
-                        print(f"New best found: {new}
-                                Solutions found: {self.solutions}")
+                        print(f"New best found: {new}"
+                              + f"Solutions found: {self.solutions}")
                         self.best = new
                         save_dat_file(self)
                         self.results_list.append(new)
