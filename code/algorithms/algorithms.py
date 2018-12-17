@@ -5,6 +5,7 @@ import sys
 import pickle
 import time
 import copy
+import datetime
 import numpy as np
 import os
 
@@ -292,7 +293,12 @@ def backup(self):
 
 
 def dfs(self):
-    self.best = greedy(self, 500)
+    if self.input == 1:
+        self.best = 34000
+    elif self.input == 2:
+        self.best = 22000
+    else:
+        self.best = 22500
     self.extra = []
     for i in self.houses:
         self.extra.append(self.houses[i])
@@ -301,6 +307,7 @@ def dfs(self):
         print(f"The costs for solution{i}: {self.cost_list[i]}")
     with open(f"dfs_result_for_WIJK{self.input}.dat", "wb") as f:
         pickle.dump(self.results_list, f)
+
 
 def dfs_search(self, num):
     for battery in self.batteries:
@@ -312,74 +319,110 @@ def dfs_search(self, num):
             dfs_search(self, num + 1)
         elif not check_full(self):
             self.solutions += 1
-            print(f"Amount of solutions found: {self.solutions}")
-            new = calculate_cost(self)
-            self.cost_list.append(new)
-            if new < self.best:
-                self.best = new
-                self.links_copy = copy.copy([self.houses, self.batteries])
-                self.results_list.append(self.links_copy)
-    if num < 125:
-        print(f"Current house: {num}")
-
-def bnb(self):
-    # 3 = 22185
-    # 2 = 21627
-    # 1 = 33687
-    self.best = 34000
-    print(f"Score to beat: {self.best}")
-    self.solutions = 0
-    self.results_list = []
-    self.cost_list = []
-    self.extra = []
-    self.up = (1 / 125) * 100
-    self.percentage = 0
-    for i in self.houses:
-        self.extra.append(self.houses[i])
-        self.houses[i].filter()
-    print("Processing...")
-    print(f"{self.percentage}% done")
-    bnb_search(self, 0)
-    for i in range(self.solutions):
-        print(f"The costs for solution{i}: {self.cost_list[i]}")
-    with open(f"bnb_result_for_WIJK{self.input}.dat", "wb") as f:
-        pickle.dump(self.results_list, f)
-
-def bnb_search(self, num):
-    cap_space = (150 - num) * 45 + 1507
-    cost_space = (150 - num) * 45 + self.best
-    for battery in self.extra[num].filtered:
-        # print(self.extra[num].x, self.extra[num].y)
-        # print(battery)
-        # print(self.batteries[battery].x, self.batteries[battery].y)
-        if self.extra[num].link == self.batteries[battery]:
-            pass
-        else:
-            swap_houses(self, self.extra[num], self.extra[num].link, self.batteries[battery])
-        if num < 149:
-            # print(f"{num} is below 149")
-            if self.batteries[battery].filled() > cap_space:
-                continue
-            elif calculate_cost(self) > cost_space:
-                continue
-            else:
-                bnb_search(self, num + 1)
-        elif not check_full(self):
-            print(f"{num} is not full")
-            self.solutions += 1
-            print(f"Amount of solutions found: {self.solutions}")
-            print(new)
+            print(f"Number of solutions found: {self.solutions}")
             new = calculate_cost(self)
             self.cost_list.append(new)
             if new < self.best:
                 self.best = new
                 save_dat_file(self)
-                self.results_list.append(new)
+                self.results_list.append(self.links_copy)
+    if num < 125:
+        print(f"Current house: {num}")
+
+
+def bnb(self):
+
+    if self.input == 1:
+        self.best = 34000
+    elif self.input == 2:
+        self.best = 22000
+    else:
+        self.best = 22500
+
+    print(f"Score to beat: {self.best}")
+
+    self.solutions = 0
+    self.results_list = []
+    self.cost_list = []
+    self.extra = []
+
+    for battery in self.batteries:
+        self.batteries[battery].linked_houses = []
+
+    for i in self.houses:
+        self.houses[i].link = None
+        self.extra.append(self.houses[i])
+        self.houses[i].filter()
+
+    # random.shuffle(self.extra)
+
+    print("Processing...")
+
+    bnb_search(self, 0)
+
+    print(f"Best solution found: {self.best}")
+    
+    with open(f"bnb_result_for_WIJK{self.input}.dat", "wb") as f:
+        pickle.dump(self.results_list, f)
+
+
+def bnb_search(self, num):
+
+    output = self.extra[num].output
+    cost_margin = self.best - (149 - num) * 45
+
+    for battery in self.extra[num].filtered:
+
+        if num < 120:
+            if self.batteries[battery].filled() + output > 1507:
+                pass
+            else:
+                self.extra[num].link = self.batteries[battery]
+                self.batteries[battery].linked_houses.append(self.extra[num])
+                if mini_cost(self, num + 1) > cost_margin:
+                    pass
+                else:
+                    bnb_search(self, num + 1)
+                self.batteries[battery].linked_houses.remove(self.extra[num])
+
+        elif num < 149:
+            if self.batteries[battery].filled() + output > 1507:
+                pass
+            else:
+                self.extra[num].link = self.batteries[battery]
+                self.batteries[battery].linked_houses.append(self.extra[num])
+                bnb_search(self, num + 1)
+                self.batteries[battery].linked_houses.remove(self.extra[num])
+
         else:
-            print(f"{num} is full")
-    if num < 10:
-        self.percentage += 1
-        print(f"{self.percentage}% done")
+            if self.batteries[battery].filled() + output > 1507:
+                pass
+            else:
+                self.extra[num].link = self.batteries[battery]
+                self.batteries[battery].linked_houses.append(self.extra[num])
+                if not check_full(self):
+                    self.solutions += 1
+                    new = mini_cost(self, num + 1)
+                    self.cost_list.append(new)
+                    if self.solutions % 1000 == 0:
+                        print(f"{self.solutions} solutions found at {datetime.datetime.now()}")
+                    if new < self.best:
+                        print(f"New best found: {new}. Solutions found: {self.solutions}")
+                        self.best = new
+                        save_dat_file(self)
+                        self.results_list.append(new)
+                self.batteries[battery].linked_houses.remove(self.extra[num])
+
+    if num < 50:
+        print(f"Now at {num} at {datetime.datetime.now()}")
+
+
+def mini_cost(self, num):
+    cost = 0
+    for i in range(num):
+        cost += (abs(self.extra[i].link.x - self.extra[i].x) + abs(self.extra[i].link.y - self.extra[i].y)) * 9
+    return cost
+
 
 def random_algorithm(self, iterations):
     """
