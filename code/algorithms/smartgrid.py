@@ -143,8 +143,6 @@ class Smartgrid(object):
     def link_houses(self):
         """ Link houses to batteries regardless of capacity, choses the
         closest option
-
-        KLOPT NIET MEER
         """
         # order the batteries for each house
         all_distances = calculate_distance(self)

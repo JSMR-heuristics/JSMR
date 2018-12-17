@@ -196,6 +196,7 @@ def hill_climber(self, iterations):
         # Initializing
         hillcount = 0
         alt_directions = 150 * 150
+        prices = []
 
         # Randomize house sequences
         random.shuffle(random_houses)

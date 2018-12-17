@@ -23,6 +23,7 @@ class Cluster(object):
         self.options_list = []
         self.input = input
         self.houses = self.load_houses()
+        self.find_clusters()
 
     def load_houses(self):
         """Load houses from csv to dict objects.
