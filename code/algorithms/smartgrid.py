@@ -6,14 +6,14 @@ import re
 import sys
 
 from algorithms import *
-from battery import Battery
 from helpers import *
-from house import House
 
 # Change path so object classes can be imported
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
+from battery import Battery
+from house import House
 
 
 class Smartgrid(object):
