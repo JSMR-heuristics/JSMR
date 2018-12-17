@@ -31,22 +31,22 @@ To quantify the results per algorithm per neighbourhood we take the 'within-cont
 
 #### State Space
 The State Space encompassing every possible combination can be calculated with:
-* possible house-battery connections: #houses ^ #batteries
+* possible house-battery connections: #batteries ^ #houses
 
-Which is 150^5 in the first part of the Case.
+Which is 5^150 in the first part of the Case.
 
 In the 2nd part the formula makes use of:
-* possible batterylocations: gridsize^#batteries = 2500^5
-* possible house-battery connections: #houses ^ #batteries = 150^5
+* possible batterylocations: #batteries^ gridsize = 5^2500
+* possible house-battery connections: #batteries ^ #houses = 5^150
   * is added up in the formula due to being independent variables
-* #houses ^ #batteries + gridsize^#batteries
+* #batteries ^ #houses + #batteries^ #houses
 
 which results in:
 total state space with 5 batteries:
-* 2500^5 + 150^5
+* 5^2500 + 5^150
 
 From the possible batttery sets that we've created, we can see that the highest amount of batteries that theoretically will be included equals 17. Thus having a state space not exceeding:
-* 2500^17 + 150^17
+* 17^2500 + 17^150
 
 
 ## Progress:
