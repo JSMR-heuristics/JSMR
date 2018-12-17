@@ -1,17 +1,17 @@
-import sys
 import os
+import sys
 import time
+
+from cluster import Cluster
+from configure import Configure
+from helpers import *
+from smartgrid import Smartgrid
+from weights import Weights
 
 # Load classes and helpers after path is specified
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'algorithms'])
 sys.path.append(path)
-
-from smartgrid import Smartgrid
-from cluster import Cluster
-from configure import Configure
-from weights import Weights
-from helpers import *
 
 
 class Main(object):
