@@ -163,5 +163,7 @@ class Smartgrid(object):
 
         self.houses, self.batteries = house_batt[0], house_batt[1]
         calculate_cost(self)
+
+
 if __name__ == "__main__":
     Smartgrid()
