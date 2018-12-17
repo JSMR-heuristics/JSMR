@@ -2,8 +2,6 @@ import sys
 import csv
 import numpy as np
 import os
-import time
-import matplotlib as plt
 from sklearn.cluster import DBSCAN
 from statistics import mean
 
@@ -21,12 +19,10 @@ class Cluster(object):
     """
 
     def __init__(self, input):
-        """Initialize Cluster with neighbourhood and calls find_clusters."""
+        """Take neighbourhoodnumber as input."""
         self.options_list = []
         self.input = input
         self.houses = self.load_houses()
-
-        self.find_clusters()
 
     def load_houses(self):
         """Load houses from csv to dict objects.
@@ -66,7 +62,6 @@ class Cluster(object):
         Try all possible settings which might result in 5 clusters. If
         exactly 5 clusters are found, save coordinates.
         """
-        # Generate sample data
         big_counter = 1
         X = []
 
@@ -86,6 +81,7 @@ class Cluster(object):
 
         subplot_data = []
 
+        # Run DBSCAN with every setting
         while counter < len(settings_list):
             temp_list = self.cluster_scan(X, settings_list, counter)
             n_clusters, noise_points, X, labels, mask_samples = (temp_list[0],
@@ -95,6 +91,7 @@ class Cluster(object):
                                                                  temp_list[4])
             counter += 1
 
+            # Save coordinates when 5 clusters are found
             if n_clusters is 5:
                 working_settings.append([settings_list[counter][0],
                                          settings_list[counter][1]])
@@ -107,14 +104,18 @@ class Cluster(object):
 
     def cluster_scan(self, X, settings_list, counter):
         """Calculate clusters and return result to find_cluster."""
+        # Credit:
+        # https://scikit-learn.org/stable/auto_examples/cluster/plot_dbscan.html
         a, b = settings_list[counter][0], settings_list[counter][1]
+
+        # Run DBSCAN with variable eps and minPTS settings
         db = DBSCAN(eps=a, min_samples=b, algorithm="ball_tree",
                     metric="manhattan").fit(X)
         mask_samples = np.zeros_like(db.labels_, dtype=bool)
         mask_samples[db.core_sample_indices_] = True
         labels = db.labels_
 
-        # Number of clusters in labels, ignoring noise if present.
+        # Calculate number of clusters by substacting noise from cluster labels
         n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
         noise_points = list(labels).count(-1)
 
@@ -124,6 +125,7 @@ class Cluster(object):
         """Save coordinates of cluster-centers."""
         length_data = len(data)
 
+        # For every solution with 5 clusters
         for index in range(length_data):
             X = data[index][0]
             labels = data[index][1]
@@ -131,37 +133,48 @@ class Cluster(object):
             n_clusters = data[index][3]
             big_counter = data[index][4]
             unique_labels = set(labels)
+
+            # Capacities corresponding to neighbourhood
             cap = [1507.0, 1508.25, 1506.75]
 
+            # Headers of txt file
             all_coords = "pos\t\tcap\n"
-            weights = []
+
+            # Switch for recognizing noise points
             switch = True
 
-            for k in unique_labels:
-                if k == -1:
+            # For each point in this configuration
+            for i in unique_labels:
+
+                # Exclude noise points
+                if i == -1:
                     switch = False
 
-                class_member_mask = (labels == k)
+                # Determine class of point (eg cluster or part of cluster)
+                class_member_mask = (labels == i)
 
-                # print(X)
                 list_X, list_Y = [], []
 
+                # Append all coordinates of cluster points in triple weight
+                # to coordinates-lists
                 xy_big = X[class_member_mask & mask_samples]
                 if xy_big[:, 0].any() and xy_big[:, 1].any():
                     for i in range(3):
                         list_X.append(mean(xy_big[:, 0]))
                         list_Y.append(mean(xy_big[:, 1]))
 
+                # Append all "part-of cluster" points to coordintes-lists
                 xy_small = X[class_member_mask & ~mask_samples]
                 if xy_small[:, 0].any() and xy_small[:, 1].any() and switch:
                         list_X.append(mean(xy_small[:, 0]))
                         list_Y.append(mean(xy_small[:, 1]))
 
+                # Write mean coordinates per cluster to text file
                 if list_X and list_Y:
                     all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t"
                     all_coords += f"{cap[int(self.input) - 1]}\n"
-                    weights.append(len(xy_big) * 3 + len(xy_small))
 
+            # Save text files
             cwd = os.getcwd()
             path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_"
                                   + f"{big_counter}.txt"])
@@ -170,20 +183,10 @@ class Cluster(object):
             with open(path, "w") as f:
                 f.write(all_coords)
 
-            cwd = os.getcwd()
-            path = os.path.join(*[cwd, "data", f"wijk{self.input}_cluster_"
-                                  + f"{big_counter}_weigth.txt"])
-            sys.path.append(path)
-
-            with open(path, "w") as f:
-                f.write(str(weights))
-
         for i in range(big_counter):
             self.options_list.append(i + 1)
 
 
 if __name__ == "__main__":
-    start_time = time.clock()
-
     cluster = Cluster()
     cluster.find_clusters()
