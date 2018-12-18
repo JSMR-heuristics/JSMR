@@ -236,7 +236,7 @@ class Weights(object):
 
 
     def set_attributes(self):
-        """ Sets cost and capacity for the batteries. """
+        """Sets cost and capacity for the batteries."""
         for i, battery in enumerate(sorted(self.batteries.values(),
                                     key=operator.attrgetter("weight"))):
             setattr(battery, "cap", self.caps[self.big_iterations][i])
