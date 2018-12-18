@@ -29,6 +29,7 @@ class Configure(object):
         print("Finding battery configurations...")
         self.input = neighbourhood
         self.houses = self.load_houses()
+        self.find_clusters()
 
 
     def load_houses(self):
@@ -59,7 +60,6 @@ class Configure(object):
 
                 output = row[2]
                 houses[id] = House(x, y, output)
-
         # returns dict, goes to init (self.houses)
         return houses
 
@@ -89,7 +89,6 @@ class Configure(object):
         working_settings = []
 
         subplot_data = []
-
         # Run DBSCAN with every setting
         while counter < len(settings_list):
             temp_list = self.cluster_scan(X, settings_list, counter)
@@ -181,8 +180,7 @@ class Configure(object):
 
                 # Write mean coordinates per cluster to text file
                 if list_X and list_Y:
-                    all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t"
-                    all_coords += f"{cap[int(self.input) - 1]}\n"
+                    all_coords += f"[{mean(list_X)}, {mean(list_Y)}]\t\t{cap}\n"
                     weights.append(len(xy_big) * 3 + len(xy_small))
 
             # Write coordinates and weights to text files
@@ -206,4 +204,3 @@ class Configure(object):
 
 if __name__ == "__main__":
     configure = Configure()
-    configure.find_clusters()
