@@ -1,14 +1,6 @@
 #!/usr/bin/python
 
 import sys, os
-# cwd = os.getcwd()
-# cwd = os.path.dirname(cwd)
-# cwd = os.path.dirname(cwd)
-# path = os.path.join(*[cwd, 'code', 'classes'])
-# print(path)
-# sys.path.append(path)
-# from house import House
-# from battery import Battery
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
