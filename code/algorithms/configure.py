@@ -6,13 +6,13 @@ import sys
 from sklearn.cluster import DBSCAN
 from statistics import mean
 
-from house import House
-
 cwd = os.getcwd()
 cwd = os.path.dirname(cwd)
 cwd = os.path.dirname(cwd)
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
+
+from house import House
 
 
 class Configure(object):

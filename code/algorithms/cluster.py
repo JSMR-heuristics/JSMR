@@ -6,12 +6,11 @@ import sys
 from sklearn.cluster import DBSCAN
 from statistics import mean
 
-from house import House
-
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
 
+from house import House
 
 class Cluster(object):
     """Cluster class, finds clusters and writes coordinates to txt file.

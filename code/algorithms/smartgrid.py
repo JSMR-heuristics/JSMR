@@ -12,6 +12,7 @@ from helpers import *
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'classes'])
 sys.path.append(path)
+
 from battery import Battery
 from house import House
 

@@ -12,13 +12,12 @@ import sys
 from algorithms import *
 from operator import itemgetter
 
-from battery2 import Battery
-from house import House
-
 cwd = os.getcwd()
 path = os.path.join(*[cwd, "code", "classes"])
 sys.path.append(path)
 
+from battery2 import Battery
+from house import House
 
 COLOUR_LIST = ["m", "g", "c", "y", "b",
                "grey", "maroon", "yellow", "orange",

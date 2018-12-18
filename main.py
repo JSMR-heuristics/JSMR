@@ -6,6 +6,7 @@ import time
 cwd = os.getcwd()
 path = os.path.join(*[cwd, 'code', 'algorithms'])
 sys.path.append(path)
+
 from cluster import Cluster
 from configure import Configure
 from smartgrid import Smartgrid
