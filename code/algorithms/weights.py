@@ -12,6 +12,7 @@ import sys
 from algorithms import *
 from operator import itemgetter
 
+# Specify import path
 cwd = os.getcwd()
 path = os.path.join(*[cwd, "code", "classes"])
 sys.path.append(path)

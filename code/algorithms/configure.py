@@ -6,6 +6,7 @@ import sys
 from sklearn.cluster import DBSCAN
 from statistics import mean
 
+# specify import path
 cwd = os.getcwd()
 cwd = os.path.dirname(cwd)
 cwd = os.path.dirname(cwd)

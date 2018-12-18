@@ -104,7 +104,7 @@ class Main(object):
                             "configure")
 
                     sys.exit()
-            # Else, algorithm argument was incorrect
+            # Else algorithm argument was incorrect
             else:
                 print("please insert the preferred algorithm as 2nd argument")
                 print("select from: \"stepdown\", \"greedy\", \"hill\", "
