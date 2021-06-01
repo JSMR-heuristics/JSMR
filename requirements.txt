@@ -45,7 +45,7 @@ six==1.11.0
 style50==2.6.2
 termcolor==1.1.0
 tornado==5.1.1
-urllib3==1.23
+urllib3==1.26.5
 win-inet-pton==1.0.1
 wincertstore==0.2
 yarg==0.1.9
