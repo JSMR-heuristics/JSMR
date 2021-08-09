@@ -35,7 +35,7 @@ PySocks==1.6.8
 python-dateutil==2.7.5
 python-magic==0.4.15
 pytz==2018.7
-pywin32==224
+pywin32==301
 requests==2.20.1
 ruamel-yaml==0.15.71
 scikit-learn==0.20.1
