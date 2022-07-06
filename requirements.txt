@@ -17,7 +17,7 @@ idna==2.7
 intel-openmp==2019.0
 jsbeautifier==1.8.8
 kiwisolver==1.0.1
-lxml==4.2.5
+lxml==4.9.1
 matplotlib==3.0.2
 menuinst==1.4.14
 mkl==2019.0
